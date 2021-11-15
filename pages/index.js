@@ -1,11 +1,14 @@
 import React, { Fragment } from "react";
 import Image from "react-bootstrap/Image";
+import styles from "../styles/Home.module.scss";
 
 export default function Home() {
   return (
     <React.Fragment>
-      <h1>GardenUp!</h1>
-      <Image src="/imgs/greenhouse.png" fluid />
+      <div className={styles.title}>
+        <Image src="/imgs/greenhouse.png" fluid />
+        <h1>GardenUp!</h1>
+      </div>
       <SignupButton />
       <WhyJoin />
       <Image src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash 1.png" fluid />
