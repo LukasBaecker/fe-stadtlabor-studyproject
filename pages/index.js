@@ -11,10 +11,18 @@ export default function Home() {
       </div>
       <SignupButton />
       <WhyJoin />
-      <Image src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash 1.png" fluid />
+      <Image
+        src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash 1.png"
+        className={styles.decoImage}
+        fluid
+      />
       <Advantages />
       <SignupButton />
-      <Image src="/imgs/anna-earl-Odhlx3-X0pI-unsplash 1.png" fluid />
+      <Image
+        src="/imgs/anna-earl-Odhlx3-X0pI-unsplash 1.png"
+        className={styles.decoImage}
+        fluid
+      />
       <Footer />
     </React.Fragment>
   );
