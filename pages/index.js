@@ -29,7 +29,11 @@ export default function Home() {
 }
 
 function SignupButton() {
-  return <button>Sign up!</button>;
+  return (
+    <div className={styles.signup}>
+      <button>Sign up!</button>
+    </div>
+  );
 }
 
 function WhyJoin() {

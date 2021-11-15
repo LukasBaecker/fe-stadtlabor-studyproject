@@ -33,3 +33,17 @@ $card-radius: 50px;
   width: 100%;
   border-radius: $card-radius;
 }
+
+.signup {
+  margin: auto;
+  width: 70%;
+  button {
+    background-color: $color-primary;
+    color: white;
+    height: 70px;
+    width: 100%;
+    border-radius: 25px;
+    font-size: 2rem;
+    border: none;
+  }
+}
