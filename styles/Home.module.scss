@@ -1,5 +1,7 @@
 @import "./colors";
 
+$card-radius: 50px;
+
 .title {
   position: relative;
 
@@ -12,5 +14,17 @@
 
   img {
     width: 100%;
+  }
+}
+
+.whyJoin {
+  background-color: $color-secondary;
+  padding: 40px;
+  border-radius: $card-radius;
+
+  h2 {
+    margin-top: 0px;
+    margin-bottom: 15px;
+    text-align: center;
   }
 }
