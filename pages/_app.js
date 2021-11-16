@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
     <React.Fragment>
       <title>GardenUp!</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </React.Fragment>
   );
 }
