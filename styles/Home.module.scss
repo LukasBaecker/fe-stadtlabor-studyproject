@@ -4,14 +4,15 @@ $card-radius: 50px;
 
 .title {
   position: relative;
-  height: 730px;
+  height: 800px;
 
   h1 {
     position: absolute;
-    top: 100px;
+    top: 90px;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3rem;
+    font-family: "Mr Dafoe", cursive;
+    font-size: 3.5rem;
   }
 
   img {
