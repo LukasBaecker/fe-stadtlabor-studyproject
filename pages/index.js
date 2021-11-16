@@ -17,7 +17,7 @@ export default function Home() {
         <WhyJoin />
       </div>
       <Image
-        src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash 1.png"
+        src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
         className={styles.decoImage}
         fluid
       />
@@ -25,7 +25,7 @@ export default function Home() {
       <div className={styles.frontFooter}>
         <SignupButton />
         <Image
-          src="/imgs/anna-earl-Odhlx3-X0pI-unsplash 1.png"
+          src="/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg"
           className={styles.decoImage}
           fluid
         />
