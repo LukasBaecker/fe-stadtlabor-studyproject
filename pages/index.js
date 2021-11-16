@@ -13,22 +13,24 @@ export default function Home() {
       <div className={styles.title}>
         <Image src="/imgs/greenhouse.png" fluid />
         <h1>GardenUp!</h1>
+        <SignupButton />
+        <WhyJoin />
       </div>
-      <SignupButton />
-      <WhyJoin />
       <Image
         src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash 1.png"
         className={styles.decoImage}
         fluid
       />
       <Advantages />
-      <SignupButton />
-      <Image
-        src="/imgs/anna-earl-Odhlx3-X0pI-unsplash 1.png"
-        className={styles.decoImage}
-        fluid
-      />
-      <Footer />
+      <div className={styles.frontFooter}>
+        <SignupButton />
+        <Image
+          src="/imgs/anna-earl-Odhlx3-X0pI-unsplash 1.png"
+          className={styles.decoImage}
+          fluid
+        />
+        <Footer />
+      </div>
     </React.Fragment>
   );
 }
