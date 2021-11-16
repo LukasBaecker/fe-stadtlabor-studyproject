@@ -5,6 +5,10 @@ $card-radius: 50px;
 .title {
   position: relative;
   height: 800px;
+  background-image: url(/imgs/greenhouse.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
   h1 {
     position: absolute;
@@ -13,10 +17,6 @@ $card-radius: 50px;
     transform: translate(-50%, -50%);
     font-family: "Mr Dafoe", cursive;
     font-size: 3.5rem;
-  }
-
-  img {
-    width: 100%;
   }
 
   .signup {

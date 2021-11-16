@@ -11,7 +11,6 @@ export default function Home() {
   return (
     <React.Fragment>
       <div className={styles.title}>
-        <Image src="/imgs/greenhouse.png" fluid />
         <h1>GardenUp!</h1>
         <SignupButton />
         <WhyJoin />
