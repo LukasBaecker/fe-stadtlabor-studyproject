@@ -47,3 +47,63 @@ $card-radius: 50px;
     border: none;
   }
 }
+
+.advantages {
+  margin-top: 35px;
+  margin-bottom: 25px;
+
+  .advantagesCol {
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  img {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .advantageText {
+    padding: 18px;
+    margin: auto;
+  }
+}
+
+#Footer {
+  position: relative;
+  background-color: $color-secondary;
+  height: 250px;
+  border-top-left-radius: $card-radius;
+  border-top-right-radius: $card-radius;
+
+  .middleDiv {
+    position: absolute;
+    bottom: 0;
+    height: 200px;
+    background-color: #785f55;
+    width: 100%;
+    border-top-left-radius: $card-radius;
+    border-top-right-radius: $card-radius;
+  }
+
+  .bottomDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    bottom: 0;
+    color: white;
+    line-height: 200%;
+    position: absolute;
+    background-color: $color-tertiary;
+    width: 100%;
+    height: 150px;
+    border-top-left-radius: $card-radius;
+    border-top-right-radius: $card-radius;
+  }
+}

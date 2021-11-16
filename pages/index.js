@@ -1,5 +1,10 @@
 import React, { Fragment } from "react";
+
 import Image from "react-bootstrap/Image";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
 import styles from "../styles/Home.module.scss";
 
 export default function Home() {
@@ -29,9 +34,13 @@ export default function Home() {
 }
 
 function SignupButton() {
+  function onSignupButtonClick() {
+    console.log("Implement href to signup page");
+  }
+
   return (
     <div className={styles.signup}>
-      <button>Sign up!</button>
+      <button onClick={() => onSignupButtonClick()}>Sign up!</button>
     </div>
   );
 }
@@ -72,28 +81,43 @@ function Advantages() {
     },
   ];
   return (
-    <div>
+    <div className={styles.advantages}>
       <h2>Advantages of GardenUp</h2>
-      {items.map((item) => (
-        <AdvantagesItem key={item.id} url={item.url} text={item.text} />
-      ))}
+      <Container className={styles.advantagesContainer}>
+        <Row xs={1} sm={3}>
+          {items.map((item) => (
+            <Col key={item.id} className={styles.advantagesCol}>
+              <AdvantagesItem url={item.url} text={item.text} />
+            </Col>
+          ))}
+        </Row>
+      </Container>
     </div>
   );
 }
 
 function AdvantagesItem({ url, text }) {
   return (
-    <div>
-      <Image src={url} />
-      <div>{text}</div>
-    </div>
+    <Container>
+      <Row xs={2} sm={1}>
+        <Col xs={4} sm={12}>
+          <Image src={url} />
+        </Col>
+        <Col className={styles.advantageText} xs={8} sm={12}>
+          {text}
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
 function Footer() {
   return (
-    <div>
-      <div>About Privacy Policy</div>
+    <div id={styles.Footer}>
+      <div className={styles.middleDiv} />
+      <div className={styles.bottomDiv}>
+        About <br /> Privacy Policy
+      </div>
     </div>
   );
 }
