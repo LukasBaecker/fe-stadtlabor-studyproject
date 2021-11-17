@@ -60,7 +60,10 @@ $card-radius: 50px;
     width: 100%;
     border-radius: 25px;
     font-size: 2rem;
-    border: none;
+    border: 2px solid white;
+  }
+  button:hover {
+    background-color: #3fb97e;
   }
 }
 
