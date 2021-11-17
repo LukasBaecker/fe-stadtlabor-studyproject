@@ -22,6 +22,27 @@ $card-radius: 50px;
     font-size: 3.5rem;
   }
 
+  .login {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 3;
+    button {
+      background-color: $color-primary;
+      color: white;
+      height: 50px;
+      width: 100%;
+      border-radius: 18px;
+      font-size: 1rem;
+      border: 2px solid white;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    button:hover {
+      background-color: #3fb97e;
+    }
+  }
+
   .signup {
     position: absolute;
     top: 200px;

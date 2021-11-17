@@ -31,6 +31,7 @@ export default function Home() {
         <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
           GardenUp!
         </h1>
+        <LoginButton offsetY={offsetY} />
         <SignupButton />
         <WhyJoin />
       </div>
@@ -49,6 +50,23 @@ export default function Home() {
         <Footer />
       </div>
     </React.Fragment>
+  );
+}
+
+function LoginButton({ offsetY }) {
+  function onLoginButtonClick() {
+    console.log("Login not implemented yet");
+  }
+
+  return (
+    <div className={styles.login}>
+      <button
+        onClick={() => onLoginButtonClick()}
+        style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
+      >
+        Log in!
+      </button>
+    </div>
   );
 }
 
