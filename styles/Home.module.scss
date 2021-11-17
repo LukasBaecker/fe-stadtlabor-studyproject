@@ -5,16 +5,19 @@ $card-radius: 50px;
 .title {
   position: relative;
   height: 800px;
-  background-image: url(/imgs/greenhouse.png);
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+
+  img {
+    position: absolute;
+    width: 100%;
+  }
 
   h1 {
     position: absolute;
-    top: 90px;
+    top: 0;
+    padding-top: 45px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
+    transform: translateY(-50%);
     font-family: "Mr Dafoe", cursive;
     font-size: 3.5rem;
   }
@@ -102,7 +105,7 @@ $card-radius: 50px;
     z-index: 5;
     left: 50%;
     transform: translate(-50%, -50%);
-    bottom: 185px;
+    bottom: 378px;
   }
 }
 

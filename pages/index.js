@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
@@ -8,17 +8,35 @@ import Col from "react-bootstrap/Col";
 import styles from "../styles/Home.module.scss";
 
 export default function Home() {
+  const [offsetY, setOffsetY] = useState(0);
+
+  const handleScroll = () => setOffsetY(window.scrollY);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const parallaxScroll = (scrollFactor) => {
+    return;
+  };
+
   return (
     <React.Fragment>
       <div className={styles.title}>
-        <h1>GardenUp!</h1>
+        <Image
+          src="/imgs/greenhouse.png"
+          style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
+        />
+        <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
+          GardenUp!
+        </h1>
         <SignupButton />
         <WhyJoin />
       </div>
       <Image
         src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
         className={styles.decoImage}
-        fluid
       />
       <Advantages />
       <div className={styles.frontFooter}>
