@@ -12,26 +12,26 @@ import styles from "../styles/Home.module.scss";
 export default function Home() {
   const [offsetY, setOffsetY] = useState(0);
 
+  // Parallax Scroll Effect on Page Top
   const handleScroll = () => setOffsetY(window.scrollY);
-
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const parallaxScroll = (scrollFactor) => {
-    return;
-  };
-
+  // Boolean State indicating whether the Login Window is currently Shown
   const [loginShown, setLoginShown] = useState(false);
 
   return (
     <React.Fragment>
       <div className={styles.title}>
+        {/* Image of greenhouse in background */}
         <Image
           src="/imgs/greenhouse.png"
           style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
         />
+
+        {/* Page Title */}
         <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
           GardenUp!
         </h1>
@@ -39,12 +39,17 @@ export default function Home() {
         <SignupButton />
         <WhyJoin />
       </div>
+
+      {/* Login-Popup: Only visible if loginShown is True */}
       <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
+
       <Image
         src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
         className={styles.decoImage}
       />
+
       <Advantages />
+
       <div className={styles.frontFooter}>
         <SignupButton />
         <Image
@@ -104,6 +109,7 @@ function WhyJoin() {
   );
 }
 
+// Popup that appears when a user clicks the Login Button
 function LoginPopup({ isVisible, toggleLoginPopup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -148,6 +154,7 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
   }
 }
 
+//Component that lists the advantages with Images and texts
 function Advantages() {
   const items = [
     {
@@ -182,6 +189,7 @@ function Advantages() {
   );
 }
 
+// Component that shows one advantage: one image plus text
 function AdvantagesItem({ url, text }) {
   return (
     <Container>
@@ -197,6 +205,7 @@ function AdvantagesItem({ url, text }) {
   );
 }
 
+// Page Footer with About and Privacy Policy Links
 function Footer() {
   return (
     <div id={styles.Footer}>
