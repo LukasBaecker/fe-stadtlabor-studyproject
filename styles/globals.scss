@@ -10,3 +10,8 @@ body {
   //   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   background-color: $color-base;
 }
+
+body {
+  max-width: 800px;
+  margin: auto;
+}
