@@ -4,6 +4,8 @@ import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import BootstrapButton from "react-bootstrap/Button";
 
 import styles from "../styles/Home.module.scss";
 
@@ -21,6 +23,8 @@ export default function Home() {
     return;
   };
 
+  const [loginShown, setLoginShown] = useState(false);
+
   return (
     <React.Fragment>
       <div className={styles.title}>
@@ -31,10 +35,11 @@ export default function Home() {
         <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
           GardenUp!
         </h1>
-        <LoginButton offsetY={offsetY} />
+        <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
         <SignupButton />
         <WhyJoin />
       </div>
+      <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
       <Image
         src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
         className={styles.decoImage}
@@ -53,9 +58,9 @@ export default function Home() {
   );
 }
 
-function LoginButton({ offsetY }) {
+function LoginButton({ offsetY, toggleLoginPopup }) {
   function onLoginButtonClick() {
-    console.log("Login not implemented yet");
+    toggleLoginPopup(true);
   }
 
   return (
@@ -97,6 +102,50 @@ function WhyJoin() {
       sit amet.
     </div>
   );
+}
+
+function LoginPopup({ isVisible, toggleLoginPopup }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onClose = () => toggleLoginPopup(false);
+  if (isVisible) {
+    return (
+      <div className={styles.popup}>
+        <div className={styles.popup_inner}>
+          <Form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <BootstrapButton variant="primary" type="submit">
+              Submit
+            </BootstrapButton>
+          </Form>
+          <button className={styles.popupCloseButton} onClick={() => onClose()}>
+            X
+          </button>
+        </div>
+      </div>
+    );
+  } else {
+    return <React.Fragment />;
+  }
 }
 
 function Advantages() {
