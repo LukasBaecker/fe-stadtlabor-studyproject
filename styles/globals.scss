@@ -1,0 +1,17 @@
+@import "./colors";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&family=Mr+Dafoe&display=swap");
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  // font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  //   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: $color-base;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+}

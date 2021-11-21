@@ -1,0 +1,202 @@
+@import "./colors";
+
+$card-radius: 50px;
+
+.title {
+  position: relative;
+  height: 800px;
+
+  img {
+    position: absolute;
+    width: 100%;
+  }
+
+  h1 {
+    position: absolute;
+    top: 0;
+    padding-top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    transform: translateY(-50%);
+    font-family: "Mr Dafoe", cursive;
+    font-size: 3.5rem;
+  }
+
+  .login {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 3;
+    button {
+      background-color: $color-primary;
+      color: white;
+      height: 50px;
+      width: 100%;
+      border-radius: 18px;
+      font-size: 1rem;
+      border: 2px solid white;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    button:hover {
+      background-color: #3fb97e;
+    }
+  }
+
+  .signup {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+}
+
+.whyJoin {
+  position: absolute;
+  top: 200px;
+  background-color: $color-secondary;
+  padding: 40px;
+  border-radius: $card-radius;
+
+  h2 {
+    margin-top: 0px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+}
+
+.decoImage {
+  width: 100%;
+  border-radius: $card-radius;
+}
+
+.signup {
+  margin: auto;
+  width: 70%;
+  button {
+    background-color: $color-primary;
+    color: white;
+    height: 70px;
+    width: 100%;
+    border-radius: 25px;
+    font-size: 2rem;
+    border: 2px solid white;
+  }
+  button:hover {
+    background-color: #3fb97e;
+  }
+}
+
+.advantages {
+  margin-top: 35px;
+  margin-bottom: 25px;
+
+  .advantagesCol {
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  img {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .advantageText {
+    padding: 18px;
+    margin: auto;
+  }
+}
+
+.frontFooter {
+  position: relative;
+  margin-top: 250px;
+  img {
+    position: absolute;
+    bottom: 200px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  .signup {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    bottom: 378px;
+  }
+}
+
+#Footer {
+  position: relative;
+  background-color: $color-secondary;
+  height: 250px;
+  border-top-left-radius: $card-radius;
+  border-top-right-radius: $card-radius;
+
+  .middleDiv {
+    position: absolute;
+    bottom: 0;
+    height: 200px;
+    background-color: #785f55;
+    width: 100%;
+    border-top-left-radius: $card-radius;
+    border-top-right-radius: $card-radius;
+  }
+
+  .bottomDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    bottom: 0;
+    color: white;
+    line-height: 200%;
+    position: absolute;
+    background-color: $color-tertiary;
+    width: 100%;
+    height: 150px;
+    border-top-left-radius: $card-radius;
+    border-top-right-radius: $card-radius;
+  }
+}
+
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+
+  .popup_inner {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    max-width: 500px;
+    margin: auto;
+    background: $color-base;
+    border-radius: $card-radius;
+    padding: 30px;
+
+    .popupCloseButton {
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 1.5rem;
+      border: none;
+      background-color: rgb(0, 0, 0, 0);
+    }
+  }
+}
