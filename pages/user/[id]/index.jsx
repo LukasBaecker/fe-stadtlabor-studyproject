@@ -48,6 +48,7 @@ function user() {
   );
 }
 
+//Garden Item
 function Garden() {
   return (
     <Container className={[styles.Item, styles.Garden].join(" ")}>
@@ -56,6 +57,7 @@ function Garden() {
   );
 }
 
+//Map Item
 function Map() {
   return (
     <Container className={[styles.Item, styles.Map].join(" ")}>
@@ -64,6 +66,7 @@ function Map() {
   );
 }
 
+//Variety Item
 function Variety() {
   return (
     <Container className={[styles.Item, styles.Variety].join(" ")}>
@@ -72,6 +75,7 @@ function Variety() {
   );
 }
 
+// Other Item
 function Other() {
   return (
     <Container className={[styles.Item, styles.Next].join(" ")}>
@@ -79,4 +83,5 @@ function Other() {
     </Container>
   );
 }
+
 export default user;
