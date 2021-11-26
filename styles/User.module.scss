@@ -1,0 +1,50 @@
+@import "./colors";
+
+.Content {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.Col {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.Row {
+  margin: 0;
+  padding: 0;
+}
+
+.Item {
+  height: 25vh;
+  padding: 0;
+  //   background-color: $color-tertiary;
+  border: 1px solid black;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Garden {
+  background-color: yellow;
+}
+
+.Map {
+  background-color: red;
+}
+
+.Variety {
+  background-color: blue;
+}
+
+.Next {
+  background-color: green;
+}
