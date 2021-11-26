@@ -31,24 +31,16 @@ function user() {
       <div className={styles.Content}>
         <Row xs="1" sm="2" className={styles.Row}>
           <Col className={styles.Col}>
-            <Container className={[styles.Item, styles.Garden].join(" ")}>
-              Garden
-            </Container>
+            <Garden />
           </Col>
           <Col className={styles.Col}>
-            <Container className={[styles.Item, styles.Map].join(" ")}>
-              Map
-            </Container>
+            <Map />
           </Col>
           <Col className={styles.Col}>
-            <Container className={[styles.Item, styles.Variety].join(" ")}>
-              Variety
-            </Container>
+            <Variety />
           </Col>
           <Col className={styles.Col}>
-            <Container className={[styles.Item, styles.Next].join(" ")}>
-              Next
-            </Container>
+            <Other />
           </Col>
         </Row>
       </div>
@@ -56,4 +48,35 @@ function user() {
   );
 }
 
+function Garden() {
+  return (
+    <Container className={[styles.Item, styles.Garden].join(" ")}>
+      Garden
+    </Container>
+  );
+}
+
+function Map() {
+  return (
+    <Container className={[styles.Item, styles.Map].join(" ")}>
+      Mapview
+    </Container>
+  );
+}
+
+function Variety() {
+  return (
+    <Container className={[styles.Item, styles.Variety].join(" ")}>
+      Variety
+    </Container>
+  );
+}
+
+function Other() {
+  return (
+    <Container className={[styles.Item, styles.Next].join(" ")}>
+      Other
+    </Container>
+  );
+}
 export default user;
