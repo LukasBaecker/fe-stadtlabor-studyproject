@@ -1,5 +1,11 @@
 $color-primary: #1d965c;
+$color-primary-opaque: #1d965caa;
 $color-secondary: #d8c3a5;
 $color-tertiary: #48332d;
 $color-base: #eae7dc;
 $color-danger: #fc4445;
+
+:export {
+  color-primary: $color-primary;
+  color-secondary: $color-secondary;
+}
