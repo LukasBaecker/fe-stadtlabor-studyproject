@@ -2,31 +2,47 @@
 
 $card-radius: 50px;
 
-.title {
+.WhyJoinElement {
   position: relative;
-  height: 800px;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0) 60%, $color-base 60%);
+}
 
+.siteElement {
+  position: relative;
+  margin: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 0;
+  padding-right: 0;
+  z-index: 2;
+  background-color: $color-base;
+}
+
+.title {
   img {
-    position: absolute;
     width: 100%;
+    z-index: 0;
   }
 
   h1 {
     position: absolute;
-    top: 0;
-    padding-top: 45px;
     left: 50%;
-    transform: translateX(-50%);
-    transform: translateY(-50%);
+    top: 60px;
     font-family: "Mr Dafoe", cursive;
     font-size: 3.5rem;
+    z-index: 1;
   }
 
   .login {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    z-index: 3;
+    width: 100px;
+    height: 30px;
+    right: 0px;
+    top: 0px;
+    z-index: 1;
     button {
       background-color: $color-primary;
       color: white;
@@ -44,20 +60,20 @@ $card-radius: 50px;
   }
 
   .signup {
-    position: absolute;
-    top: 200px;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin-top: -150px;
     z-index: 2;
+    position: relative;
   }
 }
 
 .whyJoin {
-  position: absolute;
-  top: 200px;
+  position: relative;
+  margin-top: -35px;
+  width: 100%;
   background-color: $color-secondary;
   padding: 40px;
   border-radius: $card-radius;
+  z-index: 1;
 
   h2 {
     margin-top: 0px;
@@ -67,6 +83,8 @@ $card-radius: 50px;
 }
 
 .decoImage {
+  position: relative;
+  z-index: 1;
   width: 100%;
   border-radius: $card-radius;
 }
@@ -74,6 +92,7 @@ $card-radius: 50px;
 .signup {
   margin: auto;
   width: 70%;
+  z-index: 2;
   button {
     background-color: $color-primary;
     color: white;
@@ -82,6 +101,7 @@ $card-radius: 50px;
     border-radius: 25px;
     font-size: 2rem;
     border: 2px solid white;
+    z-index: 2;
   }
   button:hover {
     background-color: #3fb97e;
@@ -89,6 +109,8 @@ $card-radius: 50px;
 }
 
 .advantages {
+  position: relative;
+  z-index: 2;
   margin-top: 35px;
   margin-bottom: 25px;
 
@@ -116,38 +138,36 @@ $card-radius: 50px;
 
 .frontFooter {
   position: relative;
-  margin-top: 250px;
   img {
-    position: absolute;
-    bottom: 200px;
+    position: relative;
+    margin-bottom: -50px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
 
   .signup {
-    position: absolute;
-    z-index: 5;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    bottom: 378px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: -35px;
   }
 }
 
 #Footer {
   position: relative;
+  padding-top: 50px;
   background-color: $color-secondary;
-  height: 250px;
   border-top-left-radius: $card-radius;
   border-top-right-radius: $card-radius;
+  z-index: 1;
 
   .middleDiv {
-    position: absolute;
     bottom: 0;
     height: 200px;
     background-color: #785f55;
     width: 100%;
     border-top-left-radius: $card-radius;
     border-top-right-radius: $card-radius;
+    margin-bottom: -150px;
   }
 
   .bottomDiv {
@@ -158,7 +178,6 @@ $card-radius: 50px;
     bottom: 0;
     color: white;
     line-height: 200%;
-    position: absolute;
     background-color: $color-tertiary;
     width: 100%;
     height: 150px;

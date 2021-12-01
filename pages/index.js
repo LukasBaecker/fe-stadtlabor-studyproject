@@ -25,17 +25,18 @@ export default function Home() {
   return (
     <React.Fragment>
       <div className={styles.title}>
+        <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
+        {/* Page Title */}
+        <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
+          GardenUp!
+        </h1>
+
         {/* Image of greenhouse in background */}
         <Image
           src="/imgs/greenhouse.png"
           style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
         />
 
-        {/* Page Title */}
-        <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
-          GardenUp!
-        </h1>
-        <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
         <SignupButton />
         <WhyJoin />
       </div>
@@ -43,10 +44,12 @@ export default function Home() {
       {/* Login-Popup: Only visible if loginShown is True */}
       <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
 
-      <Image
-        src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
-        className={styles.decoImage}
-      />
+      <Container className={styles.siteElement}>
+        <Image
+          src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
+          className={styles.decoImage}
+        />
+      </Container>
 
       <Advantages />
 
@@ -94,18 +97,20 @@ function SignupButton() {
 
 function WhyJoin() {
   return (
-    <div className={styles.whyJoin}>
-      <h2>Why Join?</h2>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-      eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-      voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-      clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-      amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-      nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-      diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-      Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
-      sit amet.
-    </div>
+    <Container className={styles.WhyJoinElement}>
+      <div className={styles.whyJoin}>
+        <h2>Why Join?</h2>
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+        voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+        amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+        ipsum dolor sit amet.
+      </div>
+    </Container>
   );
 }
 
@@ -174,18 +179,20 @@ function Advantages() {
     },
   ];
   return (
-    <div className={styles.advantages}>
-      <h2>Advantages of GardenUp</h2>
-      <Container className={styles.advantagesContainer}>
-        <Row xs={1} sm={3}>
-          {items.map((item) => (
-            <Col key={item.id} className={styles.advantagesCol}>
-              <AdvantagesItem url={item.url} text={item.text} />
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </div>
+    <Container className={styles.siteElement}>
+      <div className={styles.advantages}>
+        <h2>Advantages of GardenUp</h2>
+        <Container className={styles.advantagesContainer}>
+          <Row xs={1} sm={3}>
+            {items.map((item) => (
+              <Col key={item.id} className={styles.advantagesCol}>
+                <AdvantagesItem url={item.url} text={item.text} />
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </div>
+    </Container>
   );
 }
 
