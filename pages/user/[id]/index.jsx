@@ -39,9 +39,6 @@ function user() {
           <Col className={styles.Col}>
             <Variety />
           </Col>
-          <Col className={styles.Col}>
-            <Other />
-          </Col>
         </Row>
       </div>
     </>
@@ -71,15 +68,6 @@ function Variety() {
   return (
     <Container className={[styles.Item, styles.Variety].join(" ")}>
       Variety
-    </Container>
-  );
-}
-
-// Other Item
-function Other() {
-  return (
-    <Container className={[styles.Item, styles.Next].join(" ")}>
-      Other
     </Container>
   );
 }
