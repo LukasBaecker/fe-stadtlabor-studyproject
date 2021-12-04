@@ -25,24 +25,35 @@
 .Item {
   height: 25vh;
   padding: 0;
-  //   background-color: $color-tertiary;
   border: 1px solid black;
   border-radius: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 2.5rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  // filter: blur(8px);
 }
 
 .Garden {
-  background-color: yellow;
+  background-color: rgb(133, 81, 21);
 }
 
 .Map {
-  background-color: red;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1)
+    ),
+    url("/imgs/map.png");
 }
 
 .Variety {
-  background-color: blue;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("/imgs/markusSpiske_pixabay.jpg");
 }
 
 .Next {
