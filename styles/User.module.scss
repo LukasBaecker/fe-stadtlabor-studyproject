@@ -59,14 +59,15 @@
   grid-template-rows: 100%;
   column-gap: 5px;
   align-items: center;
+  color: white;
 }
 
 .Garden {
-  background-color: rgb(167, 117, 60);
+  background-color: $color-tertiary;
 }
 
 .GardenController {
-  background-color: lightgreen;
+  background-color: $color-primary;
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 100%;
