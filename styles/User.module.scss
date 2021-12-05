@@ -36,6 +36,7 @@
 
 .Item {
   height: 85%;
+  width: 100%;
   padding: 0;
   border: 1px solid black;
   border-radius: 50px;
@@ -59,11 +60,11 @@
   grid-template-rows: 100%;
   column-gap: 5px;
   align-items: center;
-  color: white;
 }
 
 .Garden {
   background-color: $color-tertiary;
+  color: white;
 }
 
 .GardenController {
@@ -80,6 +81,9 @@
   display: flex;
   align-items: center;
   text-align: center;
+  color: white;
+  background-color: rgba($color: #000000, $alpha: 0);
+  border: 0px;
 }
 
 .Map {

@@ -8,6 +8,10 @@ import { useRouter } from "next/router";
 import styles from "../../../styles/User.module.scss";
 import { useState } from "react";
 
+function defaultButtonClick(e) {
+  alert("Button pressed:\n" + e.target.textContent);
+}
+
 function user() {
   const [username, setUsername] = useState("Username");
 
@@ -74,22 +78,31 @@ function Gardens({ gardens }) {
 //Garden Item
 function Garden({ gardenName }) {
   return (
-    <Container className={[styles.Item, styles.Garden].join(" ")}>
+    <button
+      className={[styles.Item, styles.Garden].join(" ")}
+      onClick={(e) => defaultButtonClick(e)}
+    >
       {gardenName}
-    </Container>
+    </button>
   );
 }
 
 function GardenController() {
   return (
     <Container className={[styles.Item, styles.GardenController].join(" ")}>
-      <div
+      <button
         className={styles.GardenControllerPart}
         style={{ "border-right": "1px solid black" }}
+        onClick={(e) => defaultButtonClick(e)}
       >
         Create new Garden
-      </div>
-      <div className={styles.GardenControllerPart}>Join a Garden</div>
+      </button>
+      <button
+        className={styles.GardenControllerPart}
+        onClick={(e) => defaultButtonClick(e)}
+      >
+        Join a Garden
+      </button>
     </Container>
   );
 }
@@ -97,18 +110,24 @@ function GardenController() {
 //Map Item
 function Map() {
   return (
-    <Container className={[styles.Item, styles.Map].join(" ")}>
+    <button
+      className={[styles.Item, styles.Map].join(" ")}
+      onClick={(e) => defaultButtonClick(e)}
+    >
       Mapview
-    </Container>
+    </button>
   );
 }
 
 //Variety Item
 function Variety() {
   return (
-    <Container className={[styles.Item, styles.Variety].join(" ")}>
+    <button
+      className={[styles.Item, styles.Variety].join(" ")}
+      onClick={(e) => defaultButtonClick(e)}
+    >
       Variety
-    </Container>
+    </button>
   );
 }
 
