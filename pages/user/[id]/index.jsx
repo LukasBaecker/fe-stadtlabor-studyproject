@@ -62,7 +62,7 @@ function Gardens({ gardens }) {
   const lastWidth = gardens.length < 1 ? "100%" : "300px;";
 
   const style = {
-    gridTempllateColumns: "300px ".repeat(gardens.length) + lastWidth,
+    gridTemplateColumns: "300px ".repeat(gardens.length) + lastWidth,
   };
 
   return (
