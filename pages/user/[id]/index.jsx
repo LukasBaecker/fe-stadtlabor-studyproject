@@ -11,6 +11,12 @@ import { useState } from "react";
 function user() {
   const [username, setUsername] = useState("Username");
 
+  const [gardens, setGardens] = useState([
+    { id: 1, name: "Garden 1" },
+    { id: 2, name: "Garden 2" },
+    { id: 3, name: "Garden 3" },
+  ]);
+
   const router = useRouter();
   const { id } = router.query;
   return (
@@ -30,8 +36,8 @@ function user() {
       {/* Page Content */}
       <div className={styles.Content}>
         <Row xs="1" sm="2" className={styles.Row}>
-          <Col className={styles.Col}>
-            <Garden />
+          <Col className={styles.ColGardens}>
+            <Gardens gardens={gardens} />
           </Col>
           <Col className={styles.Col}>
             <Map />
@@ -45,11 +51,46 @@ function user() {
   );
 }
 
+function Gardens({ gardens }) {
+  // if the user is not part of a garden (yet), then the width of the two buttons is wider
+  // to allign with the rest of the page
+  // otherwise, it is only 300px to allign with the other garden entries.
+  const lastWidth = gardens.length < 1 ? "100%" : "300px;";
+
+  const style = {
+    "grid-template-columns": "300px ".repeat(gardens.length) + lastWidth,
+  };
+  console.log(style);
+
+  return (
+    <div className={styles.Gardens} style={style}>
+      {gardens.map((garden) => (
+        <Garden key={garden.id} gardenName={garden.name} />
+      ))}
+      <GardenController />
+    </div>
+  );
+}
+
 //Garden Item
-function Garden() {
+function Garden({ gardenName }) {
   return (
     <Container className={[styles.Item, styles.Garden].join(" ")}>
-      Garden
+      {gardenName}
+    </Container>
+  );
+}
+
+function GardenController() {
+  return (
+    <Container className={[styles.Item, styles.GardenController].join(" ")}>
+      <div
+        className={styles.GardenControllerPart}
+        style={{ "border-right": "1px solid black" }}
+      >
+        Create new Garden
+      </div>
+      <div className={styles.GardenControllerPart}>Join a Garden</div>
     </Container>
   );
 }

@@ -7,19 +7,25 @@
   height: 75vh;
 }
 
-.Col {
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 0;
-  padding-top: 0;
+@mixin colTemplate {
+  margin: 0;
   height: 33%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.Col {
+  @include colTemplate();
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.ColGardens {
+  @include colTemplate();
+  padding: 0;
 }
 
 .Row {
@@ -42,8 +48,37 @@
   // filter: blur(8px);
 }
 
+.Gardens {
+  width: 100%;
+  height: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  overflow: auto;
+  display: grid;
+  // grid-template-columns are added dynamically through JS in user\[id]\index.jsx
+  grid-template-rows: 100%;
+  column-gap: 5px;
+  align-items: center;
+}
+
 .Garden {
   background-color: rgb(133, 81, 21);
+}
+
+.GardenController {
+  background-color: lightgreen;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 100%;
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
+
+.GardenControllerPart {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
 }
 
 .Map {
