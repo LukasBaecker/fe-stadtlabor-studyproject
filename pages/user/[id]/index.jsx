@@ -62,7 +62,7 @@ function Gardens({ gardens }) {
   const lastWidth = gardens.length < 1 ? "100%" : "300px;";
 
   const style = {
-    "grid-template-columns": "300px ".repeat(gardens.length) + lastWidth,
+    gridTemplateColumns: "300px ".repeat(gardens.length) + lastWidth,
   };
 
   return (
@@ -92,7 +92,7 @@ function GardenController() {
     <Container className={[styles.Item, styles.GardenController].join(" ")}>
       <button
         className={styles.GardenControllerPart}
-        style={{ "border-right": "1px solid black" }}
+        style={{ borderRight: "1px solid black" }}
         onClick={(e) => defaultButtonClick(e)}
       >
         Create new Garden
