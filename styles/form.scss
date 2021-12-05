@@ -1,0 +1,22 @@
+@import "./colors";
+
+.form-div {
+  width: 100vw;
+  padding-left: 10vw;
+  padding-right: 10vw;
+  margin-top: 80px;
+  background-color: $color-base;
+}
+.form-group {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.errorForm {
+  border-color: $color-danger;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+}
+.errorForm-message {
+  color: $color-danger;
+  height: 1em;
+  font-size: 0.8em;
+}
