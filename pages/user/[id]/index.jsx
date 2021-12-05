@@ -13,7 +13,7 @@ function defaultButtonClick(e) {
 }
 
 function user() {
-  const [username, setUsername] = useState("Username");
+  const [username, setUsername] = useState("John");
 
   const [gardens, setGardens] = useState([
     { id: 1, name: "Garden 1" },
@@ -33,7 +33,7 @@ function user() {
       {/* Set Header */}
       <Header
         caption="Welcome back"
-        name="Olaf"
+        name={username}
         imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
       />
 
