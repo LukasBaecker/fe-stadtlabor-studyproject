@@ -60,7 +60,6 @@ function Gardens({ gardens }) {
   const style = {
     "grid-template-columns": "300px ".repeat(gardens.length) + lastWidth,
   };
-  console.log(style);
 
   return (
     <div className={styles.Gardens} style={style}>
