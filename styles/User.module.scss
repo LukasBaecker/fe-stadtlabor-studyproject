@@ -1,0 +1,107 @@
+@import "./colors";
+
+.Content {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 75vh;
+}
+
+@mixin colTemplate {
+  margin: 0;
+  height: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Col {
+  @include colTemplate();
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.ColGardens {
+  @include colTemplate();
+  padding: 0;
+}
+
+.Row {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.Item {
+  height: 85%;
+  width: 100%;
+  padding: 0;
+  border: 1px solid black;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  // filter: blur(8px);
+}
+
+.Gardens {
+  width: 100%;
+  height: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  overflow: auto;
+  display: grid;
+  // grid-template-columns are added dynamically through JS in user\[id]\index.jsx
+  grid-template-rows: 100%;
+  column-gap: 5px;
+  align-items: center;
+}
+
+.Garden {
+  background-color: $color-tertiary;
+  color: white;
+}
+
+.GardenController {
+  background-color: $color-primary;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 100%;
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
+
+.GardenControllerPart {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: white;
+  background-color: rgba($color: #000000, $alpha: 0);
+  border: 0px;
+}
+
+.Map {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1)
+    ),
+    url("/imgs/map.png");
+}
+
+.Variety {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("/imgs/markusSpiske_pixabay.jpg");
+}
+
+.Next {
+  background-color: green;
+}
