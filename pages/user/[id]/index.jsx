@@ -36,7 +36,7 @@ function user() {
       {/* Page Content */}
       <div className={styles.Content}>
         <Row xs="1" sm="2" className={styles.Row}>
-          <Col className={styles.ColGardens}>
+          <Col xs="12" sm="12" className={styles.ColGardens}>
             <Gardens gardens={gardens} />
           </Col>
           <Col className={styles.Col}>
