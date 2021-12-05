@@ -5,6 +5,21 @@
 @import "./map.scss";
 //import font
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300;1,400&family=Mr+Dafoe&display=swap");
+
+// change the default bootstrap theme
+$theme-colors: (
+  "primary": $color-primary,
+  "secondary": $color-secondary,
+  "danger": $color-danger,
+);
+
+// Import Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap.scss";
+// Import Leaflet styles and its default variables
+@import "~leaflet/dist/leaflet.css";
+//Import leaflet marker cluster styles
+@import "~react-leaflet-markercluster/dist/styles.min.css";
+
 html,
 body {
   padding: 0;
@@ -23,17 +38,3 @@ body {
 .btn-primary {
   color: white !important;
 }
-
-// change the default bootstrap theme
-$theme-colors: (
-  "primary": $color-primary,
-  "secondary": $color-secondary,
-  "danger": $color-danger,
-);
-
-// Import Bootstrap and its default variables
-@import "~bootstrap/scss/bootstrap.scss";
-// Import Leaflet styles and its default variables
-@import "~leaflet/dist/leaflet.css";
-//Import leaflet marker cluster styles
-@import "~react-leaflet-markercluster/dist/styles.min.css";
