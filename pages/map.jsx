@@ -1,15 +1,19 @@
 import Head from "next/head";
 import React from "react";
-import styles from "../styles/Map.module.scss";
+import dynamic from "next/dynamic";
+import Navigation from "../components/Navigation.jsx";
+const Map = dynamic(() => import("../components/Map.jsx"), {
+  ssr: false,
+});
 
-function map() {
+export default function inicio() {
   return (
     <>
       <Head>
         <title>Map</title>
       </Head>
+      <Navigation />
+      <Map />
     </>
   );
 }
-
-export default map;

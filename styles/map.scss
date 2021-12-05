@@ -1,0 +1,40 @@
+@import "./colors";
+
+.map.leaflet-container {
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+.main-container {
+  width: 100vw;
+  margin-top: 64px;
+}
+
+.location-div button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background-color: $color-primary;
+  color: rgb(196, 212, 197);
+}
+
+button.grey {
+  background-color: #888888;
+  border-color: #888888cc;
+}
+button.grey:focus {
+  background-color: #888888;
+  border-color: #888888cc;
+}
+
+//leaflet-styles for map-page
+.leaflet-left {
+  margin-top: 64px;
+}
+.leaflet-control-layers {
+  background-color: $color-primary;
+  color: rgb(196, 212, 197);
+}
