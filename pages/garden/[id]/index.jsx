@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Header from "../../../components/Header";
 
-import styles from "../../../styles/User.module.scss";
+import styles from "../../../styles/garden.module.scss";
 import { useState } from "react";
 
 function garden() {
