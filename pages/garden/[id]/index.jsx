@@ -53,8 +53,51 @@ function garden() {
             Sharables
           </Button>
         </ButtonGroup>
+
+        {/* Decide what page part shoud be rendered,
+        depending on what the pageState is (set in Buttongroup) */}
+        {pageState === 1 && <Info />}
+        {pageState === 2 && <Events />}
+        {pageState === 3 && <Members />}
+        {pageState === 4 && <Shareables />}
       </div>
     </>
+  );
+}
+
+function Info() {
+  return (
+    <div>
+      <h1>Info</h1>
+      This is the garden description
+    </div>
+  );
+}
+
+function Events() {
+  return (
+    <div>
+      <h1>Events</h1>
+      This is the garden event page
+    </div>
+  );
+}
+
+function Members() {
+  return (
+    <div>
+      <h1>Members</h1>
+      This is the membre page
+    </div>
+  );
+}
+
+function Shareables() {
+  return (
+    <div>
+      <h1>Shareables</h1>
+      This is the garden Shareables page
+    </div>
   );
 }
 
