@@ -39,20 +39,22 @@ function garden() {
 
       {/* Page Content */}
       <div className={styles.Content}>
-        <ButtonGroup aria-label="Basic example" className={styles.buttonGroup}>
-          <Button variant="primary" onClick={() => setPageState(1)}>
-            Info
-          </Button>
-          <Button variant="primary" onClick={() => setPageState(2)}>
-            Events
-          </Button>
-          <Button variant="primary" onClick={() => setPageState(3)}>
-            Members
-          </Button>
-          <Button variant="primary" onClick={() => setPageState(4)}>
-            Sharables
-          </Button>
-        </ButtonGroup>
+        <div className={styles.buttonGroupWrapper}>
+          <ButtonGroup className={styles.buttonGroup}>
+            <Button variant="primary" onClick={() => setPageState(1)}>
+              Info
+            </Button>
+            <Button variant="primary" onClick={() => setPageState(2)}>
+              Events
+            </Button>
+            <Button variant="primary" onClick={() => setPageState(3)}>
+              Members
+            </Button>
+            <Button variant="primary" onClick={() => setPageState(4)}>
+              Sharables
+            </Button>
+          </ButtonGroup>
+        </div>
 
         {/* Decide what page part shoud be rendered,
         depending on what the pageState is (set in Buttongroup) */}
