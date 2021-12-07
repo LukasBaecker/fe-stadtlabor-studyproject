@@ -69,7 +69,7 @@ function garden() {
 
 function Info() {
   return (
-    <div>
+    <div className={styles.pagePartContent}>
       <h1>Info</h1>
       This is the garden description
     </div>
@@ -78,7 +78,7 @@ function Info() {
 
 function Events() {
   return (
-    <div>
+    <div className={styles.pagePartContent}>
       <h1>Events</h1>
       This is the garden event page
     </div>
@@ -87,7 +87,7 @@ function Events() {
 
 function Members() {
   return (
-    <div>
+    <div className={styles.pagePartContent}>
       <h1>Members</h1>
       This is the membre page
     </div>
@@ -96,7 +96,7 @@ function Members() {
 
 function Shareables() {
   return (
-    <div>
+    <div className={styles.pagePartContent}>
       <h1>Shareables</h1>
       This is the garden Shareables page
     </div>
