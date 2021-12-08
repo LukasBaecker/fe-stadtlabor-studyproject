@@ -20,3 +20,51 @@
   padding: 20px;
   border: 1px solid black;
 }
+
+.eventList {
+}
+
+.event {
+  display: grid;
+  grid-template-columns: 100px calc(100% - 100px);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+$dateBorderRadius: 20px;
+.eventDate {
+  border: 1px solid black;
+  border-radius: $dateBorderRadius;
+  height: 100px;
+}
+
+.eventDateMonth {
+  background-color: rgb(255, 114, 104);
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: $dateBorderRadius;
+  border-top-right-radius: $dateBorderRadius;
+  font-size: 130%;
+}
+
+.eventDateDay {
+  background-color: beige;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: $dateBorderRadius;
+  border-bottom-right-radius: $dateBorderRadius;
+  font-size: 250%;
+}
+
+.eventDetailWrapper {
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.eventDetail {
+}
