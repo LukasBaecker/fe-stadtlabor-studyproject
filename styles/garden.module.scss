@@ -33,15 +33,15 @@
 
 .listItem {
   display: grid;
-  grid-template-columns: 100px calc(100% - 100px);
+  grid-template-columns: 70px calc(100% - 70px);
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-$dateBorderRadius: 20px;
+$dateBorderRadius: 15px;
 .listItemGraphic {
   border: 1px solid black;
-  height: 100px;
+  height: 70px;
 }
 
 .listItemGraphicCalendar {
@@ -67,7 +67,7 @@ $dateBorderRadius: 20px;
   align-items: center;
   border-bottom-left-radius: $dateBorderRadius;
   border-bottom-right-radius: $dateBorderRadius;
-  font-size: 250%;
+  font-size: 200%;
 }
 
 .listItemGraphicImage {
