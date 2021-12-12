@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Button from "react-bootstrap/Button";
 
 function Navigation() {
   return (
@@ -13,10 +14,16 @@ function Navigation() {
             <div>
               <ul>
                 <li>
-                  <Link href='/signIn'>Sign In</Link>
+                  <Link href='/'>Home</Link>
                 </li>
                 <li>
-                  <Link href='/user'>Userpage</Link>
+                  <Link href='/map'>Resources Map</Link>
+                </li>
+                <li>
+                  <Link href='/user/1'>User Page</Link>
+                </li>
+                <li>
+                  <Button variant='danger'>Logout</Button>
                 </li>
               </ul>
             </div>
