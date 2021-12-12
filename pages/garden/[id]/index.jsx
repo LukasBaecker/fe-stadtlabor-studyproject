@@ -185,19 +185,37 @@ function Event({ event }) {
 
 function Members() {
   const [members, setMembers] = useState([
-    { name: "John Doe", role: "admin" },
-    { name: "Jane Doe", role: "admin" },
-    { name: "Garten Zwerg", role: "member" },
-    { name: "Max Mustermann", role: "member" },
-    { name: "Julia Julietta", role: "member" },
-    { name: "Harry Potter", role: "member" },
-    { name: "James Bond", role: "member" },
+    { id: 1, name: "John Doe", role: "admin" },
+    { id: 2, name: "Jane Doe", role: "admin" },
+    { id: 3, name: "Garten Zwerg", role: "member" },
+    { id: 4, name: "Max Mustermann", role: "member" },
+    { id: 5, name: "Julia Julietta", role: "member" },
+    { id: 6, name: "Harry Potter", role: "member" },
+    { id: 7, name: "James Bond", role: "member" },
   ]);
 
   return (
     <div className={styles.pagePartContent}>
       <h1>Members</h1>
-      This is the membre page
+      <div className={styles.listing}>
+        {members.map((member) => (
+          <Member key={member.id} member={member} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Member({ member }) {
+  return (
+    <div className={styles.listItem}>
+      <div className={styles.listItemGraphic}>lol</div>
+      <div className={styles.listItemContent}>
+        <div className={styles.listItemDetail}>
+          {member.role}
+          <h3>{member.name}</h3>
+        </div>
+      </div>
     </div>
   );
 }
