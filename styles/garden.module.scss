@@ -6,6 +6,9 @@
 }
 
 .buttonGroupWrapper {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 60px;
   text-align: center;
 }
 

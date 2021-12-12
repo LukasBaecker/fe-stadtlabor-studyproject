@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -42,16 +43,32 @@ function garden() {
         <div className={styles.buttonGroupWrapper}>
           <ButtonGroup className={styles.buttonGroup}>
             <Button variant="primary" onClick={() => setPageState(1)}>
-              Info
+              <img
+                src="/imgs/icons8-info-100.png"
+                alt="Info"
+                className={styles.menuButtonIcon}
+              />
             </Button>
             <Button variant="primary" onClick={() => setPageState(2)}>
-              Events
+              <img
+                src="/imgs/icons8-kalender-bearbeiten-100.png"
+                alt="Events"
+                className={styles.menuButtonIcon}
+              />
             </Button>
             <Button variant="primary" onClick={() => setPageState(3)}>
-              Members
+              <img
+                src="/imgs/icons8-benutzergruppen-100.png"
+                alt="Members"
+                className={styles.menuButtonIcon}
+              />
             </Button>
             <Button variant="primary" onClick={() => setPageState(4)}>
-              Sharables
+              <img
+                src="/imgs/icons8-bohrmaschine-100.png"
+                alt="Tools"
+                className={styles.menuButtonIcon}
+              />
             </Button>
           </ButtonGroup>
         </div>
