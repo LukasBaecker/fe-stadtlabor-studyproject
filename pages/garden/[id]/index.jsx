@@ -170,7 +170,7 @@ function Event({ event }) {
         <div className={styles.eventDateDay}>{eventDate.getDate()}</div>
       </div>
       <div className={styles.listItemContent}>
-        <div className={styles.eventDetail}>
+        <div className={styles.listItemDetail}>
           {eventDate.getFullYear() +
             ", " +
             timeNumber2String(eventDate.getHours()) +
