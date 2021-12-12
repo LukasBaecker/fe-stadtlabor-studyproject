@@ -191,19 +191,30 @@ function Event({ event }) {
 function Members() {
   const [members, setMembers] = useState([
     { id: 1, name: "John Doe", role: "admin" },
-    { id: 2, name: "Jane Doe", role: "admin" },
     { id: 3, name: "Garten Zwerg", role: "member" },
     { id: 4, name: "Max Mustermann", role: "member" },
     { id: 5, name: "Julia Julietta", role: "member" },
     { id: 6, name: "Harry Potter", role: "member" },
     { id: 7, name: "James Bond", role: "member" },
+    { id: 8, name: "Santa Claus", role: "admin" },
   ]);
+
+  //sort all members into admins and normal members
+  // so we can list them systematically
+  const admins = members.filter((member) => member.role === "admin");
+  const normalMembers = members.filter((member) => member.role === "member");
 
   return (
     <div className={styles.pagePartContent}>
       <h2>Members</h2>
       <div className={styles.listing}>
-        {members.map((member) => (
+        {/* first show all admin members */}
+        {admins.map((member) => (
+          <Member key={member.id} member={member} />
+        ))}
+
+        {/* now show all normal members */}
+        {normalMembers.map((member) => (
           <Member key={member.id} member={member} />
         ))}
       </div>
