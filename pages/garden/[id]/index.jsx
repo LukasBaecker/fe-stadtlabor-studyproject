@@ -184,6 +184,16 @@ function Event({ event }) {
 }
 
 function Members() {
+  const [members, setMembers] = useState([
+    { name: "John Doe", role: "admin" },
+    { name: "Jane Doe", role: "admin" },
+    { name: "Garten Zwerg", role: "member" },
+    { name: "Max Mustermann", role: "member" },
+    { name: "Julia Julietta", role: "member" },
+    { name: "Harry Potter", role: "member" },
+    { name: "James Bond", role: "member" },
+  ]);
+
   return (
     <div className={styles.pagePartContent}>
       <h1>Members</h1>
