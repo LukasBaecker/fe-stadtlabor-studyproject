@@ -163,7 +163,12 @@ function Event({ event }) {
 
   return (
     <div className={styles.listItem}>
-      <div className={styles.listItemGraphic}>
+      <div
+        className={
+          // assign multiple classes to div
+          [styles.listItemGraphic, styles.listItemGraphicCalendar].join(" ")
+        }
+      >
         <div className={styles.eventDateMonth}>
           {monthNames[eventDate.getMonth()]}
         </div>
@@ -209,7 +214,14 @@ function Members() {
 function Member({ member }) {
   return (
     <div className={styles.listItem}>
-      <div className={styles.listItemGraphic}>lol</div>
+      <div
+        className={
+          // assign multiple classes to element
+          [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
+        }
+      >
+        lol
+      </div>
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
           {member.role}

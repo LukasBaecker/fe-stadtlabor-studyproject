@@ -41,8 +41,11 @@
 $dateBorderRadius: 20px;
 .listItemGraphic {
   border: 1px solid black;
-  border-radius: $dateBorderRadius;
   height: 100px;
+}
+
+.listItemGraphicCalendar {
+  border-radius: $dateBorderRadius;
 }
 
 .eventDateMonth {
@@ -65,6 +68,10 @@ $dateBorderRadius: 20px;
   border-bottom-left-radius: $dateBorderRadius;
   border-bottom-right-radius: $dateBorderRadius;
   font-size: 250%;
+}
+
+.listItemGraphicImage {
+  border-radius: 50%;
 }
 
 .listItemContent {
