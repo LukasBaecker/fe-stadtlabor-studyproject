@@ -116,7 +116,7 @@ function Events() {
   return (
     <div className={styles.pagePartContent}>
       <h2>Upcoming Events</h2>
-      <div className={styles.eventList}>
+      <div className={styles.listing}>
         {upcomingEvents.map((evt) => (
           <Event key={evt.id} event={evt} />
         ))}
@@ -125,7 +125,7 @@ function Events() {
       <br />
 
       <h2>Past Events</h2>
-      <div className={styles.eventList}>
+      <div className={styles.listing}>
         {pastEvents.map((evt) => (
           <Event key={evt.id} event={evt} />
         ))}
@@ -162,14 +162,14 @@ function Event({ event }) {
   }
 
   return (
-    <div className={styles.event}>
-      <div className={styles.eventDate}>
+    <div className={styles.listItem}>
+      <div className={styles.listItemGraphic}>
         <div className={styles.eventDateMonth}>
           {monthNames[eventDate.getMonth()]}
         </div>
         <div className={styles.eventDateDay}>{eventDate.getDate()}</div>
       </div>
-      <div className={styles.eventDetailWrapper}>
+      <div className={styles.listItemContent}>
         <div className={styles.eventDetail}>
           {eventDate.getFullYear() +
             ", " +

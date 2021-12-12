@@ -28,10 +28,10 @@
   border: 1px solid black;
 }
 
-.eventList {
+.listing {
 }
 
-.event {
+.listItem {
   display: grid;
   grid-template-columns: 100px calc(100% - 100px);
   margin-top: 10px;
@@ -39,7 +39,7 @@
 }
 
 $dateBorderRadius: 20px;
-.eventDate {
+.listItemGraphic {
   border: 1px solid black;
   border-radius: $dateBorderRadius;
   height: 100px;
@@ -67,7 +67,7 @@ $dateBorderRadius: 20px;
   font-size: 250%;
 }
 
-.eventDetailWrapper {
+.listItemContent {
   padding-left: 15px;
   display: flex;
   align-items: center;
