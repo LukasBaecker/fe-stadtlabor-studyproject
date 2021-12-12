@@ -201,7 +201,7 @@ function Members() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h1>Members</h1>
+      <h2>Members</h2>
       <div className={styles.listing}>
         {members.map((member) => (
           <Member key={member.id} member={member} />
@@ -235,7 +235,7 @@ function Member({ member }) {
 function Shareables() {
   return (
     <div className={styles.pagePartContent}>
-      <h1>Shareables</h1>
+      <h2>Shareables</h2>
       This is the garden Shareables page
     </div>
   );
