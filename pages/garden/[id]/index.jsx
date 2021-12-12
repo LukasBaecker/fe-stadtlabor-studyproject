@@ -214,14 +214,14 @@ function Members() {
 function Member({ member }) {
   return (
     <div className={styles.listItem}>
-      <div
+      <img
+        src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+        alt="user profile picture"
         className={
           // assign multiple classes to element
           [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
         }
-      >
-        lol
-      </div>
+      />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
           {member.role}
