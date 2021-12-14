@@ -84,6 +84,11 @@ function garden() {
   );
 }
 
+/* 
+Info Page:
+Rendered, when the user clicks the Info Button in ButtonGroup.
+Shows general informatino about the garden community, e.g. description.
+*/
 function Info() {
   return (
     <div className={styles.pagePartContent}>
@@ -93,6 +98,11 @@ function Info() {
   );
 }
 
+/* 
+Event Page:
+Rendered, when the user clicks the Event Button in ButtonGroup.
+Shows the past and futere events that take place in the garden
+*/
 function Events() {
   const [events, setEvnts] = useState([
     { id: 1, date: "2021-07-12T18:00:00", name: "Barbeque" },
@@ -188,6 +198,12 @@ function Event({ event }) {
   );
 }
 
+/* 
+Members Page:
+Rendered, when the user clicks the Members Button in ButtonGroup.
+Shows all members of the community and their role (admin or normal member).
+Admins can remove members or promote members to admins.
+*/
 function Members() {
   const [members, setMembers] = useState([
     { id: 1, name: "John Doe", role: "admin" },
@@ -263,6 +279,12 @@ function Shareables() {
   );
 }
 
+/* 
+Shareables Page:
+Rendered, when the user clicks the Shareable Button in ButtonGroup.
+Shows all items that the garden community offers to share with other people.
+Items can be added, admin can remove items.
+*/
 function ShareableItem({ item }) {
   return (
     <div className={styles.listItem}>
