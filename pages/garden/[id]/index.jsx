@@ -244,10 +244,42 @@ function Member({ member }) {
 }
 
 function Shareables() {
+  const [items, setItems] = useState([
+    { id: 1, name: "Drilling machine", type: "Tool" },
+    { id: 2, name: "Horse Dung", type: "Fertelizer" },
+    { id: 3, name: "Grass Seeds", type: "Seeds" },
+    { id: 4, name: "Lawnmower", type: "Tool" },
+  ]);
+
   return (
     <div className={styles.pagePartContent}>
       <h2>Shareables</h2>
-      This is the garden Shareables page
+      <div className={styles.listing}>
+        {items.map((item) => (
+          <ShareableItem key={item.id} item={item} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ShareableItem({ item }) {
+  return (
+    <div className={styles.listItem}>
+      <img
+        src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+        alt="user profile picture"
+        className={
+          // assign multiple classes to element
+          [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
+        }
+      />
+      <div className={styles.listItemContent}>
+        <div className={styles.listItemDetail}>
+          {item.type}
+          <h3>{item.name}</h3>
+        </div>
+      </div>
     </div>
   );
 }
