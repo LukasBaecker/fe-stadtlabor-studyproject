@@ -259,6 +259,12 @@ function Member({ member }) {
   );
 }
 
+/* 
+Shareables Page:
+Rendered, when the user clicks the Shareable Button in ButtonGroup.
+Shows all items that the garden community offers to share with other people.
+Items can be added, admin can remove items.
+*/
 function Shareables() {
   const [items, setItems] = useState([
     { id: 1, name: "Drilling machine", type: "Tool" },
@@ -279,12 +285,6 @@ function Shareables() {
   );
 }
 
-/* 
-Shareables Page:
-Rendered, when the user clicks the Shareable Button in ButtonGroup.
-Shows all items that the garden community offers to share with other people.
-Items can be added, admin can remove items.
-*/
 function ShareableItem({ item }) {
   return (
     <div className={styles.listItem}>
