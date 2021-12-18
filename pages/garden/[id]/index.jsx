@@ -10,7 +10,7 @@ import Col from "react-bootstrap/Col";
 import Header from "../../../components/Header";
 
 import styles from "../../../styles/garden.module.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function garden() {
   const router = useRouter();
@@ -132,9 +132,9 @@ function Events() {
         ))}
       </div>
 
-      <br />
+      <AddButton title="Add Event" executeFunction={() => alert("add event")} />
 
-      <h2>Past Events</h2>
+      <h2 style={{ marginTop: "25px" }}>Past Events</h2>
       <div className={styles.listing}>
         {pastEvents.map((evt) => (
           <Event key={evt.id} event={evt} />
@@ -281,6 +281,10 @@ function Shareables() {
           <ShareableItem key={item.id} item={item} />
         ))}
       </div>
+      <AddButton
+        title="Add Shareable"
+        executeFunction={() => alert("add shareable")}
+      />
     </div>
   );
 }
@@ -306,4 +310,38 @@ function ShareableItem({ item }) {
   );
 }
 
+function AddButton({ title, executeFunction }) {
+  // function to calculate left position in px of element
+  const getPosition = () => {
+    const pxBody = document.body.clientWidth;
+    const pxHtml = window.innerWidth;
+    const pos = pxHtml / 2 + pxBody / 2 - 20;
+    return pos;
+  };
+
+  //state-variable to store left position in px
+  const [leftPosition, setLeftPosition] = useState(getPosition());
+
+  // function to execute on window resizing
+  // keeps the element where it is supposed to be
+  const onResize = () => {
+    const pos = getPosition();
+    setLeftPosition(pos);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  return (
+    <Button
+      onClick={executeFunction}
+      className={styles.addButtonNew}
+      style={{ left: leftPosition }}
+    >
+      +
+    </Button>
+  );
+}
 export default garden;
