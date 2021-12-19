@@ -341,10 +341,7 @@ function Shareables() {
           <ShareableItem key={item.id} item={item} />
         ))}
       </div>
-      <AddButton
-        title="Add Shareable"
-        executeFunction={() => alert("add shareable")}
-      />
+      <AddButton ExecuteFunction={AddShareable} />
     </div>
   );
 }
@@ -365,6 +362,53 @@ function ShareableItem({ item }) {
           {item.type}
           <h3>{item.name}</h3>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AddShareable({ setPopupVisible }) {
+  const [shareableName, setShareableName] = useState("");
+  const [shareableCategory, setShareableCategory] = useState(1);
+
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popup_inner}>
+        <h3>New Shareable</h3>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Shareable name"
+              value={shareableName}
+              onChange={(e) => setShareableName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Category</Form.Label>
+            <Form.Select
+              value={shareableCategory}
+              onChange={(e) => setShareableCategory(e.target.value)}
+            >
+              <option value="1">Tools</option>
+              <option value="2">Seeds</option>
+              <option value="3">Fertelizers</option>
+              <option value="4">Compost</option>
+              <option value="5">Cosntruction Material</option>
+              <option value="6">Gardens</option>
+              <option value="7">Other</option>
+            </Form.Select>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+        <button
+          className={styles.popupCloseButton}
+          onClick={() => setPopupVisible(false)}
+        >
+          X
+        </button>
       </div>
     </div>
   );
