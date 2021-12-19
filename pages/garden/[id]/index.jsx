@@ -8,6 +8,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Header from "../../../components/Header";
+import Form from "react-bootstrap/Form";
 
 import styles from "../../../styles/garden.module.scss";
 import { useState, useEffect } from "react";
@@ -132,7 +133,7 @@ function Events() {
         ))}
       </div>
 
-      <AddButton title="Add Event" executeFunction={() => alert("add event")} />
+      <AddButton ExecuteFunction={AddEvent} />
 
       <h2 style={{ marginTop: "25px" }}>Past Events</h2>
       <div className={styles.listing}>
@@ -193,6 +194,65 @@ function Event({ event }) {
             timeNumber2String(eventDate.getMinutes())}
           <h3>{eventName}</h3>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AddEvent({ setPopupVisible }) {
+  const [eventName, setEventName] = useState("");
+  const [eventDate, setEventDate] = useState(""); // used for both date and time
+  const [eventLocation, setEventLocation] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popup_inner}>
+        <h3>New Event</h3>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Event name"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="datetime-local"
+              placeholder="Date"
+              value={eventDate}
+              onChange={(e) => setEventDate(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Location"
+              value={eventLocation}
+              onChange={(e) => setEventLocation(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control
+              as="textarea"
+              placeholder="Description"
+              value={eventDescription}
+              onChange={(e) => setEventDescription(e.target.value)}
+              rows={3}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+        <button
+          className={styles.popupCloseButton}
+          onClick={() => setPopupVisible(false)}
+        >
+          X
+        </button>
       </div>
     </div>
   );
@@ -310,7 +370,7 @@ function ShareableItem({ item }) {
   );
 }
 
-function AddButton({ title, executeFunction }) {
+function AddButton({ ExecuteFunction }) {
   // function to calculate left position in px of element
   const getPosition = () => {
     const pxBody = document.body.clientWidth;
@@ -334,14 +394,19 @@ function AddButton({ title, executeFunction }) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const [popupVisible, setPopupVisible] = useState(false);
+
   return (
-    <Button
-      onClick={executeFunction}
-      className={styles.addButtonNew}
-      style={{ left: leftPosition }}
-    >
-      +
-    </Button>
+    <>
+      <Button
+        onClick={() => setPopupVisible(true)}
+        className={styles.addButtonNew}
+        style={{ left: leftPosition }}
+      >
+        +
+      </Button>
+      {popupVisible && <ExecuteFunction setPopupVisible={setPopupVisible} />}
+    </>
   );
 }
 export default garden;
