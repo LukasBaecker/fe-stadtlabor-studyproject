@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React from "react";
 let Yup = require("yup");
 import { Formik } from "formik";
@@ -26,7 +27,6 @@ const validationSchema = Yup.object().shape({
     .max(100, "*email must be less than 100 characters long")
     .required("*email is required"),
   contact: Yup.string()
-    .email("*must be a valid phone number")
     .max(50, "*your phone number is to long")
     .required("*phone number is required"),
   password: Yup.string()
@@ -39,6 +39,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function signUp() {
+  const router = useRouter();
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
   return (
@@ -56,6 +57,7 @@ function signUp() {
                 first_name: "",
                 email: "",
                 password: "",
+                contact: "",
                 repeatPassword: "",
               }}
               // Hooks up our validationSchema to Formik
@@ -63,28 +65,35 @@ function signUp() {
               onSubmit={(values, { setSubmitting, resetForm }) => {
                 // When button submits form and form is in the process of submitting, submit button is disabled
                 setSubmitting(true);
-                axios
-                  .post(
-                    "http://giv-project15.uni-muenster.de:9000/api/v1/users/register",
-                    null,
-                    {
-                      params: {
-                        values,
-                      },
-                    }
-                  )
-                  .then(() => {
-                    resetForm();
-                    setSubmitting(false);
-                    history.push("/success/newuser");
+
+                fetch(
+                  "http://giv-project15.uni-muenster.de:9000/api/v1/users/register",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                      first_name: values.first_name,
+                      last_name: values.last_name,
+                      email: values.email,
+                      password: values.password,
+                      phone: values.contact,
+                    }),
+                  }
+                )
+                  .then((res) => {
+                    console.log(res);
+                    res.json().then((result) => {
+                      setSubmitting(false);
+                      resetForm();
+                      console.log(result);
+                      console.log(result.first_name + " has been registered");
+                      router.push("/signin");
+                    });
                   })
                   .catch((err) => {
                     setSubmitting(false);
-                    console.log("err:", err.response);
-                    message.error(
-                      "An error has been occured: " +
-                        JSON.stringify(err.response.data.email)
-                    );
+                    console.log(err.message);
                   });
               }}>
               {/* Callback function containing Formik state and helpers that handle common form actions */}

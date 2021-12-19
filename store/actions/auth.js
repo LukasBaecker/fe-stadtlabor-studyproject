@@ -3,9 +3,9 @@ import jwt_decode from "jwt-decode";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
-export const loginUser = (user) => (dispatch) => {
-  const { token } = user.data;
-  localStorage.setItem("jwtToken", token);
+export const loginUser = (jwtToken) => (dispatch) => {
+  const token = jwtToken;
+  //localStorage.setItem("jwtToken", token);
   setAuthToken(token);
   const decoded = jwt_decode(token);
   dispatch(setCurrentUser(decoded));

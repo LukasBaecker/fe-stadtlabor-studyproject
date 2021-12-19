@@ -1,46 +1,65 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Header from "../../../components/Header";
-import { useRouter } from "next/router";
-
-import styles from "../../../styles/User.module.scss";
+import Header from "../components/Header";
+import styles from "../styles/User.module.scss";
 import { useState } from "react";
-
+import { useSelector } from "react-redux";
 function defaultButtonClick(e) {
   alert("Button pressed:\n" + e.target.textContent);
 }
 
 function user() {
-  const [username, setUsername] = useState("John");
-
+  const jwtToken = localStorage.getItem("jwtToken");
+  const currentUser = useSelector((state) => state.user);
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
   const [gardens, setGardens] = useState([
     { id: 1, name: "Garden 1" },
     { id: 2, name: "Garden 2" },
     { id: 3, name: "Garden 3" },
   ]);
 
-  const router = useRouter();
-  const { id } = router.query;
+  useEffect(() => {
+    (async () => {
+      try {
+        const request = await fetch(
+          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        );
+        const content = await request.json();
+        setUsername(content.first_name);
+      } catch (e) {
+        console.log("error: ", e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  });
   return (
     <>
       {/* update page title */}
       <Head>
-        <title>Your page, {id}</title>
+        <title>Userpage</title>
       </Head>
 
       {/* Set Header */}
       <Header
-        caption="Welcome back"
+        caption='Welcome back'
         name={username}
-        imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+        imgUrl='https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'
       />
 
       {/* Page Content */}
       <div className={styles.Content}>
-        <Row xs="1" sm="2" className={styles.Row}>
-          <Col xs="12" sm="12" className={styles.ColGardens}>
+        <Row xs='1' sm='2' className={styles.Row}>
+          <Col xs='12' sm='12' className={styles.ColGardens}>
             <Gardens gardens={gardens} />
           </Col>
           <Col className={styles.Col}>
@@ -80,8 +99,7 @@ function Garden({ gardenName }) {
   return (
     <button
       className={[styles.Item, styles.Garden].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
-    >
+      onClick={(e) => defaultButtonClick(e)}>
       {gardenName}
     </button>
   );
@@ -93,14 +111,12 @@ function GardenController() {
       <button
         className={styles.GardenControllerPart}
         style={{ borderRight: "1px solid black" }}
-        onClick={(e) => defaultButtonClick(e)}
-      >
+        onClick={(e) => defaultButtonClick(e)}>
         Create new Garden
       </button>
       <button
         className={styles.GardenControllerPart}
-        onClick={(e) => defaultButtonClick(e)}
-      >
+        onClick={(e) => defaultButtonClick(e)}>
         Join a Garden
       </button>
     </Container>
@@ -112,8 +128,7 @@ function Map() {
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
-    >
+      onClick={(e) => defaultButtonClick(e)}>
       Mapview
     </button>
   );
@@ -124,8 +139,7 @@ function Variety() {
   return (
     <button
       className={[styles.Item, styles.Variety].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
-    >
+      onClick={(e) => defaultButtonClick(e)}>
       Variety
     </button>
   );

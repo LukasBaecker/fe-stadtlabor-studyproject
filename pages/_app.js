@@ -5,6 +5,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { createWrapper } from "next-redux-wrapper";
 import store from "../store/configurateStore.js";
+import { PersistGate } from "redux-persist/integration/react";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
       <title>GardenUp!</title>
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       <Provider store={store}>
-        <Component {...pageProps} />
+        <PersistGate persistor={store.__PERSISTOR} loading={null}>
+          <Component {...pageProps} />
+        </PersistGate>
       </Provider>
     </React.Fragment>
   );

@@ -1,13 +1,14 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Formik } from "formik";
+import { useSelector } from "react-redux";
 //import { message } from "antd";
 let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 // Schema for yup
 const validationSchema = Yup.object().shape({
@@ -19,6 +20,12 @@ const validationSchema = Yup.object().shape({
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const currentUser = useSelector((state) => state.user);
+  var getCrops = () => {
+    router.push("/user");
+  };
+
   return (
     <>
       <Head>
@@ -38,28 +45,28 @@ const SignIn = () => {
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting, resetForm }) => {
             setSubmitting(true);
-
-            axios
-              .post(
-                "http://giv-project15.uni-muenster.de:9000/api/v1/user/login",
-                null,
-                {
-                  params: {
-                    values,
-                  },
-                }
-              )
+            fetch(
+              "http://giv-project15.uni-muenster.de:9000/api/v1/users/login",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(values),
+              }
+            )
               .then((res) => {
-                dispatch(loginUser(res));
-                setSubmitting(false);
-                resetForm();
-                //message.success("You have been logged in");
-                console.log("You are logged in");
+                res.json().then((result) => {
+                  dispatch(loginUser(result.jwt));
+                  setSubmitting(false);
+                  resetForm();
+                  console.log("Login: Success");
+                  router.push("/user");
+                });
               })
               .catch((err) => {
                 setSubmitting(false);
-                //message.error(err.response.data.password);
-                console.log("Error occurred");
+                console.log(err.message);
+                console.log("Login: Denied");
               });
           }}>
           {/* Callback function containing Formik state and helpers that handle common form actions */}
@@ -117,6 +124,14 @@ const SignIn = () => {
           )}
         </Formik>
       </div>
+      <Button
+        variant='secondary'
+        onClick={() => {
+          getCrops();
+        }}>
+        {" "}
+        User Data to console
+      </Button>
     </>
   );
 };
