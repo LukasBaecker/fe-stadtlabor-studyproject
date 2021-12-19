@@ -199,6 +199,7 @@ function Event({ event }) {
   );
 }
 
+// Popup to add a new event
 function AddEvent({ setPopupVisible }) {
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState(""); // used for both date and time
@@ -367,6 +368,7 @@ function ShareableItem({ item }) {
   );
 }
 
+// Popup to add a new shareable
 function AddShareable({ setPopupVisible }) {
   const [shareableName, setShareableName] = useState("");
   const [shareableCategory, setShareableCategory] = useState(1);
@@ -414,6 +416,11 @@ function AddShareable({ setPopupVisible }) {
   );
 }
 
+/*
+Floating Action Button on the bottom of the screen:
+Used to add something (Event or Shareable)
+Opens an overlay popup with the form to add something
+*/
 function AddButton({ ExecuteFunction }) {
   // function to calculate left position in px of element
   const getPosition = () => {
