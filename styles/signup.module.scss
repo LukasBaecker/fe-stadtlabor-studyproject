@@ -1,7 +1,11 @@
 @import "./colors";
 
-.img {
+.signupDiv {
+  margin-left: 0;
   width: 100vw;
+}
+.img {
+  width: 100%;
   border-radius: 25px 25px 0 0;
   -webkit-border-radius: 25px 25px 0, 0;
   -moz-border-radius: 25px 25px 0, 0;
