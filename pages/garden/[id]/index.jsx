@@ -3,10 +3,6 @@ import { useRouter } from "next/router";
 
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Header from "../../../components/Header";
 import Form from "react-bootstrap/Form";
 
