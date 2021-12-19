@@ -371,7 +371,7 @@ function ShareableItem({ item }) {
 // Popup to add a new shareable
 function AddShareable({ setPopupVisible }) {
   const [shareableName, setShareableName] = useState("");
-  const [shareableCategory, setShareableCategory] = useState(1);
+  const [shareableCategory, setShareableCategory] = useState(0);
 
   return (
     <div className={styles.popup}>
@@ -392,13 +392,13 @@ function AddShareable({ setPopupVisible }) {
               value={shareableCategory}
               onChange={(e) => setShareableCategory(e.target.value)}
             >
-              <option value="1">Tools</option>
-              <option value="2">Seeds</option>
-              <option value="3">Fertelizers</option>
-              <option value="4">Compost</option>
-              <option value="5">Cosntruction Material</option>
-              <option value="6">Gardens</option>
-              <option value="7">Other</option>
+              <option value="0">Tools</option>
+              <option value="1">Seeds</option>
+              <option value="2">Fertelizers</option>
+              <option value="3">Compost</option>
+              <option value="4">Cosntruction Material</option>
+              <option value="5">Gardens</option>
+              <option value="6">Other</option>
             </Form.Select>
           </Form.Group>
           <Button variant="primary" type="submit">
