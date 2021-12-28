@@ -98,7 +98,7 @@ function Gardens({ gardens }) {
   // if the user is not part of a garden (yet), then the width of the two buttons is wider
   // to allign with the rest of the page
   // otherwise, it is only 300px to allign with the other garden entries.
-  const lastWidth = gardens.length < 1 ? "100%" : "300px;";
+  const lastWidth = gardens.length < 1 ? "100%" : "300px";
 
   const style = {
     gridTemplateColumns: "300px ".repeat(gardens.length) + lastWidth,
