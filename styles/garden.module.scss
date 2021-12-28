@@ -1,0 +1,105 @@
+@import "./_colors";
+
+$card-radius: 50px;
+@import "./popup";
+
+.Content {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 80vh;
+}
+
+.buttonGroupWrapper {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 60px;
+  text-align: center;
+}
+
+.buttonGroup {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+}
+
+.menuButtonIcon {
+  height: 50px;
+}
+
+.pagePartContent {
+  margin: 10px;
+  padding: 10px;
+}
+
+/*
+.listing {
+}
+ */
+
+.listItem {
+  display: grid;
+  grid-template-columns: 70px calc(100% - 70px);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+$dateBorderRadius: 15px;
+.listItemGraphic {
+  border: 1px solid black;
+  height: 70px;
+}
+
+.listItemGraphicCalendar {
+  border-radius: $dateBorderRadius;
+}
+
+.eventDateMonth {
+  background-color: rgb(255, 114, 104);
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: $dateBorderRadius;
+  border-top-right-radius: $dateBorderRadius;
+  font-size: 130%;
+}
+
+.eventDateDay {
+  background-color: beige;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: $dateBorderRadius;
+  border-bottom-right-radius: $dateBorderRadius;
+  font-size: 200%;
+}
+
+.listItemGraphicImage {
+  border-radius: 50%;
+}
+
+.listItemContent {
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+}
+
+/* 
+.listItemDetail {
+}
+*/
+
+.addButtonNew {
+  // left is set dynamically in javascript code
+  position: fixed;
+  z-index: 3;
+  bottom: 20px;
+  transform: translateX(-100%);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 300%;
+}
