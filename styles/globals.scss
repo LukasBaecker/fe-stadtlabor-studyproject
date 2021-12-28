@@ -3,6 +3,8 @@
 @import "./navigation.scss";
 @import "./leaflet-marker-cluster.scss";
 @import "./map.scss";
+@import "./mapNav.scss";
+@import "./error.scss";
 //import font
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300;1,400&family=Mr+Dafoe&display=swap");
 
@@ -30,7 +32,7 @@ body {
   background-color: $color-base;
 }
 
-body {
+.bodyBox {
   max-width: 800px;
   margin: auto;
 }

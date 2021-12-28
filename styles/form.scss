@@ -18,3 +18,33 @@
   height: 1em;
   font-size: 0.8em;
 }
+
+.alertBox {
+  position: fixed !important;
+  opacity: 0.9;
+  z-index: 22;
+  top: 0;
+  left: 50%;
+  margin: auto;
+  width: 100vw;
+  max-width: 800px;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+}
+
+.alertInPopup {
+  margin-top: 20px;
+}
+
+.spinnerDiv {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 21;
+  background-color: rgba($color: #666, $alpha: 0.6);
+  text-align: center;
+  padding-top: 50vh;
+}

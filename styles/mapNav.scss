@@ -1,0 +1,37 @@
+@import "./colors";
+.mapNav {
+  height: 60px;
+  background-color: $color-base;
+  max-width: 800%;
+  z-index: 20;
+  position: absolute;
+  left: 50vw;
+  transform: translateX(-50%);
+  bottom: 0;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+
+  .row {
+    height: 100%;
+  }
+  .col {
+    border-left: 1px solid $color-secondary;
+  }
+  #colFirst {
+    border-left: none;
+  }
+}
+
+.mapNavIcon {
+  color: $color-secondary;
+  font-size: 40px;
+  margin: auto;
+  margin-top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+}

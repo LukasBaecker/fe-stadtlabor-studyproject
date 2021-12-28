@@ -1,19 +1,29 @@
 import React, { Fragment, useEffect, useState } from "react";
-
+import { useSelector } from "react-redux";
+import router, { useRouter } from "next/router";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
+import { Formik } from "formik";
+import { loginUser } from "../store/actions/auth.js";
+import { useDispatch } from "react-redux";
+let Yup = require("yup");
 import BootstrapButton from "react-bootstrap/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSeedling, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "../styles/Home.module.scss";
 
 export default function Home() {
+  const router = useRouter();
   const [offsetY, setOffsetY] = useState(0);
-
+  const currentUser = useSelector((state) => state.auth);
   // Parallax Scroll Effect on Page Top
   const handleScroll = () => setOffsetY(window.scrollY);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -21,49 +31,58 @@ export default function Home() {
 
   // Boolean State indicating whether the Login Window is currently Shown
   const [loginShown, setLoginShown] = useState(false);
+  const content = () => {
+    return (
+      <React.Fragment>
+        <div className='bodyBox'>
+          <div className={styles.title}>
+            <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
+            {/* Page Title */}
+            <h1
+              style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
+              GardenUp!
+            </h1>
 
-  return (
-    <React.Fragment>
-      <div className={styles.title}>
-        <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
-        {/* Page Title */}
-        <h1 style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
-          GardenUp!
-        </h1>
+            {/* Image of greenhouse in background */}
+            <Image
+              src='/imgs/greenhouse.png'
+              style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
+            />
 
-        {/* Image of greenhouse in background */}
-        <Image
-          src="/imgs/greenhouse.png"
-          style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
-        />
+            <SignupButton />
+            <WhyJoin />
+          </div>
 
-        <SignupButton />
-        <WhyJoin />
-      </div>
+          {/* Login-Popup: Only visible if loginShown is True */}
+          <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
 
-      {/* Login-Popup: Only visible if loginShown is True */}
-      <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
+          <Container className={styles.siteElement}>
+            <Image
+              src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
+              className={styles.decoImage}
+            />
+          </Container>
 
-      <Container className={styles.siteElement}>
-        <Image
-          src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
-          className={styles.decoImage}
-        />
-      </Container>
+          <Advantages />
 
-      <Advantages />
-
-      <div className={styles.frontFooter}>
-        <SignupButton />
-        <Image
-          src="/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg"
-          className={styles.decoImage}
-          fluid
-        />
-        <Footer />
-      </div>
-    </React.Fragment>
-  );
+          <div className={styles.frontFooter}>
+            <SignupButton />
+            <Image
+              src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
+              className={styles.decoImage}
+              fluid
+            />
+            <Footer />
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  };
+  const redirecter = () => {
+    router.push("/user");
+    return <></>;
+  };
+  return <>{currentUser.isAuthenticated ? redirecter() : content()}</>;
 }
 
 function LoginButton({ offsetY, toggleLoginPopup }) {
@@ -75,8 +94,7 @@ function LoginButton({ offsetY, toggleLoginPopup }) {
     <div className={styles.login}>
       <button
         onClick={() => onLoginButtonClick()}
-        style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
-      >
+        style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}>
         Log in!
       </button>
     </div>
@@ -84,13 +102,17 @@ function LoginButton({ offsetY, toggleLoginPopup }) {
 }
 
 function SignupButton() {
+  const router = useRouter();
   function onSignupButtonClick() {
-    console.log("Implement href to signup page");
+    router.push("/signup");
   }
 
   return (
     <div className={styles.signup}>
-      <button onClick={() => onSignupButtonClick()}>Sign up!</button>
+      <button onClick={() => onSignupButtonClick()}>
+        Sign up!
+        <FontAwesomeIcon className={styles.signUpIcon} icon={faSeedling} />
+      </button>
     </div>
   );
 }
@@ -118,38 +140,130 @@ function WhyJoin() {
 function LoginPopup({ isVisible, toggleLoginPopup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  // Schema for yup
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("*enter a valid mail")
+      .required("*please enter your email"),
+    password: Yup.string().required("*please enter your password."),
+  });
 
   const onClose = () => toggleLoginPopup(false);
   if (isVisible) {
     return (
       <div className={styles.popup}>
         <div className={styles.popup_inner}>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Form.Group>
+          {showError ? (
+            <>
+              <Alert
+                className='alertInPopup'
+                variant='danger'
+                onClose={() => setShowError(false)}
+                dismissible>
+                <Alert.Heading>Ups!</Alert.Heading>
+                <p>Email or password is wrong.</p>
+              </Alert>
+            </>
+          ) : (
+            <></>
+          )}
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            // Hooks up our validationSchema to Formik
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+              setSubmitting(true);
+              fetch(
+                "http://giv-project15.uni-muenster.de:9000/api/v1/users/login",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  credentials: "include",
+                  body: JSON.stringify(values),
+                }
+              )
+                .then((res) => {
+                  if (res.ok) {
+                    res.json().then((result) => {
+                      resetForm();
+                      dispatch(loginUser(result.jwt));
+                      console.log("Login: Success");
+                      //router.push("/user");
+                    });
+                  } else {
+                    throw new Error("Something went wrong");
+                  }
+                })
+                .catch((err) => {
+                  resetForm();
+                  setShowError(true);
+                  console.log("Login: Denied");
+                  console.log(err.message);
+                });
+            }}>
+            {/* Callback function containing Formik state and helpers that handle common form actions */}
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
+              <Form onSubmit={handleSubmit} className='mx-auto'>
+                <Form.Group className='form-group' controlId='formEmail'>
+                  <Form.Label>Email :</Form.Label>
+                  <Form.Control
+                    type='text'
+                    name='email'
+                    placeholder='Email'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                    className={
+                      touched.email && errors.email ? "errorForm" : null
+                    }
+                  />
+                  {touched.email && errors.email ? (
+                    <div className='errorForm-message'>{errors.email}</div>
+                  ) : null}
+                </Form.Group>
+                <Form.Group
+                  className='form-group'
+                  controlId='formBasicPassword'>
+                  <Form.Label>Password :</Form.Label>
+                  <Form.Control
+                    type='password'
+                    placeholder='Password'
+                    name='password'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    className={
+                      touched.password && errors.password ? "errorForm" : null
+                    }
+                  />
+                  {touched.password && errors.password ? (
+                    <div className='errorForm-message'>{errors.password}</div>
+                  ) : null}
+                </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <BootstrapButton variant="primary" type="submit">
-              Submit
-            </BootstrapButton>
-          </Form>
+                <BootstrapButton
+                  className='form-group'
+                  variant='secondary'
+                  type='submit'
+                  disabled={isSubmitting}>
+                  Login
+                </BootstrapButton>
+              </Form>
+            )}
+          </Formik>
           <button className={styles.popupCloseButton} onClick={() => onClose()}>
-            X
+            <FontAwesomeIcon className={styles.closeIcon} icon={faTimes} />
           </button>
         </div>
       </div>

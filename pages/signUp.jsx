@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import React from "react";
 let Yup = require("yup");
@@ -11,34 +12,39 @@ import { useMediaQuery } from "react-responsive";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 //yup schema
 const validationSchema = Yup.object().shape({
   first_name: Yup.string()
     .min(2, "*names must have at least 2 characters")
     .max(30, "*names can't be longer than 30 characters")
-    .required("*firstname is required"),
+    .required("*First name is required."),
   last_name: Yup.string()
     .min(2, "*names must have at least 2 characters")
     .max(30, "*names can't be longer than 30 characters")
-    .required("*lastname is required"),
+    .required("*Last name is required."),
   email: Yup.string()
     .email("*must be a valid email address")
     .max(100, "*email must be less than 100 characters long")
-    .required("*email is required"),
+    .required("Email is required."),
   contact: Yup.string()
     .max(50, "*your phone number is to long")
-    .required("*phone number is required"),
+    .required("*Phone number is required."),
   password: Yup.string()
-    .required("*please enter a password.")
-    .min(6, "*your password is too short - 6 chars minimum"),
+    .required("*Please enter a password.")
+    .min(6, "*your password is too short - 6 charakters minimum"),
   repeatPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "*passwords do not match")
-    .required("please confirm your password.")
+    .required("Please confirm your password.")
     .min(6, "*password is too short - 6 charakters minimum"),
 });
 
 function signUp() {
+  const [show, setShow] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [message, setMessage] = useState("An error has been occurred");
   const router = useRouter();
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
@@ -47,8 +53,42 @@ function signUp() {
       <Head>
         <title>Sign Up</title>
       </Head>
+      {show ? (
+        <>
+          <Alert
+            className='alertBox'
+            variant='danger'
+            onClose={() => setShow(false)}
+            dismissible>
+            <Alert.Heading>Error</Alert.Heading>
+            <p>{message}</p>
+          </Alert>
+        </>
+      ) : (
+        <></>
+      )}
+      {/* make the multiple ALerts more flexible in the future to safe code */}
+      {showSuccess ? (
+        <>
+          <div className='spinnerDiv'>
+            <Spinner
+              animation='border'
+              role='status'
+              variant='secondary'></Spinner>
+          </div>
+          <Alert className='alertBox' variant='primary'>
+            <Alert.Heading>Congratulation</Alert.Heading>
+            <p>
+              Your account has been created! You will be redirected shortly.
+            </p>
+          </Alert>
+        </>
+      ) : (
+        <></>
+      )}
+
       <Container className={styles.signupDiv}>
-        <Row>
+        <Row className={styles.test}>
           <Col className='form-div' xs={12} md={6}>
             <h2>Registration</h2>
             <Formik
@@ -63,6 +103,7 @@ function signUp() {
               // Hooks up our validationSchema to Formik
               validationSchema={validationSchema}
               onSubmit={(values, { setSubmitting, resetForm }) => {
+                setShow(false);
                 // When button submits form and form is in the process of submitting, submit button is disabled
                 setSubmitting(true);
 
@@ -82,14 +123,25 @@ function signUp() {
                   }
                 )
                   .then((res) => {
-                    console.log(res);
-                    res.json().then((result) => {
-                      setSubmitting(false);
-                      resetForm();
-                      console.log(result);
-                      console.log(result.first_name + " has been registered");
-                      router.push("/signin");
-                    });
+                    console.log(res.status);
+                    if (res.status == 200) {
+                      res.json().then((result) => {
+                        console.log(result);
+                        setSubmitting(false);
+                        setShowSuccess(true);
+                        resetForm();
+                        console.log(result.first_name + " has been registered");
+                        setTimeout(() => {
+                          router.push("/signin");
+                        }, 5000);
+                      });
+                    } else {
+                      res.json().then((result) => {
+                        setSubmitting(false);
+                        setMessage(result.email[0]);
+                        setShow(true);
+                      });
+                    }
                   })
                   .catch((err) => {
                     setSubmitting(false);
@@ -108,7 +160,7 @@ function signUp() {
               }) => (
                 <Form onSubmit={handleSubmit} className='mx-auto'>
                   <Form.Group className='form-group' controlId='formSurname'>
-                    <Form.Label>Surname :</Form.Label>
+                    <Form.Label>Last Name :</Form.Label>
                     <Form.Control
                       type='text'
                       /* This name property is used to access the value of the form element via values.nameOfElement */

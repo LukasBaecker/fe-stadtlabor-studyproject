@@ -7,13 +7,14 @@ import Header from "../components/Header";
 import styles from "../styles/User.module.scss";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import Spinner from "react-bootstrap/Spinner";
+import NotAuthenticated from "../components/NotAuthenticated.jsx";
 function defaultButtonClick(e) {
   alert("Button pressed:\n" + e.target.textContent);
 }
 
 function user() {
-  const jwtToken = localStorage.getItem("jwtToken");
-  const currentUser = useSelector((state) => state.user);
+  const currentUser = useSelector((state) => state.auth);
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
   const [gardens, setGardens] = useState([
@@ -21,7 +22,7 @@ function user() {
     { id: 2, name: "Garden 2" },
     { id: 3, name: "Garden 3" },
   ]);
-
+  const authenticated = true;
   useEffect(() => {
     (async () => {
       try {
@@ -42,34 +43,53 @@ function user() {
       }
     })();
   });
+  const spinner = () => {
+    return (
+      <div className='spinnerDiv'>
+        <Spinner animation='border' role='status' variant='secondary'></Spinner>
+      </div>
+    );
+  };
+  const content = () => {
+    return (
+      <div className='bodyBox'>
+        {/* Set Header */}
+        <Header
+          caption='Welcome back'
+          name={username}
+          imgUrl='https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'
+        />
+        {/* Page Content */}
+        <div className={styles.Content}>
+          <Row xs='1' sm='2' className={styles.Row}>
+            <Col xs='12' sm='12' className={styles.ColGardens}>
+              <Gardens gardens={gardens} />
+            </Col>
+            <Col className={styles.Col}>
+              <Map />
+            </Col>
+            <Col className={styles.Col}>
+              <Variety />
+            </Col>
+          </Row>
+        </div>
+      </div>
+    );
+  };
   return (
     <>
       {/* update page title */}
       <Head>
         <title>Userpage</title>
       </Head>
-
-      {/* Set Header */}
-      <Header
-        caption='Welcome back'
-        name={username}
-        imgUrl='https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'
-      />
-
-      {/* Page Content */}
-      <div className={styles.Content}>
-        <Row xs='1' sm='2' className={styles.Row}>
-          <Col xs='12' sm='12' className={styles.ColGardens}>
-            <Gardens gardens={gardens} />
-          </Col>
-          <Col className={styles.Col}>
-            <Map />
-          </Col>
-          <Col className={styles.Col}>
-            <Variety />
-          </Col>
-        </Row>
-      </div>
+      {/* wait for fetching data from the server*/}
+      {loading ? (
+        spinner()
+      ) : currentUser.isAuthenticated ? (
+        content()
+      ) : (
+        <NotAuthenticated />
+      )}
     </>
   );
 }
