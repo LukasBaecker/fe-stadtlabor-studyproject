@@ -132,7 +132,7 @@ function signUp() {
                         resetForm();
                         console.log(result.first_name + " has been registered");
                         setTimeout(() => {
-                          router.push("/signin");
+                          router.push("/login");
                         }, 5000);
                       });
                     } else {

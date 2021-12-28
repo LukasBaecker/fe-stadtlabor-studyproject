@@ -1,12 +1,13 @@
 import React from "react";
 import { Marker } from "react-leaflet";
 import useGeoLocation from "../hooks/useGeoLocation.js";
-import positionMarker from "../public/imgs/markerIcon.png";
 import L from "leaflet";
 const positionMarkerIcon = new L.Icon({
-  iconUrl: positionMarker,
-  iconSize: [25, 41], // size of the icon
+  iconUrl: "/imgs/markerIcon.png",
+  iconAnchor: [13, 42],
+  iconSize: [26, 42], // size of the icon
   shadowAnchor: [4, 62], // the same for the shadow
+  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 });
 
 const LocationMarker = () => {

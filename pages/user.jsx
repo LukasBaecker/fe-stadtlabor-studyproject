@@ -1,11 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Header from "../components/Header";
 import styles from "../styles/User.module.scss";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import Spinner from "react-bootstrap/Spinner";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
@@ -22,7 +21,6 @@ function user() {
     { id: 2, name: "Garden 2" },
     { id: 3, name: "Garden 3" },
   ]);
-  const authenticated = true;
   useEffect(() => {
     (async () => {
       try {

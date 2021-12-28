@@ -18,7 +18,7 @@
   left: 10px;
   z-index: 2;
   background-color: $color-primary;
-  color: rgb(196, 212, 197);
+  color: $color-base;
 }
 
 button.grey {
@@ -35,6 +35,5 @@ button.grey:focus {
   margin-top: 64px;
 }
 .leaflet-control-layers {
-  background-color: $color-primary;
-  color: rgb(196, 212, 197);
+  background-color: $color-base;
 }

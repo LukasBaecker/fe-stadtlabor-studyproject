@@ -5,8 +5,6 @@ import Image from "react-bootstrap/Image";
 const Map = dynamic(() => import("../components/Map.jsx"), {
   ssr: false,
 });
-import notFoundPic from "../public/imgs/404.svg";
-
 export default function pageNotFound() {
   const language = "eng";
   return (

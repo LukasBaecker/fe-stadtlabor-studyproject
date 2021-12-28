@@ -104,7 +104,7 @@ function LoginButton({ offsetY, toggleLoginPopup }) {
 function SignupButton() {
   const router = useRouter();
   function onSignupButtonClick() {
-    router.push("/signup");
+    router.push("/register");
   }
 
   return (
@@ -191,7 +191,6 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                       resetForm();
                       dispatch(loginUser(result.jwt));
                       console.log("Login: Success");
-                      //router.push("/user");
                     });
                   } else {
                     throw new Error("Something went wrong");
