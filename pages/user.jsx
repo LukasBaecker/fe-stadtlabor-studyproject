@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import Header from "../components/Header";
 import styles from "../styles/User.module.scss";
 import { useSelector } from "react-redux";
-import Spinner from "react-bootstrap/Spinner";
+import Spinner from "../components/Spinner";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
 import { logoutUser } from "../store/actions/auth";
 function defaultButtonClick(e) {
@@ -49,13 +49,7 @@ function user() {
       }
     })();
   });
-  const spinner = () => {
-    return (
-      <div className='spinnerDiv'>
-        <Spinner animation='border' role='status' variant='secondary'></Spinner>
-      </div>
-    );
-  };
+
   const content = () => {
     return (
       <div className='bodyBox'>
@@ -89,7 +83,7 @@ function user() {
         <title>Userpage</title>
       </Head>
       {/* wait for fetching data from the server*/}
-      {loading ? spinner() : content()}
+      {loading ? <Spinner /> : content()}
     </>
   );
 }

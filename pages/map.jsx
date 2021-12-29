@@ -9,7 +9,7 @@ import {
   setGardenLocations,
   setResources,
 } from "../store/actions/gardenAndResources.js";
-import Spinner from "react-bootstrap/Spinner";
+import Spinner from "../components/Spinner.jsx";
 import { logoutUser } from "../store/actions/auth.js";
 
 const Map = dynamic(() => import("../components/Map.jsx"), {
@@ -62,13 +62,6 @@ export default function mapPage() {
     })();
   }, []);
 
-  const spinner = () => {
-    return (
-      <div className='spinnerDiv'>
-        <Spinner animation='border' role='status' variant='secondary'></Spinner>
-      </div>
-    );
-  };
   const content = () => {
     return (
       <>
@@ -84,7 +77,7 @@ export default function mapPage() {
       <Head>
         <title>Map</title>
       </Head>
-      {loading ? spinner() : content()}
+      {loading ?< Spinner/> : content()}
     </>
   );
 }
