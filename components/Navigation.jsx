@@ -15,9 +15,9 @@ function Navigation() {
     })
       .then((res) => {
         res.json().then((result) => {
-          dispatch(logoutUser());
-          console.log("Logout: Success");
           router.push("/");
+          console.log("Logout: Success");
+          dispatch(logoutUser());
         });
       })
       .catch((err) => {

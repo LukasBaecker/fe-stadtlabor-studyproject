@@ -2,6 +2,44 @@
 
 $card-radius: 50px;
 
+@keyframes wiggle {
+  0% {
+    transform: translateX(50px) rotate(0deg);
+    -webkit-transform: translateX(50px) rotate(0deg);
+    -moz-transform: translateX(50px) rotate(0deg);
+    -ms-transform: translateX(50px) rotate(0deg);
+    -o-transform: translateX(50px) rotate(0deg);
+  }
+  80% {
+    transform: translateX(50px) rotate(0deg);
+    -webkit-transform: translateX(50px) rotate(0deg);
+    -moz-transform: translateX(50px) rotate(0deg);
+    -ms-transform: translateX(50px) rotate(0deg);
+    -o-transform: translateX(50px) rotate(0deg);
+  }
+  85% {
+    transform: translateX(50px) rotate(5deg);
+    -webkit-transform: translateX(50px) rotate(5deg);
+    -moz-transform: translateX(50px) rotate(5deg);
+    -ms-transform: translateX(50px) rotate(5deg);
+    -o-transform: translateX(50px) rotate(5deg);
+  }
+  95% {
+    transform: translateX(50px) rotate(-5deg);
+    -webkit-transform: translateX(50px) rotate(-5deg);
+    -moz-transform: translateX(50px) rotate(-5deg);
+    -ms-transform: translateX(50px) rotate(-5deg);
+    -o-transform: translateX(50px) rotate(-5deg);
+  }
+  100% {
+    transform: translateX(50px) rotate(0deg);
+    -webkit-transform: translateX(50px) rotate(0deg);
+    -moz-transform: translateX(50px) rotate(0deg);
+    -ms-transform: translateX(50px) rotate(0deg);
+    -o-transform: translateX(50px) rotate(0deg);
+  }
+}
+
 .WhyJoinElement {
   position: relative;
   z-index: 1;
@@ -45,17 +83,21 @@ $card-radius: 50px;
     z-index: 1;
     button {
       background-color: $color-primary;
-      color: white;
+      color: $color-primary;
       height: 50px;
       width: 100%;
       border-radius: 18px;
       font-size: 1rem;
-      border: 2px solid white;
       padding-left: 20px;
       padding-right: 20px;
+      border: 2px solid $color-primary;
+      background-color: $color-base;
+      transition-duration: 500ms;
     }
     button:hover {
-      background-color: #3fb97e;
+      transition-duration: 500ms;
+      background-color: $color-primary;
+      color: white;
     }
   }
 
@@ -71,7 +113,7 @@ $card-radius: 50px;
   margin-top: -35px;
   width: 100%;
   background-color: $color-secondary;
-  padding: 40px;
+  padding: 100px;
   border-radius: $card-radius;
   z-index: 1;
 
@@ -100,11 +142,37 @@ $card-radius: 50px;
     width: 100%;
     border-radius: 25px;
     font-size: 2rem;
-    border: 2px solid white;
+    border: none;
     z-index: 2;
+  }
+  .signUpIcon {
+    font-size: 2rem;
+    opacity: 0;
+    transform: translateX(50px);
+    -webkit-transform: translateX(50px);
+    -moz-transform: translateX(50px);
+    -ms-transform: translateX(50px);
+    -o-transform: translateX(50px);
+    transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -moz-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -ms-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -o-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  }
+
+  button:hover .signUpIcon {
+    opacity: 1;
+    animation: wiggle 1.5s infinite;
+    -webkit-animation: wiggle 1.5s infinite;
+    transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -moz-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -ms-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -o-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
   }
   button:hover {
     background-color: #3fb97e;
+    transition-duration: 0.5s;
   }
 }
 
