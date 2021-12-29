@@ -11,6 +11,7 @@ let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
 import { useDispatch } from "react-redux";
 import Alert from "react-bootstrap/Alert";
+import Spinner from "../components/Spinner.jsx";
 
 // Schema for yup
 const validationSchema = Yup.object().shape({
@@ -21,6 +22,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignIn = () => {
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const router = useRouter();
   const currentUser = useSelector((state) => state.user);
@@ -34,7 +36,7 @@ const SignIn = () => {
       <Head>
         <title>Sign In</title>
       </Head>
-
+      {loading ? <Spinner /> : <></>}
       <div className='bodyBox'>
         <div
           style={{
@@ -63,6 +65,7 @@ const SignIn = () => {
             // Hooks up our validationSchema to Formik
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, resetForm }) => {
+              setLoading(true);
               setShowError(false);
               setSubmitting(true);
               fetch(
@@ -83,6 +86,7 @@ const SignIn = () => {
                       router.push("/user");
                     });
                   } else {
+                    setLoading(false);
                     throw new Error("Something went wrong");
                   }
                 })
