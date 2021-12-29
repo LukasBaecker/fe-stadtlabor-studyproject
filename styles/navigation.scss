@@ -18,6 +18,7 @@
   }
 
   .hamburger {
+    border-radius: 0 0 0 20px;
     position: absolute;
     top: 0;
     right: 0;
@@ -29,6 +30,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    -webkit-border-radius: 0 0 0 20px;
+    -moz-border-radius: 0 0 0 20px;
+    -ms-border-radius: 0 0 0 20px;
+    -o-border-radius: 0 0 0 20px;
   }
 
   //Hamburger Line

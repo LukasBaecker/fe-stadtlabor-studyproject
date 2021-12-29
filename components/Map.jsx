@@ -41,14 +41,14 @@ function Map() {
         zoomControl={false}
         className={isTabletOrMobile ? "map" : "map desktop"}>
         <LayersControl position='topleft'>
-          <LayersControl.BaseLayer name='OpenStreetMap'>
+          <LayersControl.BaseLayer checked name='OpenStreetMap'>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             />
           </LayersControl.BaseLayer>
 
-          <LayersControl.BaseLayer checked name='OSM Reduced Colors'>
+          <LayersControl.BaseLayer name='OSM Reduced Colors'>
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'

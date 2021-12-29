@@ -123,7 +123,6 @@ function signUp() {
                   }
                 )
                   .then((res) => {
-                    console.log(res.status);
                     if (res.status == 200) {
                       res.json().then((result) => {
                         console.log(result);
