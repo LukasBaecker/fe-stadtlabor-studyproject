@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import React from "react";
 import Form from "react-bootstrap/Form";
@@ -23,6 +24,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const currentUser = useSelector((state) => state.user);
+  const [showError, setShowError] = useState(false);
   var getCrops = () => {
     router.push("/user");
   };
@@ -32,6 +34,7 @@ const SignIn = () => {
       <Head>
         <title>Sign In</title>
       </Head>
+
       <div className='bodyBox'>
         <div
           style={{
@@ -41,11 +44,26 @@ const SignIn = () => {
             marginTop: "80px",
           }}>
           <h2>Sign in</h2>
+          {showError ? (
+            <>
+              <Alert
+                className='alertInPopup'
+                variant='danger'
+                onClose={() => setShowError(false)}
+                dismissible>
+                <Alert.Heading>Ups!</Alert.Heading>
+                <p>Email or password is wrong.</p>
+              </Alert>
+            </>
+          ) : (
+            <></>
+          )}
           <Formik
             initialValues={{ email: "", password: "" }}
             // Hooks up our validationSchema to Formik
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, resetForm }) => {
+              setShowError(false);
               setSubmitting(true);
               fetch(
                 "http://giv-project15.uni-muenster.de:9000/api/v1/users/login",
@@ -57,7 +75,7 @@ const SignIn = () => {
                 }
               )
                 .then((res) => {
-                  if (res.ok) {
+                  if (res.status == 200) {
                     res.json().then((result) => {
                       resetForm();
                       dispatch(loginUser(result.jwt));
@@ -70,6 +88,7 @@ const SignIn = () => {
                 })
                 .catch((err) => {
                   resetForm();
+                  setShowError(true);
                   console.log("Login: Denied");
                   console.log(err.message);
                 });

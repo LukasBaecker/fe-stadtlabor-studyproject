@@ -10,6 +10,7 @@ import {
   setResources,
 } from "../store/actions/gardenAndResources.js";
 import Spinner from "react-bootstrap/Spinner";
+import { logoutUser } from "../store/actions/auth.js";
 
 const Map = dynamic(() => import("../components/Map.jsx"), {
   ssr: false,
@@ -32,11 +33,15 @@ export default function mapPage() {
           }
         );
         const content = await request.json();
-        dispatch(setGardenLocations(content));
+        if (content.detail === "Unauthenticated!") {
+          dispatch(logoutUser());
+          router.push("/login");
+        } else {
+          dispatch(setGardenLocations(content));
+          setLoading(false);
+        }
       } catch (e) {
         console.log("error: ", e);
-      } finally {
-        setLoading(false);
       }
       try {
         const request = await fetch(
@@ -65,14 +70,12 @@ export default function mapPage() {
     );
   };
   const content = () => {
-    return currentUser.isAuthenticated ? (
+    return (
       <>
         <Navigation />
         <Map />
         <MapNavigation />
       </>
-    ) : (
-      <NotAuthenticated />
     );
   };
 

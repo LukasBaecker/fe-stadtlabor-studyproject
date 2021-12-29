@@ -72,7 +72,7 @@ const MapNav = (props) => {
               {" "}
               <FontAwesomeIcon className='mapNavIcon' icon={faListUl} />
             </Col>
-            <Col>
+            <Col id='colLast'>
               {" "}
               <FontAwesomeIcon className='mapNavIcon' icon={faListUl} />
             </Col>

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,12 +10,14 @@ import styles from "../styles/User.module.scss";
 import { useSelector } from "react-redux";
 import Spinner from "react-bootstrap/Spinner";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
+import { logoutUser } from "../store/actions/auth";
 function defaultButtonClick(e) {
   alert("Button pressed:\n" + e.target.textContent);
 }
 
 function user() {
-  const currentUser = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
   const [gardens, setGardens] = useState([
@@ -33,11 +37,15 @@ function user() {
           }
         );
         const content = await request.json();
-        setUsername(content.first_name);
+        if (content.detail === "Unauthenticated!") {
+          dispatch(logoutUser());
+          router.push("/login");
+        } else {
+          setUsername(content.first_name);
+          setLoading(false);
+        }
       } catch (e) {
         console.log("error: ", e);
-      } finally {
-        setLoading(false);
       }
     })();
   });
@@ -81,13 +89,7 @@ function user() {
         <title>Userpage</title>
       </Head>
       {/* wait for fetching data from the server*/}
-      {loading ? (
-        spinner()
-      ) : currentUser.isAuthenticated ? (
-        content()
-      ) : (
-        <NotAuthenticated />
-      )}
+      {loading ? spinner() : content()}
     </>
   );
 }

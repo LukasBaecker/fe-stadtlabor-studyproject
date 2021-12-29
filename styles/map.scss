@@ -30,10 +30,10 @@ button.grey:focus {
   border-color: #888888cc;
 }
 
-//leaflet-styles for map-page
-.leaflet-left {
-  margin-top: 64px;
-}
 .leaflet-control-layers {
   background-color: $color-base;
+}
+/* Radio element, when checked */
+input[type="radio"]:checked {
+  box-shadow: 0 0 0 2px $color-primary;
 }
