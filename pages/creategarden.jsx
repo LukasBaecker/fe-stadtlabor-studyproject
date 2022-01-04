@@ -66,13 +66,13 @@ const CreateGarden = () => {
         console.log("error: ", e);
       }
     })();
-  });
+  }, []);
 
   <Head>
     <title>New Garden</title>
   </Head>;
 
-  const content = () => {
+  const Content = () => {
     return (
       <>
         <div className="bodyBox">
@@ -341,7 +341,7 @@ const CreateGarden = () => {
       </>
     );
   };
-  return <>{loading ? <CenterSpinner /> : content()}</>;
+  return <>{loading ? <CenterSpinner /> : <Content />}</>;
 };
 
 export default CreateGarden;
