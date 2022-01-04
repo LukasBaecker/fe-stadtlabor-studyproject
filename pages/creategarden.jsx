@@ -57,7 +57,6 @@ const CreateGarden = () => {
         if (content.detail === "Unauthenticated!") {
           console.log("unauthenticated");
           dispatch(logoutUser());
-          setLoading(false);
           router.push("/login");
         } else {
           setLoading(false);
