@@ -113,6 +113,7 @@ const CreateGarden = () => {
                 address: "",
                 crops: [],
                 members: "",
+                primary_purpose: "RESOURCES",
               }}
               // Hooks up our validationSchema to Formik
               validationSchema={validationSchema}
@@ -276,6 +277,28 @@ const CreateGarden = () => {
                     />
                     {touched.address && errors.address ? (
                       <div className="errorForm-message">{errors.address}</div>
+                    ) : null}
+                  </Form.Group>
+
+                  <Form.Group className="form-group" controlId="formEmail">
+                    <Form.Label>Primary Purpose</Form.Label>
+                    <Form.Select
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.primary_purpose}
+                      className={
+                        touched.primary_purpose && errors.primary_purpose
+                          ? "errorForm"
+                          : null
+                      }
+                    >
+                      <option value="RESOURCES">Ressource Sharing</option>
+                      <option value="GARDEN">Community Garden</option>
+                    </Form.Select>
+                    {touched.primary_purpose && errors.primary_purpose ? (
+                      <div className="errorForm-message">
+                        {errors.primary_purpose}
+                      </div>
                     ) : null}
                   </Form.Group>
 
