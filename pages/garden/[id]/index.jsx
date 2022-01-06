@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Header from "../../../components/Header";
+import { CenterSpinner } from "../../../components/Loader";
 import Form from "react-bootstrap/Form";
 
 import styles from "../../../styles/garden.module.scss";
@@ -13,8 +14,21 @@ function garden() {
   const router = useRouter();
   const { id } = router.query;
 
+  const [loading, setLoading] = useState(false);
   const [gardenName, setGardenName] = useState("Münstergarden");
 
+  return (
+    <>
+      <Head>
+        <title>The garden {id}</title>
+      </Head>
+
+      {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
+    </>
+  );
+}
+
+function Content({ gardenName }) {
   // controls, what the page is showing, depending on which button is pressed
   // 1: Info (default, shows when site is loaded)
   // 2: Events
@@ -24,17 +38,12 @@ function garden() {
 
   return (
     <>
-      <Head>
-        <title>The garden {id}</title>
-      </Head>
-
       {/* Set Header */}
       <Header
         caption="Garden"
         name={gardenName}
         imgUrl="/imgs/markus-spiske-bk11wZwb9F4-unsplash-square.jpg"
       />
-
       {/* Page Content */}
       <div className={styles.Content}>
         <div className={styles.buttonGroupWrapper}>
