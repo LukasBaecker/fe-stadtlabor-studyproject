@@ -8,33 +8,41 @@ import { CenterSpinner } from "../../../components/Loader";
 import Form from "react-bootstrap/Form";
 
 import styles from "../../../styles/garden.module.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
+
+// Context that is used to wrap the page in
+const GardenContext = createContext();
 
 function garden() {
   const router = useRouter();
   const { id } = router.query;
 
-  const [loading, setLoading] = useState(false);
-  const [gardenName, setGardenName] = useState("Münstergarden");
-
-  return (
-    <>
-      <Head>
-        <title>The garden {id}</title>
-      </Head>
-
-      {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
-    </>
-  );
-}
-
-function Content({ gardenName }) {
   // controls, what the page is showing, depending on which button is pressed
   // 1: Info (default, shows when site is loaded)
   // 2: Events
   // 3: Members
   // 4: Sharables
   const [pageState, setPageState] = useState(1);
+
+  // determins, whether the loading circle is shown or the page
+  const [loading, setLoading] = useState(false);
+  const [gardenName, setGardenName] = useState("Münstergarden");
+
+  return (
+    <GardenContext.Provider
+      value={{ gardenName, setLoading, pageState, setPageState }}
+    >
+      <Head>
+        <title>The garden {id}</title>
+      </Head>
+
+      {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
+    </GardenContext.Provider>
+  );
+}
+
+function Content({ gardenName }) {
+  const { pageState, setPageState } = useContext(GardenContext);
 
   return (
     <>
