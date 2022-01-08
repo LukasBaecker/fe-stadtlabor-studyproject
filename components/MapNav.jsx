@@ -15,11 +15,11 @@ import {
 const MapNav = (props) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
-
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   const [showList, setShowList] = useState(false);
   const locationActive = useSelector((state) => state.location_active);
+  const filtercategories = useSelector((state) => state.filtercategories);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -41,6 +41,7 @@ const MapNav = (props) => {
       };
     }, [ref]);
   }
+
   return (
     <>
       <div ref={wrapperRef}>
@@ -84,7 +85,8 @@ const MapNav = (props) => {
               ? "mapNavExtraContainer filterContainer"
               : "mapNavExtraContainer hidden"
           }>
-          <p>here are some filters</p>
+          <h3>Filter</h3>
+          <FiltercategorieList categories={filtercategories} />
         </div>
         <div
           className={
@@ -98,5 +100,18 @@ const MapNav = (props) => {
     </>
   );
 };
+
+function FiltercategorieList(props) {
+  const categories = props.categories;
+  const listItems = categories.map((element) => (
+    <li>
+      <input key={element} type='checkbox' id={element} name={element} />
+      <label key={element} for={element}>
+        {element}
+      </label>
+    </li>
+  ));
+  return <ul>{listItems}</ul>;
+}
 
 export default MapNav;
