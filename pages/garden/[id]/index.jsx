@@ -21,7 +21,7 @@ function garden() {
   const [loading, setLoading] = useState(true);
 
   const [gardenName, setGardenName] = useState("");
-  const [gardenDescription, setGardenDescription] = useState("");
+  const [gardenDetails, setGardenDetails] = useState("");
 
   const [dataFetched, setDataFetched] = useState(false);
   useEffect(() => {
@@ -41,7 +41,7 @@ function garden() {
           if (cont.detail === "Not found.") {
             throw new Error("Garden not found");
           } else {
-            setGardenName(cont.properties.name);
+            setGardenDetails(cont.properties);
             setLoading(false);
           }
         } catch (e) {
@@ -62,12 +62,8 @@ function garden() {
 
   return (
     <GardenContext.Provider
-      value={{ gardenName, setLoading, pageState, setPageState }}
+      value={{ gardenDetails, setLoading, pageState, setPageState }}
     >
-      <Head>
-        <title>The garden {id}</title>
-      </Head>
-
       {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
     </GardenContext.Provider>
   );
@@ -75,13 +71,17 @@ function garden() {
 
 function Content({ gardenName }) {
   const { pageState, setPageState } = useContext(GardenContext);
-
+  const { gardenDetails } = useContext(GardenContext);
   return (
     <>
+      <Head>
+        <title>{gardenDetails.name}</title>
+      </Head>
+
       {/* Set Header */}
       <Header
         caption="Garden"
-        name={gardenName}
+        name={gardenDetails.name}
         imgUrl="/imgs/markus-spiske-bk11wZwb9F4-unsplash-square.jpg"
       />
       {/* Page Content */}
@@ -136,10 +136,14 @@ Rendered, when the user clicks the Info Button in ButtonGroup.
 Shows general informatino about the garden community, e.g. description.
 */
 function Info() {
+  const { gardenDetails } = useContext(GardenContext);
+
   return (
     <div className={styles.pagePartContent}>
-      <h1>Info</h1>
-      This is the garden description
+      <h5>{gardenDetails.email}</h5>
+      <h5>{gardenDetails.phone}</h5>
+      <hr />
+      {gardenDetails.description}
     </div>
   );
 }
