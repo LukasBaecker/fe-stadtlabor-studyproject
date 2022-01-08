@@ -17,16 +17,48 @@ function garden() {
   const router = useRouter();
   const { id } = router.query;
 
+  // determins, whether the loading circle is shown or the page
+  const [loading, setLoading] = useState(true);
+
+  const [gardenName, setGardenName] = useState("");
+  const [gardenDescription, setGardenDescription] = useState("");
+
+  const [dataFetched, setDataFetched] = useState(false);
+  useEffect(() => {
+    if (id && !dataFetched) {
+      (async () => {
+        try {
+          const request = await fetch(
+            `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${id}/`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            }
+          );
+          const cont = await request.json();
+          console.log(cont);
+          if (cont.detail === "Not found.") {
+            throw new Error("Garden not found");
+          } else {
+            setGardenName(cont.properties.name);
+            setLoading(false);
+          }
+        } catch (e) {
+          console.log(e);
+          setLoading(false);
+        }
+      })();
+      setDataFetched(true);
+    }
+  });
+
   // controls, what the page is showing, depending on which button is pressed
   // 1: Info (default, shows when site is loaded)
   // 2: Events
   // 3: Members
   // 4: Sharables
   const [pageState, setPageState] = useState(1);
-
-  // determins, whether the loading circle is shown or the page
-  const [loading, setLoading] = useState(false);
-  const [gardenName, setGardenName] = useState("Münstergarden");
 
   return (
     <GardenContext.Provider
