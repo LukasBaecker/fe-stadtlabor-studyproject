@@ -52,17 +52,17 @@ function user() {
 
   const content = () => {
     return (
-      <div className="bodyBox">
+      <div className='bodyBox'>
         {/* Set Header */}
         <Header
-          caption="Welcome back"
+          caption='Welcome back'
           name={username}
-          imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+          imgUrl='https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'
         />
         {/* Page Content */}
         <div className={styles.Content}>
-          <Row xs="1" sm="2" className={styles.Row}>
-            <Col xs="12" sm="12" className={styles.ColGardens}>
+          <Row xs='1' sm='2' className={styles.Row}>
+            <Col xs='12' sm='12' className={styles.ColGardens}>
               <Gardens gardens={gardens} />
             </Col>
             <Col className={styles.Col}>
@@ -114,8 +114,7 @@ function Garden({ gardenName }) {
   return (
     <button
       className={[styles.Item, styles.Garden].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
-    >
+      onClick={(e) => defaultButtonClick(e)}>
       {gardenName}
     </button>
   );
@@ -127,14 +126,12 @@ function GardenController() {
       <button
         className={styles.GardenControllerPart}
         style={{ borderRight: "1px solid black" }}
-        onClick={() => router.push("/creategarden")}
-      >
+        onClick={() => router.push("/creategarden")}>
         Create new Garden
       </button>
       <button
         className={styles.GardenControllerPart}
-        onClick={(e) => defaultButtonClick(e)}
-      >
+        onClick={(e) => defaultButtonClick(e)}>
         Join a Garden
       </button>
     </Container>
@@ -146,8 +143,7 @@ function Map() {
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
-    >
+      onClick={(e) => defaultButtonClick(e)}>
       Mapview
     </button>
   );
@@ -158,8 +154,7 @@ function Variety() {
   return (
     <button
       className={[styles.Item, styles.Variety].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
-    >
+      onClick={(e) => defaultButtonClick(e)}>
       Variety
     </button>
   );
