@@ -8,6 +8,7 @@ import NotAuthenticated from "../components/NotAuthenticated.jsx";
 import {
   setGardenLocations,
   setResources,
+  setFilterCategories
 } from "../store/actions/gardenAndResources.js";
 import Spinner from "../components/Spinner.jsx";
 import { logoutUser } from "../store/actions/auth.js";
@@ -17,9 +18,21 @@ const Map = dynamic(() => import("../components/Map.jsx"), {
 });
 
 export default function mapPage() {
-  const currentUser = useSelector((state) => state.auth);
+  const resources = useSelector((state) => state.resources);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const [resourceFilter, setResourceFilter] = useState([]);
+  const pushResourceFilter = (element) => {
+    {
+      if (
+        !resourceFilter.includes(element.resource_name) &&
+        (!(typeof element === "string") ||
+          !(element.resource_name instanceof String))
+      ) {
+        setResourceFilter(resourceFilter.push(element.resource_name));
+      }
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -57,11 +70,17 @@ export default function mapPage() {
       } catch (e) {
         console.log("error: ", e);
       } finally {
-        setLoading(false);
+        try {
+          resources.forEach((element) => pushResourceFilter(element));
+        } catch (e) {
+          console.log("error: ", e);
+        } finally {
+          dispatch(setFilterCategories(resourceFilter));
+          setLoading(false);
+        }
       }
     })();
   }, []);
-
   const content = () => {
     return (
       <>
@@ -77,7 +96,7 @@ export default function mapPage() {
       <Head>
         <title>Map</title>
       </Head>
-      {loading ?< Spinner/> : content()}
+      {loading ? <Spinner /> : content()}
     </>
   );
 }

@@ -2,7 +2,7 @@ import { SET_LOCATION_ACTIVE } from "../actions";
 
 const initialState = false;
 
-const languageReducer = (state = initialState, action) => {
+const locationActiveReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_LOCATION_ACTIVE:
       let active = action.payload.active;
@@ -13,4 +13,4 @@ const languageReducer = (state = initialState, action) => {
   }
 };
 
-export default languageReducer;
+export default locationActiveReducer;

@@ -17,14 +17,11 @@ const MapMarker = (point) => {
       <Marker
         icon={orangeIcon}
         key={"key" + point.geometry.coordinates + point.properties.id}
-        position={[
-          point.geometry.coordinates[1],
-          point.geometry.coordinates[0],
-        ]}>
+        position={[point.properties.longitude, point.properties.latitude]}>
         <Popup
           key={"keyPopup" + point.geometry.coordinates + point.properties.id}
           className='request-popup'>
-          <p>This is a popu</p>
+          <p>This is a popup</p>
         </Popup>
       </Marker>
     </>
