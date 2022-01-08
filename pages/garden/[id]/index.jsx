@@ -4,16 +4,54 @@ import { useRouter } from "next/router";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Header from "../../../components/Header";
+import { CenterSpinner } from "../../../components/Loader";
 import Form from "react-bootstrap/Form";
 
 import styles from "../../../styles/garden.module.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
+
+// Context that is used to wrap the page in
+const GardenContext = createContext();
 
 function garden() {
   const router = useRouter();
   const { id } = router.query;
 
-  const [gardenName, setGardenName] = useState("Münstergarden");
+  // determins, whether the loading circle is shown or the page
+  const [loading, setLoading] = useState(true);
+
+  const [gardenName, setGardenName] = useState("");
+  const [gardenDetails, setGardenDetails] = useState("");
+
+  const [dataFetched, setDataFetched] = useState(false);
+  useEffect(() => {
+    if (id && !dataFetched) {
+      (async () => {
+        try {
+          const request = await fetch(
+            `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${id}/`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            }
+          );
+          const cont = await request.json();
+          console.log(cont);
+          if (cont.detail === "Not found.") {
+            throw new Error("Garden not found");
+          } else {
+            setGardenDetails(cont.properties);
+            setLoading(false);
+          }
+        } catch (e) {
+          console.log(e);
+          setLoading(false);
+        }
+      })();
+      setDataFetched(true);
+    }
+  });
 
   // controls, what the page is showing, depending on which button is pressed
   // 1: Info (default, shows when site is loaded)
@@ -23,18 +61,29 @@ function garden() {
   const [pageState, setPageState] = useState(1);
 
   return (
+    <GardenContext.Provider
+      value={{ gardenDetails, setLoading, pageState, setPageState }}
+    >
+      {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
+    </GardenContext.Provider>
+  );
+}
+
+function Content({ gardenName }) {
+  const { pageState, setPageState } = useContext(GardenContext);
+  const { gardenDetails } = useContext(GardenContext);
+  return (
     <>
       <Head>
-        <title>The garden {id}</title>
+        <title>{gardenDetails.name}</title>
       </Head>
 
       {/* Set Header */}
       <Header
         caption="Garden"
-        name={gardenName}
+        name={gardenDetails.name}
         imgUrl="/imgs/markus-spiske-bk11wZwb9F4-unsplash-square.jpg"
       />
-
       {/* Page Content */}
       <div className={styles.Content}>
         <div className={styles.buttonGroupWrapper}>
@@ -87,10 +136,14 @@ Rendered, when the user clicks the Info Button in ButtonGroup.
 Shows general informatino about the garden community, e.g. description.
 */
 function Info() {
+  const { gardenDetails } = useContext(GardenContext);
+
   return (
     <div className={styles.pagePartContent}>
-      <h1>Info</h1>
-      This is the garden description
+      <h5>{gardenDetails.email}</h5>
+      <h5>{gardenDetails.phone}</h5>
+      <hr />
+      {gardenDetails.description}
     </div>
   );
 }

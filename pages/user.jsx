@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import Head from "next/head";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import Header from "../components/Header";
 import styles from "../styles/User.module.scss";
 import { useSelector } from "react-redux";
-import Spinner from "react-bootstrap/Spinner";
+import { CenterSpinner } from "../components/Loader";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
 import { logoutUser } from "../store/actions/auth";
 function defaultButtonClick(e) {
@@ -49,26 +49,20 @@ function user() {
       }
     })();
   });
-  const spinner = () => {
-    return (
-      <div className='spinnerDiv'>
-        <Spinner animation='border' role='status' variant='secondary'></Spinner>
-      </div>
-    );
-  };
+
   const content = () => {
     return (
-      <div className='bodyBox'>
+      <div className="bodyBox">
         {/* Set Header */}
         <Header
-          caption='Welcome back'
+          caption="Welcome back"
           name={username}
-          imgUrl='https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'
+          imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
         />
         {/* Page Content */}
         <div className={styles.Content}>
-          <Row xs='1' sm='2' className={styles.Row}>
-            <Col xs='12' sm='12' className={styles.ColGardens}>
+          <Row xs="1" sm="2" className={styles.Row}>
+            <Col xs="12" sm="12" className={styles.ColGardens}>
               <Gardens gardens={gardens} />
             </Col>
             <Col className={styles.Col}>
@@ -82,6 +76,7 @@ function user() {
       </div>
     );
   };
+
   return (
     <>
       {/* update page title */}
@@ -89,7 +84,7 @@ function user() {
         <title>Userpage</title>
       </Head>
       {/* wait for fetching data from the server*/}
-      {loading ? spinner() : content()}
+      {loading ? <CenterSpinner /> : content()}
     </>
   );
 }
@@ -119,7 +114,8 @@ function Garden({ gardenName }) {
   return (
     <button
       className={[styles.Item, styles.Garden].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}>
+      onClick={(e) => defaultButtonClick(e)}
+    >
       {gardenName}
     </button>
   );
@@ -131,12 +127,14 @@ function GardenController() {
       <button
         className={styles.GardenControllerPart}
         style={{ borderRight: "1px solid black" }}
-        onClick={(e) => defaultButtonClick(e)}>
+        onClick={() => router.push("/creategarden")}
+      >
         Create new Garden
       </button>
       <button
         className={styles.GardenControllerPart}
-        onClick={(e) => defaultButtonClick(e)}>
+        onClick={(e) => defaultButtonClick(e)}
+      >
         Join a Garden
       </button>
     </Container>
@@ -148,7 +146,8 @@ function Map() {
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}>
+      onClick={(e) => defaultButtonClick(e)}
+    >
       Mapview
     </button>
   );
@@ -159,7 +158,8 @@ function Variety() {
   return (
     <button
       className={[styles.Item, styles.Variety].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}>
+      onClick={(e) => defaultButtonClick(e)}
+    >
       Variety
     </button>
   );
