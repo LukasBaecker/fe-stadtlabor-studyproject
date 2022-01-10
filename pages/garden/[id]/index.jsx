@@ -39,7 +39,6 @@ function garden() {
             }
           );
           const cont = await request.json();
-          console.log(cont);
           if (cont.detail === "Not found.") {
             throw new Error("Garden not found");
           } else {
