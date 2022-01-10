@@ -27,6 +27,7 @@ function garden() {
   useEffect(() => {
     if (id && !dataFetched) {
       (async () => {
+        // Fetch general garden information
         try {
           const request = await fetch(
             `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${id}/`,
