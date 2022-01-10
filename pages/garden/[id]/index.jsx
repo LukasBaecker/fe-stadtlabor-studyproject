@@ -22,6 +22,7 @@ function garden() {
 
   const [gardenName, setGardenName] = useState("");
   const [gardenDetails, setGardenDetails] = useState("");
+  const [events, setEvents] = useState(null);
 
   const [dataFetched, setDataFetched] = useState(false);
   useEffect(() => {
@@ -43,14 +44,29 @@ function garden() {
             throw new Error("Garden not found");
           } else {
             setGardenDetails(cont.properties);
-            setLoading(false);
           }
         } catch (e) {
           console.log(e);
-          setLoading(false);
+        }
+        // Fetch events
+        try {
+          const request = await fetch(
+            `http://giv-project15.uni-muenster.de:9000/api/v1/events/all`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            }
+          );
+          const cont = await request.json();
+          const evts = cont.filter((evt) => evt.garden == id);
+          setEvents(evts);
+        } catch (e) {
+          console.log(e);
         }
       })();
       setDataFetched(true);
+      setLoading(false);
     }
   });
 
@@ -63,7 +79,7 @@ function garden() {
 
   return (
     <GardenContext.Provider
-      value={{ gardenDetails, setLoading, pageState, setPageState }}
+      value={{ gardenDetails, events, setLoading, pageState, setPageState }}
     >
       {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
     </GardenContext.Provider>
@@ -155,14 +171,7 @@ Rendered, when the user clicks the Event Button in ButtonGroup.
 Shows the past and futere events that take place in the garden
 */
 function Events() {
-  const [events, setEvnts] = useState([
-    { id: 1, date: "2021-07-12T18:00:00", name: "Barbeque" },
-    { id: 2, date: "2021-08-14T11:00:00", name: "Weeding" },
-    { id: 3, date: "2021-08-18T09:00:00", name: "Plant potatoes" },
-    { id: 4, date: "2021-09-02T19:05:00", name: "Summer party" },
-    { id: 5, date: "2021-12-20T18:30:00", name: "Christmas party" },
-    { id: 6, date: "2022-01-18T09:23:00", name: "Snowball fight" },
-  ]);
+  const { events } = useContext(GardenContext);
 
   // sort all events into upcoming and past
   const upcomingEvents = events.filter((evt) => {
@@ -188,7 +197,7 @@ function Events() {
       <h2 style={{ marginTop: "25px" }}>Past Events</h2>
       <div className={styles.listing}>
         {pastEvents.map((evt) => (
-          <Event key={evt.id} event={evt} />
+          <Event key={evt.event_id} event={evt} />
         ))}
       </div>
     </div>
@@ -196,7 +205,7 @@ function Events() {
 }
 
 function Event({ event }) {
-  const eventName = event.name;
+  const eventName = event.title;
   const eventDate = new Date(event.date);
 
   const monthNames = [
