@@ -32,6 +32,25 @@ async function fetchEvents(id, setEvents) {
   }
 }
 
+async function fetchResources(id, setResources) {
+  // Fetch Resources
+  try {
+    const request = await fetch(
+      "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/all",
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
+    const cont = await request.json();
+    const resources = cont.filter((resource) => resource.garden == id);
+    setResources(resources);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function garden() {
   const router = useRouter();
   const { id } = router.query;
@@ -42,6 +61,7 @@ function garden() {
   const [gardenName, setGardenName] = useState("");
   const [gardenDetails, setGardenDetails] = useState("");
   const [events, setEvents] = useState(null);
+  const [resources, setResources] = useState(null);
 
   const [dataFetched, setDataFetched] = useState(false);
   useEffect(() => {
@@ -68,6 +88,7 @@ function garden() {
         }
 
         fetchEvents(id, setEvents);
+        fetchResources(id, setResources);
       })();
       setDataFetched(true);
       setLoading(false);
@@ -88,6 +109,8 @@ function garden() {
         gardenId: id,
         events,
         setEvents,
+        resources,
+        setResources,
         setLoading,
         pageState,
         setPageState,
@@ -441,19 +464,14 @@ Shows all items that the garden community offers to share with other people.
 Items can be added, admin can remove items.
 */
 function Shareables() {
-  const [items, setItems] = useState([
-    { id: 1, name: "Drilling machine", type: "Tool" },
-    { id: 2, name: "Horse Dung", type: "Fertelizer" },
-    { id: 3, name: "Grass Seeds", type: "Seeds" },
-    { id: 4, name: "Lawnmower", type: "Tool" },
-  ]);
+  const { resources } = useContext(GardenContext);
 
   return (
     <div className={styles.pagePartContent}>
       <h2>Shareables</h2>
       <div className={styles.listing}>
-        {items.map((item) => (
-          <ShareableItem key={item.id} item={item} />
+        {resources.map((item) => (
+          <ShareableItem key={item.resource_id} item={item} />
         ))}
       </div>
       <AddButton ExecuteFunction={AddShareable} />
@@ -474,8 +492,8 @@ function ShareableItem({ item }) {
       />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
-          {item.type}
-          <h3>{item.name}</h3>
+          {item.category}
+          <h3>{item.resource_name}</h3>
         </div>
       </div>
     </div>
