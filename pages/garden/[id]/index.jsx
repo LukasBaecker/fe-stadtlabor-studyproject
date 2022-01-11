@@ -13,6 +13,25 @@ import { useState, useEffect, createContext, useContext } from "react";
 // Context that is used to wrap the page in
 const GardenContext = createContext();
 
+async function fetchEvents(id, setEvents) {
+  // Fetch events
+  try {
+    const request = await fetch(
+      `http://giv-project15.uni-muenster.de:9000/api/v1/events/all`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
+    const cont = await request.json();
+    const evts = cont.filter((evt) => evt.garden == id);
+    setEvents(evts);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function garden() {
   const router = useRouter();
   const { id } = router.query;
@@ -47,22 +66,8 @@ function garden() {
         } catch (e) {
           console.log(e);
         }
-        // Fetch events
-        try {
-          const request = await fetch(
-            `http://giv-project15.uni-muenster.de:9000/api/v1/events/all`,
-            {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-            }
-          );
-          const cont = await request.json();
-          const evts = cont.filter((evt) => evt.garden == id);
-          setEvents(evts);
-        } catch (e) {
-          console.log(e);
-        }
+
+        fetchEvents(id, setEvents);
       })();
       setDataFetched(true);
       setLoading(false);
@@ -82,6 +87,7 @@ function garden() {
         gardenDetails,
         gardenId: id,
         events,
+        setEvents,
         setLoading,
         pageState,
         setPageState,
@@ -271,10 +277,12 @@ function AddEvent({ setPopupVisible }) {
   const [venue, setVenue] = useState("");
   const [description, setDescription] = useState("");
 
-  let { gardenId } = useContext(GardenContext);
+  let { gardenId, setLoading, setEvents } = useContext(GardenContext);
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    setLoading(true);
 
     const values = {
       garden: parseInt(gardenId),
@@ -298,6 +306,7 @@ function AddEvent({ setPopupVisible }) {
           res.json().then((result) => {
             console.log("event created successfully");
             setPopupVisible(false);
+            fetchEvents(gardenId, setEvents);
           });
         } else {
           console.log(res);
@@ -308,6 +317,7 @@ function AddEvent({ setPopupVisible }) {
         console.log("Something went wrong creating the garden");
         console.log(err.message);
       });
+    setLoading(false);
   }
 
   return (
