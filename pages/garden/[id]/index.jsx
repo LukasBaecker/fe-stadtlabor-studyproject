@@ -78,7 +78,14 @@ function garden() {
 
   return (
     <GardenContext.Provider
-      value={{ gardenDetails, events, setLoading, pageState, setPageState }}
+      value={{
+        gardenDetails,
+        gardenId: id,
+        events,
+        setLoading,
+        pageState,
+        setPageState,
+      }}
     >
       {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
     </GardenContext.Provider>
@@ -187,7 +194,7 @@ function Events() {
       <h2>Upcoming Events</h2>
       <div className={styles.listing}>
         {upcomingEvents.map((evt) => (
-          <Event key={evt.id} event={evt} />
+          <Event key={evt.event_id} event={evt} />
         ))}
       </div>
 
@@ -259,46 +266,85 @@ function Event({ event }) {
 
 // Popup to add a new event
 function AddEvent({ setPopupVisible }) {
-  const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState(""); // used for both date and time
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventDescription, setEventDescription] = useState("");
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState(""); // used for both date and time
+  const [venue, setVenue] = useState("");
+  const [description, setDescription] = useState("");
+
+  let { gardenId } = useContext(GardenContext);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const values = {
+      garden: parseInt(gardenId),
+      duration: "01:00:00",
+      title,
+      date,
+      venue,
+      description,
+    };
+
+    fetch("http://giv-project15.uni-muenster.de:9000/api/v1/events/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values),
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          res.json().then((result) => {
+            console.log("event created successfully");
+            setPopupVisible(false);
+          });
+        } else {
+          console.log(res);
+          throw new Error("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log("Something went wrong creating the garden");
+        console.log(err.message);
+      });
+  }
 
   return (
     <div className={styles.popup}>
-      <div className={styles.popup_inner}>
+      <div className={styles.popup_inner} onSubmit={handleSubmit}>
         <h3>New Event</h3>
         <Form>
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
               placeholder="Event name"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
               type="datetime-local"
               placeholder="Date"
-              value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
               placeholder="Location"
-              value={eventLocation}
-              onChange={(e) => setEventLocation(e.target.value)}
+              value={venue}
+              onChange={(e) => setVenue(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
               as="textarea"
               placeholder="Description"
-              value={eventDescription}
-              onChange={(e) => setEventDescription(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               rows={3}
             />
           </Form.Group>
