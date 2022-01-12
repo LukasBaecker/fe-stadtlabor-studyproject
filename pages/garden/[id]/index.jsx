@@ -120,14 +120,14 @@ function garden() {
         <CenterSpinner />
       ) : (
         <div className="bodyBox">
-          <Content gardenName={gardenName} />
+          <Content />
         </div>
       )}
     </GardenContext.Provider>
   );
 }
 
-function Content({ gardenName }) {
+function Content() {
   const { pageState, setPageState } = useContext(GardenContext);
   const { gardenDetails } = useContext(GardenContext);
   return (
