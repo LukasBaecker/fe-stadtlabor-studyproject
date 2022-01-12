@@ -520,8 +520,10 @@ function Shareables() {
 }
 
 function ShareableItem({ item }) {
+  const [popupVisible, setPopupVisible] = useState(false);
+
   return (
-    <div className={styles.listItem}>
+    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
       <img
         src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
         alt="user profile picture"
@@ -536,8 +538,51 @@ function ShareableItem({ item }) {
           <h3>{item.resource_name}</h3>
         </div>
       </div>
+      {popupVisible && (
+        <ItemDetails item={item} setPopupVisible={setPopupVisible} />
+      )}
     </div>
   );
+}
+
+function ItemDetails({ item, setPopupVisible }) {
+  /*
+  I know this looks like really strange programming...
+  For some  reason I was not able to manage to get x-button
+  to change state using setPopupVisible() directly.
+  But it does work when executing this function in the else{} clause...
+  Hence this strange construct here...
+  */
+  const [visible, setVisible] = useState(true);
+  console.log(item);
+  if (visible) {
+    return (
+      <div className={styles.popup}>
+        <div className={styles.popup_inner}>
+          <h3>{item.resource_name}</h3>
+          {item.resource_status}
+          <br />
+          {item.resource_status === "BORROWED"
+            ? "Available again: " +
+              new Date(item.return_date).toLocaleDateString()
+            : null}
+          <hr />
+          {item.description}
+          <button
+            className={styles.popupCloseButton}
+            onClick={() => setVisible(false)}
+          >
+            X
+          </button>
+        </div>
+      </div>
+    );
+  } else {
+    {
+      setPopupVisible(false);
+    }
+    return null;
+  }
 }
 
 // Popup to add a new shareable
