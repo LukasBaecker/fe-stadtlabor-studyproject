@@ -116,7 +116,13 @@ function garden() {
         setPageState,
       }}
     >
-      {loading ? <CenterSpinner /> : <Content gardenName={gardenName} />}
+      {loading ? (
+        <CenterSpinner />
+      ) : (
+        <div className="bodyBox">
+          <Content gardenName={gardenName} />
+        </div>
+      )}
     </GardenContext.Provider>
   );
 }
