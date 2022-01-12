@@ -502,27 +502,76 @@ function ShareableItem({ item }) {
 
 // Popup to add a new shareable
 function AddShareable({ setPopupVisible }) {
-  const [shareableName, setShareableName] = useState("");
-  const [shareableCategory, setShareableCategory] = useState(0);
+  const [resource_name, setResourceName] = useState("");
+  const [category, setCategory] = useState(0);
+
+  let { gardenId, setLoading, setResources } = useContext(GardenContext);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setLoading(true);
+
+    const values = {
+      garden: gardenId,
+      resource_status: "AVAILABLE FOR BORROWING",
+      date_created: Date.now(),
+      resource_name,
+      category,
+    };
+
+    fetch(
+      "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(values),
+      }
+    )
+      .then((res) => {
+        if (res.status == 200) {
+          res.json().then((result) => {
+            console.log("resource created successfully");
+            setPopupVisible(false);
+            fetchEvents(gardenId, setResources);
+          });
+        } else {
+          console.log(res);
+          throw new Error("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log("Something went wrong creating the garden");
+        console.log(err.message);
+      });
+
+    console.log(values);
+
+    setPopupVisible(false);
+    setLoading(false);
+  }
 
   return (
     <div className={styles.popup}>
-      <div className={styles.popup_inner}>
+      <div className={styles.popup_inner} onSubmit={handleSubmit}>
         <h3>New Shareable</h3>
         <Form>
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
               placeholder="Shareable name"
-              value={shareableName}
-              onChange={(e) => setShareableName(e.target.value)}
+              value={resource_name}
+              onChange={(e) => setResourceName(e.target.value)}
             />
           </Form.Group>
           <Form.Group>
             <Form.Label>Category</Form.Label>
             <Form.Select
-              value={shareableCategory}
-              onChange={(e) => setShareableCategory(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             >
               <option value="0">Tools</option>
               <option value="1">Seeds</option>
