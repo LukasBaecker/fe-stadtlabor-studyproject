@@ -8,7 +8,6 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import LocationMarker from "../components/LocationMarker.jsx";
 import { useMediaQuery } from "react-responsive";
 import { useSelector, useDispatch } from "react-redux";
-import { setLocationActive } from "../store/actions/index.js";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   shadowUrl:
@@ -17,7 +16,7 @@ L.Icon.Default.mergeOptions({
 
 function Map() {
   const dispatch = useDispatch();
-  const locations = useSelector((state) => state.locations);
+  const locations = useSelector((state) => state.filtered_locations);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const locationActivate = useSelector((state) => state.location_active);
 

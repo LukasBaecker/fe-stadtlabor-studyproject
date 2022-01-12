@@ -12,24 +12,6 @@
   margin-top: 64px;
 }
 
-.location-div button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  background-color: $color-primary;
-  color: $color-base;
-}
-
-button.grey {
-  background-color: #888888;
-  border-color: #888888cc;
-}
-button.grey:focus {
-  background-color: #888888;
-  border-color: #888888cc;
-}
-
 .leaflet-control-layers {
   background-color: $color-base;
 }

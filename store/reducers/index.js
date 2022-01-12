@@ -5,7 +5,7 @@ import resourcesReducer from "./resourcesReducer.js";
 import languageReducer from "./languageReducer.js";
 import locationActiveReducer from "./locationActiveReducer.js";
 import filtercategoriesReducer from "./filtercategoriesReducer.js";
-import filteredLocationsReducer from "./filteredLocations.js";
+import filteredLocationsReducer from "./filteredLocationsReducer.js";
 
 const rootReducer = combineReducers({
   auth: authReducer,

@@ -143,7 +143,9 @@ function Map() {
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}>
+      onClick={() => {
+        router.push("/map");
+      }}>
       Mapview
     </button>
   );

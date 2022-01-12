@@ -9,7 +9,7 @@ const MapMarker = (point) => {
     iconAnchor: [13, 42],
     iconSize: [26, 42], // size of the icon
     shadowAnchor: [4, 62], // the same for the shadow
-    popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+    popupAnchor: [0, -42], // point from which the popup should open relative to the iconAnchor
   });
 
   return (

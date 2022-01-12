@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
+import { Formik, Field, Form } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationActive } from "../store/actions";
 import Container from "react-bootstrap/Container";
@@ -10,7 +11,10 @@ import {
   faListUl,
   faMapMarkerAlt,
   faFilter,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import filteredLocationsReducer from "../store/reducers/filteredLocationsReducer";
+import { setFilteredLocations } from "../store/actions/gardenAndResources";
 
 const MapNav = (props) => {
   const wrapperRef = useRef(null);
@@ -101,17 +105,128 @@ const MapNav = (props) => {
   );
 };
 
-function FiltercategorieList(props) {
+const FiltercategorieList = (props) => {
+  const dispatch = useDispatch();
   const categories = props.categories;
+  const locations = useSelector((state) => state.locations);
+  const resources = useSelector((state) => state.resources);
+  const [filterlist, setFilterlist] = useState({});
+
+  const setOneFilterElement = (element, boolean) => {
+    setFilterlist((filterlist) => {
+      return { ...filterlist, [element]: boolean, all: false };
+    });
+  };
+  const setAllFilterElements = (boolean) => {
+    Object.keys(filterlist).forEach((e) => {
+      setFilterlist((filterlist) => {
+        return { ...filterlist, [e]: boolean };
+      });
+    });
+  };
+
+  const initialState = () => {
+    setFilterlist((filterlist) => {
+      return { ...filterlist, all: true, noResources: true };
+    });
+    categories.forEach((e) => {
+      setFilterlist((filterlist) => {
+        return { ...filterlist, [e]: true };
+      });
+    });
+  };
+
+  useEffect(() => {
+    initialState();
+  }, []);
+
+  const getFilteredLocations = () => {
+    var filteredResources = [];
+    var gardenIds = [];
+    var filteredGardens = [];
+    if (filterlist.all) {
+      dispatch(setFilteredLocations(locations));
+    } else {
+      Object.keys(filterlist).forEach((e) => {
+        var thisResource = [];
+        if (filterlist[e]) {
+          thisResource = resources.filter(
+            (resource) => resource.resource_name === e
+          );
+          thisResource.forEach((elem) => {
+            filteredResources.push(elem);
+          });
+        }
+      });
+
+      filteredResources.forEach((r) => {
+        if (!gardenIds.includes(r.garden)) {
+          gardenIds.push(r.garden);
+        }
+      });
+      locations.features.forEach((g) => {
+        if (
+          gardenIds.includes(g.id) ||
+          (filterlist.noResources && g.properties.resources.length === 0)
+        ) {
+          filteredGardens.push(g);
+        }
+      });
+      var newCollection = { ...locations, features: filteredGardens };
+      console.log(newCollection);
+      dispatch(setFilteredLocations(newCollection));
+    }
+  };
   const listItems = categories.map((element) => (
-    <li>
-      <input key={element} type='checkbox' id={element} name={element} />
-      <label key={element} for={element}>
-        {element}
-      </label>
-    </li>
+    <div
+      key={element}
+      onClick={() => {
+        setOneFilterElement(element, !filterlist[element]);
+      }}
+      className={
+        filterlist[element] ? "filterElement checked" : "filterElement "
+      }>
+      <FontAwesomeIcon className='filterCheck' icon={faCheck} />
+      {element}
+    </div>
   ));
-  return <ul>{listItems}</ul>;
-}
+
+  return (
+    <>
+      <div>
+        <div
+          key='all'
+          onClick={() => {
+            setAllFilterElements(!filterlist.all);
+          }}
+          className={
+            filterlist.all ? "filterElement checked" : "filterElement"
+          }>
+          <FontAwesomeIcon className='filterCheck' icon={faCheck} />
+          all
+        </div>
+
+        {listItems}
+      </div>
+      <div
+        key='noResources'
+        onClick={() => {
+          setOneFilterElement("noResources", !filterlist.noResources);
+        }}
+        className={
+          filterlist.noResources ? "filterElement checked" : "filterElement"
+        }>
+        <FontAwesomeIcon className='filterCheck' icon={faCheck} />
+        show gardens with no resources
+      </div>
+      <Button
+        onClick={() => {
+          getFilteredLocations();
+        }}>
+        Filter
+      </Button>
+    </>
+  );
+};
 
 export default MapNav;

@@ -69,7 +69,7 @@
       margin-left: 10px;
     }
   }
-  overflow-y: hidden;
+  overflow-y: scroll;
   padding: 5%;
   opacity: 1;
   height: 95vh;
@@ -100,4 +100,30 @@
   opacity: 0;
   height: 0px;
   transition-duration: 200ms;
+}
+
+.filterElement {
+  color: black;
+  .filterCheck {
+    fill-opacity: 0;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+  }
+}
+.filterElement.checked {
+  .filterCheck {
+    color: $color-primary;
+    fill-opacity: 1;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+  }
+  text-decoration: underline;
+  text-decoration-color: $color-primary;
+  -moz-text-decoration-color: $color-primary;
 }
