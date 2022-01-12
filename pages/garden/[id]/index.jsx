@@ -13,6 +13,10 @@ import { useState, useEffect, createContext, useContext } from "react";
 // Context that is used to wrap the page in
 const GardenContext = createContext();
 
+/*
+Function to fetch all events in database,
+then filters them by garden-id to only show the relevant ones
+*/
 async function fetchEvents(id, setEvents) {
   // Fetch events
   try {
@@ -32,6 +36,10 @@ async function fetchEvents(id, setEvents) {
   }
 }
 
+/*
+Function to fetch all resources in database,
+then filters them by garden-id to only show the relevant ones
+*/
 async function fetchResources(id, setResources) {
   // Fetch Resources
   try {
@@ -87,8 +95,8 @@ function garden() {
           console.log(e);
         }
 
-        fetchEvents(id, setEvents);
-        fetchResources(id, setResources);
+        fetchEvents(id, setEvents); // fetch events
+        fetchResources(id, setResources); // fetch resources
       })();
       setDataFetched(true);
       setLoading(false);
@@ -127,6 +135,10 @@ function garden() {
   );
 }
 
+/*
+Entire page content:
+Everything that is shown, when the page is not loading
+*/
 function Content() {
   const { pageState, setPageState } = useContext(GardenContext);
   const { gardenDetails } = useContext(GardenContext);
