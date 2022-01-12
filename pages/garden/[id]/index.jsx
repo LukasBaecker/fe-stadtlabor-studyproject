@@ -243,6 +243,8 @@ function Event({ event }) {
   const eventName = event.title;
   const eventDate = new Date(event.date);
 
+  const [popupVisible, setPopupVisible] = useState(false);
+
   const monthNames = [
     "Jan",
     "Feb",
@@ -267,7 +269,7 @@ function Event({ event }) {
   }
 
   return (
-    <div className={styles.listItem}>
+    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
       <div
         className={
           // assign multiple classes to div
@@ -289,8 +291,46 @@ function Event({ event }) {
           <h3>{eventName}</h3>
         </div>
       </div>
+      {popupVisible && (
+        <EventDetails event={event} setPopupVisible={setPopupVisible} />
+      )}
     </div>
   );
+}
+
+function EventDetails({ event, setPopupVisible }) {
+  /*
+  I know this looks like really strange programming...
+  For some  reason I was not able to manage to get x-button
+  to change state using setPopupVisible() directly.
+  But it does work when executing this function in the else{} clause...
+  Hence this strange construct here...
+  */
+  const [visible, setVisible] = useState(true);
+  if (visible) {
+    return (
+      <div className={styles.popup}>
+        <div className={styles.popup_inner}>
+          {new Date(event.date).toLocaleString()}
+          <h3>{event.title}</h3>
+          Location: {event.venue}
+          <hr />
+          {event.description}
+          <button
+            className={styles.popupCloseButton}
+            onClick={() => setVisible(false)}
+          >
+            X
+          </button>
+        </div>
+      </div>
+    );
+  } else {
+    {
+      setPopupVisible(false);
+    }
+    return null;
+  }
 }
 
 // Popup to add a new event
