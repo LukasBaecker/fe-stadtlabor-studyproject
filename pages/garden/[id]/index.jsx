@@ -298,6 +298,10 @@ function Event({ event }) {
   );
 }
 
+/*
+Popup to display details of each event,
+e.g. description, venue, date and time...
+*/
 function EventDetails({ event, setPopupVisible }) {
   /*
   I know this looks like really strange programming...
@@ -545,6 +549,10 @@ function ShareableItem({ item }) {
   );
 }
 
+/*
+Popup to display details of each sharable item,
+e.g. description, status, return date
+*/
 function ItemDetails({ item, setPopupVisible }) {
   /*
   I know this looks like really strange programming...
