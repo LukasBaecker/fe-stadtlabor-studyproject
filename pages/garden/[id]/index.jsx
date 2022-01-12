@@ -554,7 +554,6 @@ function ItemDetails({ item, setPopupVisible }) {
   Hence this strange construct here...
   */
   const [visible, setVisible] = useState(true);
-  console.log(item);
   if (visible) {
     return (
       <div className={styles.popup}>
