@@ -763,6 +763,9 @@ function AddButton({ ExecuteFunction }) {
   );
 }
 
+/*
+Alert component displaying when there is an error in POSTing a new event our resource
+*/
 function ErrorAlert({ setShowError, heading, message }) {
   return (
     <>
