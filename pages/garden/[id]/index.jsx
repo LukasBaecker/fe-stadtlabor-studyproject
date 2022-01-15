@@ -68,8 +68,8 @@ function garden() {
 
   const [gardenName, setGardenName] = useState("");
   const [gardenDetails, setGardenDetails] = useState("");
-  const [events, setEvents] = useState(null);
-  const [resources, setResources] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [resources, setResources] = useState([]);
 
   const [dataFetched, setDataFetched] = useState(false);
   useEffect(() => {
