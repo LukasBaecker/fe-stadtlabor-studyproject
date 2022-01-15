@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Header from "../../../components/Header";
 import { CenterSpinner } from "../../../components/Loader";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 
 import styles from "../../../styles/garden.module.scss";
 import { useState, useEffect, createContext, useContext } from "react";
@@ -361,6 +362,7 @@ function AddEvent({ setPopupVisible }) {
   const [date, setDate] = useState(""); // used for both date and time
   const [venue, setVenue] = useState("");
   const [description, setDescription] = useState("");
+  const [showError, setShowError] = useState(false);
 
   let { gardenId, setLoading, setEvents } = useContext(GardenContext);
 
@@ -389,18 +391,15 @@ function AddEvent({ setPopupVisible }) {
       .then((res) => {
         if (res.status == 200) {
           res.json().then((result) => {
-            console.log("event created successfully");
             setPopupVisible(false);
             fetchEvents(gardenId, setEvents);
           });
         } else {
-          console.log(res);
           throw new Error("Something went wrong");
         }
       })
       .catch((err) => {
-        console.log("Something went wrong creating the garden");
-        console.log(err.message);
+        setShowError(true);
       });
     setLoading(false);
   }
@@ -409,6 +408,15 @@ function AddEvent({ setPopupVisible }) {
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
         <h3>New Event</h3>
+        {showError ? (
+          <ErrorAlert
+            setShowError={setShowError}
+            heading={"Ups"}
+            message={"Something went wrong creating the event"}
+          />
+        ) : (
+          <></>
+        )}
         <Form>
           <Form.Group className="mb-3">
             <Form.Control
@@ -614,6 +622,7 @@ function ItemDetails({ item, setPopupVisible }) {
 function AddShareable({ setPopupVisible }) {
   const [resource_name, setResourceName] = useState("");
   const [category, setCategory] = useState(0);
+  const [showError, setShowError] = useState(false);
 
   let { gardenId, setLoading, setResources } = useContext(GardenContext);
 
@@ -644,23 +653,16 @@ function AddShareable({ setPopupVisible }) {
       .then((res) => {
         if (res.status == 200) {
           res.json().then((result) => {
-            console.log("resource created successfully");
             setPopupVisible(false);
             fetchEvents(gardenId, setResources);
           });
         } else {
-          console.log(res);
           throw new Error("Something went wrong");
         }
       })
       .catch((err) => {
-        console.log("Something went wrong creating the garden");
-        console.log(err.message);
+        setShowError(true);
       });
-
-    console.log(values);
-
-    setPopupVisible(false);
     setLoading(false);
   }
 
@@ -668,6 +670,15 @@ function AddShareable({ setPopupVisible }) {
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
         <h3>New Shareable</h3>
+        {showError ? (
+          <ErrorAlert
+            setShowError={setShowError}
+            heading="Ups"
+            message="Something weng wrong creating the shareable resource"
+          />
+        ) : (
+          <></>
+        )}
         <Form>
           <Form.Group className="mb-3">
             <Form.Control
@@ -751,4 +762,21 @@ function AddButton({ ExecuteFunction }) {
     </>
   );
 }
+
+function ErrorAlert({ setShowError, heading, message }) {
+  return (
+    <>
+      <Alert
+        className="alertInPopup"
+        variant="danger"
+        onClose={() => setShowError(false)}
+        dismissible
+      >
+        <Alert.Heading>{heading}</Alert.Heading>
+        <p>{message}</p>
+      </Alert>
+    </>
+  );
+}
+
 export default garden;
