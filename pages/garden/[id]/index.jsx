@@ -72,6 +72,9 @@ function garden() {
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
 
+  const [showError, setShowError] = useState(false);
+  const [errorText, setErrorText] = useState("");
+
   const [dataFetched, setDataFetched] = useState(false);
   useEffect(() => {
     if (id && !dataFetched) {
@@ -93,7 +96,13 @@ function garden() {
             setGardenDetails(cont.properties);
           }
         } catch (e) {
+          if (e.message === "Garden not found") {
+            setErrorText(`Could not find garden with ID ${id}`);
+          } else {
+            setErrorText(`Something went wrong loading garden with ID ${id}`);
+          }
           console.log(e);
+          setShowError(true);
         }
 
         fetchEvents(id, setEvents); // fetch events
@@ -129,7 +138,20 @@ function garden() {
         <CenterSpinner />
       ) : (
         <div className="bodyBox">
-          <Content />
+          {showError ? (
+            <>
+              <ErrorAlert
+                setShowError={setShowError}
+                heading={"Ups"}
+                message={errorText}
+              />
+              <Button variant="primary" onClick={() => router.push("/user/")}>
+                Back
+              </Button>
+            </>
+          ) : (
+            <Content />
+          )}
         </div>
       )}
     </GardenContext.Provider>
