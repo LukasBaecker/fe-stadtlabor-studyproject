@@ -72,8 +72,9 @@ function garden() {
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
 
+  // controls if an error message is shown instead of the garden
   const [showError, setShowError] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState(""); // Text within error message
 
   const [dataFetched, setDataFetched] = useState(false);
   useEffect(() => {
