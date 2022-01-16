@@ -19,3 +19,60 @@
 input[type="radio"]:checked {
   box-shadow: 0 0 0 2px $color-primary;
 }
+
+.leaflet-popup-close-button {
+  color: $color-base !important;
+}
+.leaflet-popup-close-button:hover {
+  color: $color-secondary !important;
+}
+.leaflet-popup-content {
+  width: 300px;
+  max-width: 300px;
+  max-height: 400px;
+  word-break: keep-all;
+  h1 {
+    font-size: 1.5rem;
+    word-break: keep-all;
+    float: left;
+    display: inline;
+  }
+  .copyLinkButton {
+    width: 100%;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+  }
+}
+.popupInfos {
+  overflow-y: scroll;
+}
+.leaflet-container {
+  font-family: "Montserrat", sans-serif;
+}
+.dropdown-icon {
+  transform: rotateX(0deg);
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  -ms-transform: rotateX(0deg);
+  -o-transform: rotateX(0deg);
+  transition: transform 0.75s;
+  -webkit-transition: transform 0.75s;
+  -moz-transition: transform 0.75s;
+  -ms-transition: transform 0.75s;
+  -o-transition: transform 0.75s;
+}
+.dropdownIcon.dropdownOpened {
+  transform: rotateX(180deg) !important;
+  -webkit-transform: rotateX(180deg) !important;
+  -moz-transform: rotateX(180deg) !important;
+  -ms-transform: rotateX(180deg) !important;
+  -o-transform: rotateX(180deg) !important;
+  transition: transform 0.75s;
+  -webkit-transition: transform 0.75s;
+  -moz-transition: transform 0.75s;
+  -ms-transition: transform 0.75s;
+  -o-transition: transform 0.75s;
+}

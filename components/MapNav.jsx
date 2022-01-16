@@ -6,6 +6,7 @@ import { setLocationActive } from "../store/actions";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Dropdown from "react-bootstrap/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faListUl,
@@ -89,7 +90,7 @@ const MapNav = (props) => {
               ? "mapNavExtraContainer filterContainer"
               : "mapNavExtraContainer hidden"
           }>
-          <h3>Filter</h3>
+          <h2>Filter</h2>
           <FiltercategorieList categories={filtercategories} />
         </div>
         <div
@@ -98,7 +99,9 @@ const MapNav = (props) => {
               ? "mapNavExtraContainer listContainer"
               : "mapNavExtraContainer hidden"
           }>
-          <p>here is a list of all gardens</p>
+          <h2>List of Gardens</h2>
+          <Dropdown.Divider />
+          <GardenList />
         </div>
       </div>
     </>
@@ -173,7 +176,6 @@ const FiltercategorieList = (props) => {
         }
       });
       var newCollection = { ...locations, features: filteredGardens };
-      console.log(newCollection);
       dispatch(setFilteredLocations(newCollection));
     }
   };
@@ -205,9 +207,10 @@ const FiltercategorieList = (props) => {
           <FontAwesomeIcon className='filterCheck' icon={faCheck} />
           all
         </div>
-
+        <Dropdown.Divider />
         {listItems}
       </div>
+      <Dropdown.Divider />
       <div
         key='noResources'
         onClick={() => {
@@ -228,5 +231,36 @@ const FiltercategorieList = (props) => {
     </>
   );
 };
+const GardenList = () => {
+  const filteredLocations = useSelector((state) => state.filtered_locations);
+  const resources = useSelector((state) => state.resources);
 
+  const gardenListReturner = filteredLocations.features.map((e) => (
+    <div key={e.id}>
+      <h4>{e.properties.name}</h4>
+
+      <p>
+        {e.properties.address} | {e.properties.phone} | {e.properties.email}
+      </p>
+
+      <p>Resources ({e.properties.resources.length}) </p>
+
+      <ul>
+        {e.properties.resources.map((element) => (
+          <li>
+            {resources.find((e) => (e.resource_id = element)).resource_name} (
+            {resources.find((e) => (e.resource_id = element)).resource_status})
+          </li>
+        ))}
+      </ul>
+
+      <Dropdown.Divider />
+    </div>
+  ));
+  return <> {gardenListReturner}</>;
+};
 export default MapNav;
+
+/*
+http://giv-project15:9000/api/v1/gardens/all/get_nearest_gardens?x=9.99579&y=51.80490
+*/

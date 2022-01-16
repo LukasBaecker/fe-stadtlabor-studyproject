@@ -54,8 +54,6 @@ export default function mapPage() {
           router.push("/login");
         } else {
           setLocations(content);
-          //dispatch(setGardenLocations(content));
-          dispatch(setFilteredLocations(content));
           setLoading(false);
 
           content.features.forEach((el) => {
@@ -72,7 +70,9 @@ export default function mapPage() {
             };
             setGardensWithResources(gardensWithResources.push(garden));
           });
-          console.log(gardensWithResources);
+          dispatch(
+            setFilteredLocations({ ...content, features: gardensWithResources })
+          );
           dispatch(
             setGardenLocations({ ...content, features: gardensWithResources })
           );

@@ -24,10 +24,10 @@
     -o-border-radius: 0 20px 0 0;
   }
   .activeLocation {
-    background-color: $color-primary;
+    background-color: $color-tertiary;
   }
   .activeLocation:hover {
-    background-color: $color-primary-hover;
+    background-color: $color-tertiary-hover;
   }
   overflow-y: hidden;
   border-radius: 20px 20px 0 0;
@@ -62,6 +62,12 @@
 }
 
 .mapNavExtraContainer {
+  h2 {
+    margin-bottom: 0.8rem;
+  }
+  h4 {
+    font-size: 1.2rem;
+  }
   li {
     list-style: none;
 
@@ -69,16 +75,23 @@
       margin-left: 10px;
     }
   }
+  .dropdown-divider {
+    margin-top: 0.8rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+  button {
+    margin-top: 30px;
+  }
   overflow-y: scroll;
-  padding: 5%;
+  position: absolute;
+  z-index: 2;
+  background-color: #fff;
+  padding: 30px;
+  padding-bottom: 90px;
   opacity: 1;
-  height: 95vh;
-  background-color: $color-secondary;
+  max-height: 90vh;
   width: 100vw;
   max-width: 800px !important;
-  padding-bottom: 60px;
-  z-index: 2;
-  position: absolute;
   left: 50vw;
   transform: translateX(-50%);
   transition-duration: 200ms;
@@ -99,6 +112,7 @@
   bottom: 0;
   opacity: 0;
   height: 0px;
+  padding: 0;
   transition-duration: 200ms;
 }
 
