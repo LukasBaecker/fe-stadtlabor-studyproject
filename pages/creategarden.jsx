@@ -40,6 +40,7 @@ const CreateGarden = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErorrMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [userDetails, setUserDetails] = useState({});
 
@@ -87,17 +88,10 @@ const CreateGarden = () => {
           >
             <h2>New Garden</h2>
             {showError ? (
-              <>
-                <Alert
-                  className="alertInPopup"
-                  variant="danger"
-                  onClose={() => setShowError(false)}
-                  dismissible
-                >
-                  <Alert.Heading>Ups!</Alert.Heading>
-                  <p>Cannot create garden.</p>
-                </Alert>
-              </>
+              <ErrorMessage
+                setShowError={setShowError}
+                message={errorMessage}
+              />
             ) : (
               <></>
             )}
@@ -199,8 +193,8 @@ const CreateGarden = () => {
                   })
                   .catch((err) => {
                     setLoading(false);
+                    setErorrMessage(err.message);
                     setShowError(true);
-                    console.log(err.message);
                   });
               }}
             >
@@ -390,5 +384,19 @@ const CreateGarden = () => {
   };
   return <>{loading ? <CenterSpinner /> : <Content />}</>;
 };
+
+function ErrorMessage({ message, setShowError }) {
+  return (
+    <Alert
+      className="alertInPopup"
+      variant="danger"
+      onClose={() => setShowError(false)}
+      dismissible
+    >
+      <Alert.Heading>Ups!</Alert.Heading>
+      <p>{message}</p>
+    </Alert>
+  );
+}
 
 export default CreateGarden;
