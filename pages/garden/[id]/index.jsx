@@ -575,6 +575,16 @@ function Shareables() {
 function ShareableItem({ item }) {
   const [popupVisible, setPopupVisible] = useState(false);
 
+  const categoryLookup = {
+    1: "Tool",
+    2: "Seeds",
+    3: "Fertelizer",
+    4: "Compost",
+    5: "Construction Material",
+    6: "Gardens",
+    7: "Other",
+  };
+
   return (
     <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
       <img
@@ -587,8 +597,9 @@ function ShareableItem({ item }) {
       />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
-          {item.category}
-          <h3>{item.resource_name}</h3>
+          {categoryLookup[item.category]}
+          <h3 style={{ marginBottom: "0" }}>{item.resource_name}</h3>
+          {item.resource_status}
         </div>
       </div>
       {popupVisible && (
@@ -644,7 +655,11 @@ function ItemDetails({ item, setPopupVisible }) {
 // Popup to add a new shareable
 function AddShareable({ setPopupVisible }) {
   const [resource_name, setResourceName] = useState("");
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState(1);
+  const [resource_status, setResourceStatus] = useState(
+    "AVAILABLE FOR BORROWING"
+  );
+  const [description, setDescription] = useState("");
   const [showError, setShowError] = useState(false);
 
   let { gardenId, setLoading, setResources } = useContext(GardenContext);
@@ -656,7 +671,8 @@ function AddShareable({ setPopupVisible }) {
 
     const values = {
       garden: gardenId,
-      resource_status: "AVAILABLE FOR BORROWING",
+      resource_status,
+      description,
       date_created: Date.now(),
       resource_name,
       category,
@@ -677,7 +693,7 @@ function AddShareable({ setPopupVisible }) {
         if (res.status == 200) {
           res.json().then((result) => {
             setPopupVisible(false);
-            fetchEvents(gardenId, setResources);
+            fetchResources(gardenId, setResources);
           });
         } else {
           throw new Error("Something went wrong");
@@ -712,19 +728,36 @@ function AddShareable({ setPopupVisible }) {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Category</Form.Label>
             <Form.Select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="0">Tools</option>
-              <option value="1">Seeds</option>
-              <option value="2">Fertelizers</option>
-              <option value="3">Compost</option>
-              <option value="4">Cosntruction Material</option>
-              <option value="5">Gardens</option>
-              <option value="6">Other</option>
+              <option value="1">Tools</option>
+              <option value="2">Seeds</option>
+              <option value="3">Fertelizers</option>
+              <option value="4">Compost</option>
+              <option value="5">Cosntruction Material</option>
+              <option value="6">Gardens</option>
+              <option value="7">Other</option>
             </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Select
+              value={resource_status}
+              onChange={(e) => setResourceStatus(e.target.value)}
+            >
+              <option value="AVAILABLE FOR BORROWING">For borrowing</option>
+              <option value="AVAILABLE FOR DONATION">For giveaway</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control
+              as="textarea"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+            />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit
