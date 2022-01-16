@@ -186,7 +186,6 @@ const CreateGarden = () => {
                                   The Garden has the ID " +
                                     result.id
                                 );
-                                router.push("/garden/" + result.id + "/");
                               }
                             });
                           }
