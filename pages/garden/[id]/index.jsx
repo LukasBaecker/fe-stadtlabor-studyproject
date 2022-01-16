@@ -67,7 +67,6 @@ function garden() {
   // determins, whether the loading circle is shown or the page
   const [loading, setLoading] = useState(true);
 
-  const [gardenName, setGardenName] = useState("");
   const [gardenDetails, setGardenDetails] = useState("");
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
