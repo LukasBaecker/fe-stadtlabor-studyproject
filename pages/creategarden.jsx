@@ -67,13 +67,12 @@ const CreateGarden = () => {
     })();
   }, []);
 
-  <Head>
-    <title>New Garden</title>
-  </Head>;
-
   const Content = () => {
     return (
       <>
+        <Head>
+          <title>New Garden</title>
+        </Head>
         <div className="bodyBox">
           <Navigation />
           <div
