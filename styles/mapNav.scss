@@ -24,11 +24,12 @@
     -o-border-radius: 0 20px 0 0;
   }
   .activeLocation {
-    background-color: $color-primary;
+    background-color: $color-tertiary;
   }
   .activeLocation:hover {
-    background-color: $color-primary-hover;
+    background-color: $color-tertiary-hover;
   }
+  overflow-y: hidden;
   border-radius: 20px 20px 0 0;
   height: 60px;
   background-color: $color-base;
@@ -61,14 +62,36 @@
 }
 
 .mapNavExtraContainer {
-  opacity: 1;
-  height: 100vh;
+  h2 {
+    margin-bottom: 0.8rem;
+  }
+  h4 {
+    font-size: 1.2rem;
+  }
+  li {
+    list-style: none;
+
+    label {
+      margin-left: 10px;
+    }
+  }
+  .dropdown-divider {
+    margin-top: 0.8rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+  button {
+    margin-top: 30px;
+  }
+  overflow-y: scroll;
+  position: absolute;
+  z-index: 2;
   background-color: #fff;
+  padding: 30px;
+  padding-bottom: 90px;
+  opacity: 1;
+  max-height: 90vh;
   width: 100vw;
   max-width: 800px !important;
-  padding-bottom: 60px;
-  z-index: 2;
-  position: absolute;
   left: 50vw;
   transform: translateX(-50%);
   transition-duration: 200ms;
@@ -77,19 +100,44 @@
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -o-transform: translateX(-50%);
+  border-radius: 20px 20px 0 0;
+  -webkit-border-radius: 20px 20px 0 0;
+  -moz-border-radius: 20px 20px 0 0;
+  -ms-border-radius: 20px 20px 0 0;
+  -o-border-radius: 20px 20px 0 0;
 }
 
 .mapNavExtraContainer.hidden {
+  overflow-y: hidden;
   bottom: 0;
   opacity: 0;
-  height: 60px;
+  height: 0px;
+  padding: 0;
   transition-duration: 200ms;
 }
 
-.filterContainer {
-  background-color: green;
+.filterElement {
+  color: black;
+  .filterCheck {
+    fill-opacity: 0;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+  }
 }
-
-.listContainer {
-  background-color: hotpink;
+.filterElement.checked {
+  .filterCheck {
+    color: $color-primary;
+    fill-opacity: 1;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+  }
+  text-decoration: underline;
+  text-decoration-color: $color-primary;
+  -moz-text-decoration-color: $color-primary;
 }

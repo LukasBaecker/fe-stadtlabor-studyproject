@@ -17,7 +17,7 @@ if (isClient) {
   const persistConfig = {
     key: "root",
     storage,
-    blacklist: ["auth"],
+    // blacklist: ["auth"],
     transforms: [
       // Create a transformer by passing the reducer key and configuration. Values
       // shown below are the available configurations with default values

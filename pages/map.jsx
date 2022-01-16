@@ -7,9 +7,11 @@ import MapNavigation from "../components/MapNav.jsx";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
 import {
   setGardenLocations,
+  setFilteredLocations,
   setResources,
+  setFilterCategories,
 } from "../store/actions/gardenAndResources.js";
-import Spinner from "react-bootstrap/Spinner";
+import CenterSpinner from "../components/Loader.jsx";
 import { logoutUser } from "../store/actions/auth.js";
 
 const Map = dynamic(() => import("../components/Map.jsx"), {
@@ -17,15 +19,29 @@ const Map = dynamic(() => import("../components/Map.jsx"), {
 });
 
 export default function mapPage() {
-  const currentUser = useSelector((state) => state.auth);
+  const resources = useSelector((state) => state.resources);
+  const [locations, setLocations] = useState({});
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const [resourceFilter, setResourceFilter] = useState([]);
+  const [gardensWithResources, setGardensWithResources] = useState([]);
+  const pushResourceFilter = (element) => {
+    {
+      if (
+        !resourceFilter.includes(element.resource_name) &&
+        (!(typeof element === "string") ||
+          !(element.resource_name instanceof String))
+      ) {
+        setResourceFilter(resourceFilter.push(element.resource_name));
+      }
+    }
+  };
 
   useEffect(() => {
     (async () => {
       try {
         const request = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all",
+          "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/",
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -37,14 +53,32 @@ export default function mapPage() {
           dispatch(logoutUser());
           router.push("/login");
         } else {
-          dispatch(setGardenLocations(content));
+          setLocations(content);
           setLoading(false);
+
+          content.features.forEach((el) => {
+            var garden = el;
+            var resOfGarden = [];
+            resources.forEach((r) => {
+              if (r.garden === el.id) {
+                resOfGarden.push(r.resource_id);
+              }
+            });
+            garden = {
+              ...el,
+              properties: { ...el.properties, resources: resOfGarden },
+            };
+            setGardensWithResources(gardensWithResources.push(garden));
+          });
+          dispatch(
+            setFilteredLocations({ ...content, features: gardensWithResources })
+          );
+          dispatch(
+            setGardenLocations({ ...content, features: gardensWithResources })
+          );
         }
-      } catch (e) {
-        console.log("error: ", e);
-      }
-      try {
-        const request = await fetch(
+
+        const req = await fetch(
           "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/all",
           {
             method: "GET",
@@ -52,23 +86,22 @@ export default function mapPage() {
             credentials: "include",
           }
         );
-        const content = await request.json();
-        dispatch(setResources(content));
+        const cont = await req.json();
+        dispatch(setResources(cont));
       } catch (e) {
         console.log("error: ", e);
       } finally {
-        setLoading(false);
+        try {
+          resources.forEach((element) => pushResourceFilter(element));
+        } catch (e) {
+          console.log("error: ", e);
+        } finally {
+          dispatch(setFilterCategories(resourceFilter));
+          setLoading(false);
+        }
       }
     })();
   }, []);
-
-  const spinner = () => {
-    return (
-      <div className='spinnerDiv'>
-        <Spinner animation='border' role='status' variant='secondary'></Spinner>
-      </div>
-    );
-  };
   const content = () => {
     return (
       <>
@@ -84,7 +117,7 @@ export default function mapPage() {
       <Head>
         <title>Map</title>
       </Head>
-      {loading ? spinner() : content()}
+      {loading ? <CenterSpinner /> : content()}
     </>
   );
 }

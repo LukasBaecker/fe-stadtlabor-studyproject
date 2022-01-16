@@ -8,7 +8,6 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import LocationMarker from "../components/LocationMarker.jsx";
 import { useMediaQuery } from "react-responsive";
 import { useSelector, useDispatch } from "react-redux";
-import { setLocationActive } from "../store/actions/index.js";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   shadowUrl:
@@ -17,18 +16,18 @@ L.Icon.Default.mergeOptions({
 
 function Map() {
   const dispatch = useDispatch();
-  const locations = useSelector((state) => state.locations);
+  const filtered_locations = useSelector((state) => state.filtered_locations);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const locationActivate = useSelector((state) => state.location_active);
 
   //that was for polygons but may be changed to marker design
-  const geoJSONstyle = () => {
+  const polygonStyle = () => {
     return {
       // the fillColor is adapted from a property which can be changed by the user (segment)
-      fillColor: "#000000",
+      fillColor: "#eae7dc",
       //stroke-width: to have a constant width on the screen need to adapt with scale
       opacity: 1,
-      color: "#555555",
+      color: "#d8c3a5",
       fillOpacity: 0.5,
     };
   };
@@ -57,27 +56,11 @@ function Map() {
         </LayersControl>
         {locationActivate ? <LocationMarker /> : ""}
 
-        <MarkerClusterGroup polygonOptions={geoJSONstyle()}>
-          {isTabletOrMobile
-            ? locations.features.map((p) => MapMarker(p))
-            : locations.features.map((p) => MapMarker(p))}
+        <MarkerClusterGroup polygonOptions={polygonStyle()}>
+          {filtered_locations.features.map((p) => MapMarker(p))}
         </MarkerClusterGroup>
       </MapContainer>
-      <div id='positioningDiv' className='location-div'>
-        {/*<button
-          className={
-            locationActivate ? "btn btn-primary" : "btn btn-primary grey"
-          }
-          onClick={() => {
-            console.log(locationActivate);
-            dispatch(setLocationActive(!locationActivate));
-          }}>
-          <FontAwesomeIcon
-            icon={faMapMarkerAlt}
-            style={{ fontSize: "1.6em" }}
-          />
-        </button>*/}
-      </div>
+      <div id='positioningDiv' className='location-div'></div>
     </>
   );
 }

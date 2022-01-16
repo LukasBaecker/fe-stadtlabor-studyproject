@@ -44,7 +44,7 @@ function Navigation() {
                   <Link href='/map'>Resources Map</Link>
                 </li>
                 <li>
-                  <Link href='/user/1'>User Page</Link>
+                  <Link href='/user'>User Page</Link>
                 </li>
                 <li>
                   <Button

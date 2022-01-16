@@ -4,13 +4,17 @@ import gardenLocationReducer from "./gardenLocationReducer.js";
 import resourcesReducer from "./resourcesReducer.js";
 import languageReducer from "./languageReducer.js";
 import locationActiveReducer from "./locationActiveReducer.js";
+import filtercategoriesReducer from "./filtercategoriesReducer.js";
+import filteredLocationsReducer from "./filteredLocationsReducer.js";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   lang: languageReducer,
   locations: gardenLocationReducer,
+  filtered_locations: filteredLocationsReducer,
   resources: resourcesReducer,
   location_active: locationActiveReducer,
+  filtercategories: filtercategoriesReducer,
 });
 
 export default rootReducer;
