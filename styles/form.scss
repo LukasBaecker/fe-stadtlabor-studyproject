@@ -4,6 +4,14 @@
   width: 100%;
   margin-top: 80px;
   background-color: $color-base;
+
+  a {
+    text-decoration: underline !important;
+    color: $color-primary !important;
+  }
+  a:hover {
+    cursor: pointer;
+  }
 }
 .form-group {
   margin-top: 20px;

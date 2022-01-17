@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="388.38293"
+   height="45.712933"
+   viewBox="0 0 388.38293 45.712933"
+   fill="none"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="garden.svg"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8">
+    <rect
+       x="80.59095"
+       y="13.975309"
+       width="138.8214"
+       height="44.022221"
+       id="rect867" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2100"
+     inkscape:window-height="1224"
+     id="namedview6"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="1.5179059"
+     inkscape:cx="232.88658"
+     inkscape:cy="-59.9527"
+     inkscape:window-x="-9"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g863" />
+  <g
+     id="g857"
+     transform="translate(-9.7474869,-8.341481)">
+    <g
+       id="g863"
+       transform="rotate(-45.470431,23.344841,46.707326)">
+      <path
+         style="fill:#3fb97e;fill-opacity:1;stroke-width:0.125026"
+         d="M 53.94013,55.848497 41.040031,68.748467 28.138432,55.848497 c -8.600066,-8.60007 -8.600066,-22.54414 0,-31.14408 l 12.901599,-12.90172 12.900099,12.9016 c 8.600065,8.60006 8.600065,22.54413 0,31.1442 z"
+         id="path2" />
+      <path
+         style="fill:#1d965c;fill-opacity:1;stroke-width:0.125026"
+         d="m 41.040031,11.802817 v 56.94577 L 28.138432,55.848617 c -8.600066,-8.60006 -8.600066,-22.54413 0,-31.14407 z"
+         id="path4" />
+      <path
+         style="fill:#8fd9b5;fill-opacity:1;stroke-width:0.125026"
+         d="m 56.635449,41.124507 c -0.61263,0 -1.113735,-0.49198 -1.122862,-1.10648 -0.06689,-4.48932 -1.847515,-8.70546 -5.013809,-11.87176 l -5.308871,-5.30887 c -0.438718,-0.43872 -0.438718,-1.14987 0,-1.58846 0.438718,-0.43872 1.149993,-0.43872 1.58846,0 l 5.308871,5.30887 c 3.581882,3.58176 5.596057,8.35014 5.671698,13.42684 0.0093,0.62038 -0.486228,1.13061 -1.106359,1.13999 -0.0057,-2.5e-4 -0.01138,-1.3e-4 -0.01713,-1.3e-4 z"
+         id="path6" />
+      <path
+         style="fill:#000000;fill-opacity:1;stroke-width:0.125026"
+         d="m 54.735047,23.909877 -12.901224,-12.9011 c -0.210669,-0.2108 -0.496354,-0.32907 -0.794417,-0.32907 -0.298063,0 -0.583624,0.11827 -0.794293,0.32907 l -12.901099,12.9011 c -9.024405,9.0244 -9.024405,23.708 0,32.73228 l 12.572029,12.57203 v 4.35555 c 0,0.62038 0.502982,1.12336 1.123363,1.12336 0.620381,0 1.123362,-0.50298 1.123362,-1.12336 v -4.35555 l 12.572279,-12.57203 c 9.024281,-9.02428 9.024281,-23.70788 0,-32.73228 z m -12.572279,42.12739 v -9.24482 l 5.767968,-2.8056 c 0.557867,-0.27143 0.790041,-0.94357 0.518859,-1.50144 -0.271557,-0.55787 -0.943574,-0.79017 -1.501442,-0.51886 l -4.785135,2.32749 v -6.19743 l 11.304387,-4.73975 c 0.572121,-0.23993 0.841427,-0.89819 0.601627,-1.47019 -0.239801,-0.57199 -0.89794,-0.84167 -1.470186,-0.60162 l -10.435703,4.37555 v -6.42386 l 7.877663,-3.30295 c 0.572121,-0.23992 0.841428,-0.89819 0.601627,-1.47018 -0.2398,-0.572 -0.897939,-0.84168 -1.470185,-0.60163 l -7.00898,2.93874 v -6.54363 l 3.879944,-1.62672 c 0.572121,-0.23992 0.841428,-0.89819 0.601627,-1.47018 -0.2398,-0.57212 -0.898189,-0.84118 -1.470185,-0.60163 l -3.011261,1.26264 v -4.29753 c 0,-0.62038 -0.502981,-1.12336 -1.123362,-1.12336 -0.620381,0 -1.123362,0.50298 -1.123362,1.12336 v 4.29728 l -3.011011,-1.26264 c -0.571871,-0.2398 -1.230385,0.0295 -1.470186,0.60163 -0.2398,0.57212 0.02938,1.23038 0.601627,1.47018 l 3.87982,1.62672 v 6.54363 l -7.008855,-2.93874 c -0.571746,-0.23993 -1.230385,0.0294 -1.470186,0.60163 -0.239925,0.57212 0.02938,1.23038 0.601627,1.47018 l 7.877539,3.30295 v 6.42386 l -10.435579,-4.37555 c -0.571495,-0.2398 -1.230384,0.0294 -1.470185,0.60162 -0.239926,0.57212 0.02938,1.23039 0.601627,1.47019 l 11.304262,4.73975 v 6.19756 l -4.785136,-2.32749 c -0.557617,-0.27119 -1.230009,-0.0391 -1.501442,0.51886 -0.271432,0.55786 -0.03913,1.23013 0.51886,1.50144 l 5.767843,2.80559 v 9.24483 L 28.933725,55.053577 c -8.148471,-8.14822 -8.148471,-21.40665 -1.25e-4,-29.55499 l 12.106931,-12.10693 12.106931,12.10693 c 8.148346,8.14834 8.148346,21.40689 0,29.55511 z"
+         id="path8" />
+    </g>
+    <text
+       xml:space="preserve"
+       id="text865"
+       style="font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;white-space:pre;shape-inside:url(#rect867);"><tspan
+         style="visibility:hidden"
+         x="80.591797"
+         y="94.49126"><tspan
+           dx="0 31.015625 24.023438 17.070312 24.921875 23.828125 25.3125 27.929688 17.070312 15.761719">GardenCrtw</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:53.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px"
+       x="60.093452"
+       y="49.332603"
+       id="text873"><tspan
+         sodipodi:role="line"
+         id="tspan871"
+         x="60.093452"
+         y="49.332603"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:53.3333px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Semi-Bold';fill:#241c1c">GARDEN UP</tspan></text>
+  </g>
+</svg>

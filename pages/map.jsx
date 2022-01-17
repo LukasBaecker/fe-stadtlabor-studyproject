@@ -19,8 +19,6 @@ const Map = dynamic(() => import("../components/Map.jsx"), {
 });
 
 export default function mapPage() {
-  const resources = useSelector((state) => state.resources);
-  const [locations, setLocations] = useState({});
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const [resourceFilter, setResourceFilter] = useState([]);
@@ -40,6 +38,17 @@ export default function mapPage() {
   useEffect(() => {
     (async () => {
       try {
+        const req = await fetch(
+          "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/all",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        );
+        const cont = await req.json();
+        dispatch(setResources(cont));
+        cont.forEach((element) => pushResourceFilter(element));
         const request = await fetch(
           "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/",
           {
@@ -53,13 +62,11 @@ export default function mapPage() {
           dispatch(logoutUser());
           router.push("/login");
         } else {
-          setLocations(content);
-          setLoading(false);
-
+          console.log(content);
           content.features.forEach((el) => {
             var garden = el;
             var resOfGarden = [];
-            resources.forEach((r) => {
+            cont.forEach((r) => {
               if (r.garden === el.id) {
                 resOfGarden.push(r.resource_id);
               }
@@ -77,28 +84,11 @@ export default function mapPage() {
             setGardenLocations({ ...content, features: gardensWithResources })
           );
         }
-
-        const req = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/all",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
-        const cont = await req.json();
-        dispatch(setResources(cont));
       } catch (e) {
         console.log("error: ", e);
       } finally {
-        try {
-          resources.forEach((element) => pushResourceFilter(element));
-        } catch (e) {
-          console.log("error: ", e);
-        } finally {
-          dispatch(setFilterCategories(resourceFilter));
-          setLoading(false);
-        }
+        dispatch(setFilterCategories(resourceFilter));
+        setLoading(false);
       }
     })();
   }, []);

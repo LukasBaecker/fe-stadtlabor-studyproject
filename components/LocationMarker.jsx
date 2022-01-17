@@ -1,5 +1,5 @@
 import React from "react";
-import { Marker } from "react-leaflet";
+import { Marker, useMap } from "react-leaflet";
 import useGeoLocation from "../hooks/useGeoLocation.js";
 import L from "leaflet";
 const positionMarkerIcon = new L.Icon({
@@ -11,7 +11,12 @@ const positionMarkerIcon = new L.Icon({
 });
 
 const LocationMarker = () => {
+  const map = useMap();
   const location = useGeoLocation();
+
+  location.loaded &&
+    !location.error &&
+    map.flyTo([location.coordinates.lat, location.coordinates.lng], 15);
 
   return (
     location.loaded &&
