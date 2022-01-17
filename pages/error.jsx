@@ -1,9 +1,10 @@
+import { useSelector } from "react-redux";
 import Head from "next/head";
-import React from "react";
 import Image from "react-bootstrap/Image";
+//import the pictures
 
-export default function pageNotFound() {
-  const language = "eng";
+function Error({ center, zoom }) {
+  const language = useSelector((state) => state.lang);
   return (
     <>
       <Head>
@@ -13,21 +14,23 @@ export default function pageNotFound() {
         {language === "eng" ? (
           <>
             <h1>Ups! Seems, you digged to deep.</h1>
-            <p>This page could not be found please return to our surface.</p>
+            <p>Please refresh the page to go on or try it again later.</p>
           </>
         ) : language === "ger" ? (
           <>
             <h1>Ups! Scheint, als hättest du zu tief gebuddelt.</h1>
             <p>
-              Diese Seite konnte nicht gefunden werden. Kehre bitte an unsere
-              Oberfläche zurück.
+              Bitte lade die Seite neu, um fortzufahren oder versuche es zu
+              einem späteren Zeitpunkt erneut.
             </p>
           </>
         ) : (
           <></>
         )}
-        <Image src={"/imgs/404.svg"} className='notFoundImage' />
+        <Image src={"/imgs/error_primary.svg"} className='notFoundImage' />
       </div>
     </>
   );
 }
+
+export default Error;

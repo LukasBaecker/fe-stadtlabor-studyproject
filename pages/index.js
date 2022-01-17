@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import router, { useRouter } from "next/router";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -10,7 +11,10 @@ import Alert from "react-bootstrap/Alert";
 import { Formik } from "formik";
 import { loginUser } from "../store/actions/auth.js";
 import { useDispatch } from "react-redux";
+import { logoutUser } from "../store/actions/auth.js";
+import { CenterSpinner } from "../components/Loader";
 let Yup = require("yup");
+import Navigation from "../components/Navigation.jsx";
 import BootstrapButton from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSeedling, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -19,73 +23,62 @@ import styles from "../styles/Home.module.scss";
 
 export default function Home() {
   const router = useRouter();
-  const [offsetY, setOffsetY] = useState(0);
-  const currentUser = useSelector((state) => state.auth);
-  // Parallax Scroll Effect on Page Top
-  const handleScroll = () => setOffsetY(window.scrollY);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
 
   // Boolean State indicating whether the Login Window is currently Shown
   const [loginShown, setLoginShown] = useState(false);
-  const content = () => {
-    return (
-      <React.Fragment>
+
+  return (
+    <React.Fragment>
+      <div className={styles.title}>
+        {isAuth ? (
+          <Navigation />
+        ) : (
+          <LoginButton
+            className={styles.loginButton}
+            toggleLoginPopup={setLoginShown}
+          />
+        )}
+
+        {/* Page Title */}
+
+        <Image id={styles.mainLogo} src='/garden.svg' />
+
+        {/* Image of greenhouse in background */}
+        <Image id={styles.mainBackground} src='/imgs/greenhouse.png' />
         <div className='bodyBox'>
-          <div className={styles.title}>
-            <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
-            {/* Page Title */}
-            <h1
-              style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
-              GardenUp!
-            </h1>
-
-            {/* Image of greenhouse in background */}
-            <Image
-              src='/imgs/greenhouse.png'
-              style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
-            />
-
-            <SignupButton />
-            <WhyJoin />
-          </div>
-
-          {/* Login-Popup: Only visible if loginShown is True */}
-          <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
-
-          <Container className={styles.siteElement}>
-            <Image
-              src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
-              className={styles.decoImage}
-            />
-          </Container>
-
-          <Advantages />
-
-          <div className={styles.frontFooter}>
-            <SignupButton />
-            <Image
-              src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
-              className={styles.decoImage}
-              fluid
-            />
-            <Footer />
-          </div>
+          <SignupButton />
+          <WhyJoin />
         </div>
-      </React.Fragment>
-    );
-  };
-  const redirecter = () => {
-    router.push("/user");
-    return <></>;
-  };
-  return <>{currentUser.isAuthenticated ? redirecter() : content()}</>;
+
+        {/* Login-Popup: Only visible if loginShown is True */}
+        <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
+
+        <Container className={styles.siteElement}>
+          <Image
+            src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
+            className={styles.decoImage}
+          />
+        </Container>
+
+        <Advantages />
+
+        <div className={styles.frontFooter}>
+          <SignupButton />
+          <Image
+            src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
+            className={styles.decoImage}
+            fluid
+          />
+          <Footer />
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }
 
-function LoginButton({ offsetY, toggleLoginPopup }) {
+function LoginButton({ toggleLoginPopup }) {
   function onLoginButtonClick() {
     toggleLoginPopup(true);
   }
@@ -93,8 +86,8 @@ function LoginButton({ offsetY, toggleLoginPopup }) {
   return (
     <div className={styles.login}>
       <button
-        onClick={() => onLoginButtonClick()}
-        style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}>
+        className={styles.loginButton}
+        onClick={() => onLoginButtonClick()}>
         Log in!
       </button>
     </div>
@@ -138,9 +131,12 @@ function WhyJoin() {
 
 // Popup that appears when a user clicks the Login Button
 function LoginPopup({ isVisible, toggleLoginPopup }) {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(false);
+
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const router = useRouter();
   // Schema for yup
@@ -155,6 +151,7 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
   if (isVisible) {
     return (
       <div className={styles.popup}>
+        {loading ? <CenterSpinner /> : <></>}
         <div className={styles.popup_inner}>
           {showError ? (
             <>
@@ -191,6 +188,8 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                       resetForm();
                       dispatch(loginUser(result.jwt));
                       console.log("Login: Success");
+                      setLoading(true);
+                      router.push("/user");
                     });
                   } else {
                     throw new Error("Something went wrong");
@@ -277,17 +276,17 @@ function Advantages() {
   const items = [
     {
       id: 1,
-      url: "/imgs/icons8-hands-60 1.png",
+      url: "/imgs/icons8-hands.svg",
       text: "Connect with your local urban gardening community",
     },
     {
       id: 2,
-      url: "/imgs/icons8-shovel-50 1.png",
+      url: "/imgs/icons8-shovel.svg",
       text: "Find useful tools in your local neighborhood and share yours",
     },
     {
       id: 3,
-      url: "/imgs/icons8-plant-60.png",
+      url: "/imgs/icons8-plant.svg",
       text: "Grow the urban garden together",
     },
   ];

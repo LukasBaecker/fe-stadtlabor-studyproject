@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Button from "react-bootstrap/Button";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/actions/auth.js";
 
 function Navigation() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const logout = () => {
     fetch("http://giv-project15.uni-muenster.de:9000/api/v1/users/logout", {
       method: "POST",
@@ -46,15 +47,19 @@ function Navigation() {
                 <li>
                   <Link href='/user'>User Page</Link>
                 </li>
-                <li>
-                  <Button
-                    variant='danger'
-                    onClick={() => {
-                      logout();
-                    }}>
-                    Logout
-                  </Button>
-                </li>
+                {isAuth ? (
+                  <li>
+                    <Button
+                      variant='danger'
+                      onClick={() => {
+                        logout();
+                      }}>
+                      Logout
+                    </Button>
+                  </li>
+                ) : (
+                  <></>
+                )}
               </ul>
             </div>
           </div>

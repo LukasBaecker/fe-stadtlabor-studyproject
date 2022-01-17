@@ -6,6 +6,7 @@ import languageReducer from "./languageReducer.js";
 import locationActiveReducer from "./locationActiveReducer.js";
 import filtercategoriesReducer from "./filtercategoriesReducer.js";
 import filteredLocationsReducer from "./filteredLocationsReducer.js";
+import currentPointReducer from "./currentPointReducer.js";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   resources: resourcesReducer,
   location_active: locationActiveReducer,
   filtercategories: filtercategoriesReducer,
+  currentPoint: currentPointReducer,
 });
 
 export default rootReducer;
