@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import React from "react";
 let Yup = require("yup");
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
@@ -16,6 +16,9 @@ import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { CenterSpinner } from "../components/Loader";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Modal from "react-bootstrap/Modal";
 //yup schema
 const validationSchema = Yup.object().shape({
   first_name: Yup.string()
@@ -40,6 +43,10 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "*passwords do not match")
     .required("Please confirm your password.")
     .min(6, "*password is too short - 6 charakters minimum"),
+  acceptTerms: Yup.boolean().oneOf(
+    [true],
+    "Please accept the terms and conditions"
+  ),
 });
 
 function signUp() {
@@ -47,9 +54,14 @@ function signUp() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [message, setMessage] = useState("An error has been occurred");
   const currentUser = useSelector((state) => state.auth);
+  // Boolean State indicating whether the Login Window is currently Shown
+  const [termsShown, setTermsShown] = useState(false);
   const router = useRouter();
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
-
+  const redirecter = () => {
+    router.push("/user");
+    return <></>;
+  };
   return (
     <>
       <Head>
@@ -84,9 +96,7 @@ function signUp() {
         <></>
       )}
       {currentUser.isAuthenticated ? (
-        () => {
-          router.push("/user");
-        }
+        redirecter()
       ) : (
         <Container className={styles.signupDiv}>
           <Row className={styles.test}>
@@ -100,6 +110,7 @@ function signUp() {
                   password: "",
                   contact: "",
                   repeatPassword: "",
+                  acceptTerms: false,
                 }}
                 // Hooks up our validationSchema to Formik
                 validationSchema={validationSchema}
@@ -303,7 +314,26 @@ function signUp() {
                         </div>
                       ) : null}
                     </Form.Group>
-
+                    <Form.Group className='form-group' controlId='formTerms'>
+                      <Field
+                        type='checkbox'
+                        name='acceptTerms'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          touched.acceptTerms && errors.acceptTerms
+                            ? "errorForm"
+                            : null
+                        }
+                      />
+                      <Form.Label>
+                        Yes, I have read the{" "}
+                        <a onClick={() => setTermsShown(true)}>
+                          terms and conditions
+                        </a>
+                        .
+                      </Form.Label>
+                    </Form.Group>
                     <Button
                       className='form-group'
                       variant='primary'
@@ -323,6 +353,20 @@ function signUp() {
             </Col>
           </Row>
         </Container>
+      )}
+      {termsShown ? (
+        <div className='popup'>
+          <div className='popup_inner'>
+            <p>TEst</p>
+            <button
+              className='popupCloseButton'
+              onClick={() => setTermsShown(false)}>
+              <FontAwesomeIcon className='closeIcon' icon={faTimes} />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <></>
       )}
     </>
   );
