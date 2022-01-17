@@ -40,7 +40,9 @@ const CreateGarden = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErorrMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -59,6 +61,7 @@ const CreateGarden = () => {
           dispatch(logoutUser());
           router.push("/login");
         } else {
+          setUserDetails(content);
           setLoading(false);
         }
       } catch (e) {
@@ -67,13 +70,12 @@ const CreateGarden = () => {
     })();
   }, []);
 
-  <Head>
-    <title>New Garden</title>
-  </Head>;
-
   const Content = () => {
     return (
       <>
+        <Head>
+          <title>New Garden</title>
+        </Head>
         <div className="bodyBox">
           <Navigation />
           <div
@@ -86,17 +88,10 @@ const CreateGarden = () => {
           >
             <h2>New Garden</h2>
             {showError ? (
-              <>
-                <Alert
-                  className="alertInPopup"
-                  variant="danger"
-                  onClose={() => setShowError(false)}
-                  dismissible
-                >
-                  <Alert.Heading>Ups!</Alert.Heading>
-                  <p>Cannot create garden.</p>
-                </Alert>
-              </>
+              <ErrorMessage
+                setShowError={setShowError}
+                message={errorMessage}
+              />
             ) : (
               <></>
             )}
@@ -111,7 +106,7 @@ const CreateGarden = () => {
                 phone: "",
                 address: "",
                 crops: [],
-                members: "",
+                members: [],
                 primary_purpose: "RESOURCES",
               }}
               // Hooks up our validationSchema to Formik
@@ -123,8 +118,12 @@ const CreateGarden = () => {
 
                 values["geom_point"] =
                   "POINT(" + values.longitude + " " + values.latitude + ")";
-                console.log(values);
 
+                /*
+                Two-step process:
+                1st step: Call garden-api by POST to create instance of the garden
+                2nd step: Call user-api by PUT to link user to newly created garden
+                */
                 fetch(
                   "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/",
                   {
@@ -139,20 +138,63 @@ const CreateGarden = () => {
                   .then((res) => {
                     if (res.status == 200) {
                       res.json().then((result) => {
-                        resetForm();
-                        console.log("garden created successfullz");
-                        router.push("/garden/" + result.id + "/");
+                        delete userDetails["email"];
+                        delete userDetails["id"];
+                        userDetails["garden"] = [
+                          ...userDetails["garden"],
+                          result.id,
+                        ];
+                        fetch(
+                          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
+                          {
+                            method: "PUT",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            credentials: "include",
+                            body: JSON.stringify(userDetails),
+                          }
+                        ).then((res2) => {
+                          if (res2.status == 200) {
+                            router.push("/garden/" + result.id + "/");
+                          } else {
+                            // Delete garden, in case it was created but not registered to user
+                            fetch(
+                              `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/${result.id}`,
+                              {
+                                method: "DELETE",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                credentials: "include",
+                              }
+                            ).then((res3) => {
+                              if (res3.status == 204) {
+                                throw new Error(
+                                  "Something went wrong registering the user in the garden. So garden was deleted."
+                                );
+                              } else {
+                                throw new Error(
+                                  "Something went wrong registering the user in the garden.\
+                                  The Garden was tried to be deleted, but failed.\
+                                  The Garden has the ID " +
+                                    result.id
+                                );
+                              }
+                            });
+                          }
+                        });
                       });
                     } else {
-                      console.log(res);
-                      throw new Error("Something went wrong");
+                      throw new Error(
+                        "Something went wrong creating the garden"
+                      );
                     }
                   })
                   .catch((err) => {
                     setLoading(false);
+                    setErorrMessage(err.message);
                     setShowError(true);
-                    console.log("Something went wrong creating the garden");
-                    console.log(err.message);
                   });
               }}
             >
@@ -342,5 +384,19 @@ const CreateGarden = () => {
   };
   return <>{loading ? <CenterSpinner /> : <Content />}</>;
 };
+
+function ErrorMessage({ message, setShowError }) {
+  return (
+    <Alert
+      className="alertInPopup"
+      variant="danger"
+      onClose={() => setShowError(false)}
+      dismissible
+    >
+      <Alert.Heading>Ups!</Alert.Heading>
+      <p>{message}</p>
+    </Alert>
+  );
+}
 
 export default CreateGarden;
