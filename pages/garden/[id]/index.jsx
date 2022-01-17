@@ -70,6 +70,7 @@ function garden() {
   const [gardenDetails, setGardenDetails] = useState("");
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   // controls if an error message is shown instead of the garden
   const [showError, setShowError] = useState(false);
@@ -79,6 +80,26 @@ function garden() {
   useEffect(() => {
     if (id && !dataFetched) {
       (async () => {
+        // check if user is logged in
+        try {
+          const request = await fetch(
+            "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            }
+          );
+          const content = await request.json();
+          if (content.detail === "Unauthenticated!") {
+            console.log("unauthenticated");
+          } else {
+            setLoggedIn(true);
+          }
+        } catch (e) {
+          console.log("error: ", e);
+        }
+
         // Fetch general garden information
         try {
           const request = await fetch(
@@ -123,6 +144,7 @@ function garden() {
   return (
     <GardenContext.Provider
       value={{
+        loggedIn,
         gardenDetails,
         gardenId: id,
         events,
@@ -802,18 +824,27 @@ function AddButton({ ExecuteFunction }) {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // only show button if user is logged in
+  const { loggedIn } = useContext(GardenContext);
+
   const [popupVisible, setPopupVisible] = useState(false);
 
   return (
     <>
-      <Button
-        onClick={() => setPopupVisible(true)}
-        className={styles.addButtonNew}
-        style={{ left: leftPosition }}
-      >
-        +
-      </Button>
-      {popupVisible && <ExecuteFunction setPopupVisible={setPopupVisible} />}
+      {loggedIn ? (
+        <>
+          <Button
+            onClick={() => setPopupVisible(true)}
+            className={styles.addButtonNew}
+            style={{ left: leftPosition }}
+          >
+            +
+          </Button>
+          {popupVisible && (
+            <ExecuteFunction setPopupVisible={setPopupVisible} />
+          )}
+        </>
+      ) : null}
     </>
   );
 }
