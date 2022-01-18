@@ -47,6 +47,7 @@ const CreateGarden = () => {
   useEffect(() => {
     (async () => {
       try {
+        // Check if user is authenticated
         const request = await fetch(
           "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
           {
