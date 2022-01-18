@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Button from "react-bootstrap/Button";
 import Header from "../../../components/Header";
 import { CenterSpinner } from "../../../components/Loader";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 
