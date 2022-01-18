@@ -1,8 +1,9 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 
 import Header from "../../../components/Header";
 import { CenterSpinner } from "../../../components/Loader";
+import { joinGarden } from "../../../helpers/manageGarden";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -71,6 +72,8 @@ function garden() {
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+  const [isMember, setIsMember] = useState(false);
 
   // controls if an error message is shown instead of the garden
   const [showError, setShowError] = useState(false);
@@ -95,6 +98,8 @@ function garden() {
             console.log("unauthenticated");
           } else {
             setLoggedIn(true);
+            setUserDetails(content);
+            setIsMember(content.garden.includes(parseInt(id)));
           }
         } catch (e) {
           console.log("error: ", e);
@@ -154,6 +159,8 @@ function garden() {
         setLoading,
         pageState,
         setPageState,
+        userDetails,
+        isMember,
       }}
     >
       {loading ? (
@@ -185,8 +192,8 @@ Entire page content:
 Everything that is shown, when the page is not loading
 */
 function Content() {
-  const { pageState, setPageState } = useContext(GardenContext);
-  const { gardenDetails } = useContext(GardenContext);
+  const { pageState, setPageState, gardenDetails, isMember } =
+    useContext(GardenContext);
   return (
     <>
       <Head>
@@ -240,6 +247,7 @@ function Content() {
         {pageState === 2 && <Events />}
         {pageState === 3 && <Members />}
         {pageState === 4 && <Shareables />}
+        {!isMember && <JoinButton />}
       </div>
     </>
   );
@@ -843,6 +851,63 @@ function AddButton({ ExecuteFunction }) {
           {popupVisible && (
             <ExecuteFunction setPopupVisible={setPopupVisible} />
           )}
+        </>
+      ) : null}
+    </>
+  );
+}
+
+/*
+Button to join the garden.
+Only shows up when 
+*/
+function JoinButton() {
+  // function to calculate left position in px of element
+  const getPosition = () => {
+    const pxBody = document.body.clientWidth;
+    const pxHtml = window.innerWidth;
+    const pos = pxHtml / 2 + pxBody / 2 - 20;
+    return pos;
+  };
+
+  //state-variable to store left position in px
+  const [leftPosition, setLeftPosition] = useState(getPosition());
+
+  // function to execute on window resizing
+  // keeps the element where it is supposed to be
+  const onResize = () => {
+    const pos = getPosition();
+    setLeftPosition(pos);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // only show button if user is not logged in
+  const { loggedIn, gardenId, userDetails } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    const success = await joinGarden(userDetails, gardenId);
+    if (success) {
+      router.reload();
+    } else {
+      console.log("not successful");
+    }
+  };
+
+  return (
+    <>
+      {loggedIn ? (
+        <>
+          <Button
+            onClick={handleClick}
+            className={styles.joinButton}
+            style={{ left: leftPosition }}
+          >
+            Join!
+          </Button>
         </>
       ) : null}
     </>
