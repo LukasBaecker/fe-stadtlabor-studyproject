@@ -10,6 +10,11 @@ import { Formik } from "formik";
 import { useSelector } from "react-redux";
 import Navigation from "../components/Navigation";
 import { CenterSpinner } from "../components/Loader";
+import {
+  createGarden,
+  joinGarden,
+  deleteGarden,
+} from "../helpers/manageGarden";
 //import { message } from "antd";
 let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
@@ -112,7 +117,7 @@ const CreateGarden = () => {
               }}
               // Hooks up our validationSchema to Formik
               validationSchema={validationSchema}
-              onSubmit={(values, { setSubmitting, resetForm }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setLoading(true);
                 setShowError(false);
                 setSubmitting(true);
@@ -124,79 +129,43 @@ const CreateGarden = () => {
                 Two-step process:
                 1st step: Call garden-api by POST to create instance of the garden
                 2nd step: Call user-api by PUT to link user to newly created garden
+                If 2nd step fails, try to delete garden.
                 */
-                fetch(
-                  "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify(values),
-                  }
-                )
-                  .then((res) => {
-                    if (res.status == 200) {
-                      res.json().then((result) => {
-                        delete userDetails["email"];
-                        delete userDetails["id"];
-                        userDetails["garden"] = [
-                          ...userDetails["garden"],
-                          result.id,
-                        ];
-                        fetch(
-                          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-                          {
-                            method: "PUT",
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                            credentials: "include",
-                            body: JSON.stringify(userDetails),
-                          }
-                        ).then((res2) => {
-                          if (res2.status == 200) {
-                            router.push("/garden/" + result.id + "/");
-                          } else {
-                            // Delete garden, in case it was created but not registered to user
-                            fetch(
-                              `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/${result.id}`,
-                              {
-                                method: "DELETE",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                },
-                                credentials: "include",
-                              }
-                            ).then((res3) => {
-                              if (res3.status == 204) {
-                                throw new Error(
-                                  "Something went wrong registering the user in the garden. So garden was deleted."
-                                );
-                              } else {
-                                throw new Error(
-                                  "Something went wrong registering the user in the garden.\
+                try {
+                  const gardenId = await createGarden(values);
+
+                  if (gardenId != -1) {
+                    const joinedGarden = await joinGarden(
+                      userDetails,
+                      gardenId
+                    );
+
+                    if (joinedGarden) {
+                      router.push("/garden/" + gardenId + "/");
+                    } else {
+                      const gardenDeleted = await deleteGarden(gardenId);
+
+                      if (gardenDeleted) {
+                        throw new Error(
+                          "Something went wrong registering the user in the garden. So garden was deleted."
+                        );
+                      } else {
+                        throw new Error(
+                          "Something went wrong registering the user in the garden.\
                                   The Garden was tried to be deleted, but failed.\
                                   The Garden has the ID " +
-                                    result.id
-                                );
-                              }
-                            });
-                          }
-                        });
-                      });
-                    } else {
-                      throw new Error(
-                        "Something went wrong creating the garden"
-                      );
+                            gardenId
+                        );
+                      }
                     }
-                  })
-                  .catch((err) => {
-                    setLoading(false);
-                    setErorrMessage(err.message);
-                    setShowError(true);
-                  });
+                  } else {
+                    throw new Error("Something went wrong creating the garden");
+                  }
+                } catch (err) {
+                  setLoading(false);
+                  setErorrMessage(err.message);
+                  setShowError(true);
+                }
               }}
             >
               {/* Callback function containing Formik state and helpers that handle common form actions */}
