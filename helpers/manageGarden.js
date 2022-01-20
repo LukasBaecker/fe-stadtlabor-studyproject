@@ -59,6 +59,38 @@ export async function joinGarden(user, gardenId) {
 }
 
 /**
+ *
+ * @param {json} user JSON-object of the current user, like it is returned from the User-API
+ * @param {*} gardenId ID of the garden, from which a user likes to un-register
+ * @returns {Promise<boolean>} Indicates, whether leaving the garden was successful
+ */
+export async function leaveGarden(user, gardenId) {
+  delete user["email"];
+  delete user["id"];
+  user["garden"] = user["garden"].filter((item) => item !== parseInt(gardenId));
+
+  const response = await fetch(
+    "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(user),
+    }
+  );
+
+  return new Promise((resolve, reject) => {
+    if (response.status == 200) {
+      resolve(true);
+    } else {
+      reject(false);
+    }
+  });
+}
+
+/**
  * Function to delete a garden
  * @param {int} id ID of the garden to be deleted
  * @returns {Promise<boolean>} Indicates, whether deleting the garden was successful
