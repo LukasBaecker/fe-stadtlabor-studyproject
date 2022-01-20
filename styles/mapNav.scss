@@ -66,6 +66,11 @@
     margin-bottom: 0.8rem;
   }
   h4 {
+    img {
+      height: 1.2rem;
+      width: auto;
+      margin-right: 5px;
+    }
     font-size: 1.2rem;
   }
   li {
@@ -76,8 +81,12 @@
     }
   }
   .dropdown-divider {
-    margin-top: 0.8rem !important;
-    margin-bottom: 0.8rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 10%;
+    margin-right: 10%;
+    color: $color-secondary;
+    height: 2px;
   }
   button {
     margin-top: 30px;
@@ -125,7 +134,12 @@
 }
 
 .filterElement {
+  margin: 10px;
+  margin-left: 15%;
   color: black;
+  svg {
+    margin-right: 5px;
+  }
   .filterCheck {
     fill-opacity: 0;
     transition: height 0.4s;
@@ -148,4 +162,38 @@
   text-decoration: underline;
   text-decoration-color: $color-primary;
   -moz-text-decoration-color: $color-primary;
+}
+.gardenDiv {
+  background-color: white;
+  padding: 0.8rem;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  transition: background-color 0.1s;
+  -webkit-transition: background-color 0.1s;
+  -moz-transition: background-color 0.1s;
+  -ms-transition: background-color 0.1s;
+  -o-transition: background-color 0.1s;
+}
+.gardenDiv:hover {
+  cursor: pointer;
+}
+.activeGardenDiv {
+  h4 {
+    text-decoration: underline $color-primary;
+  }
+
+  background-color: $color-base;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  transition: background-color 0.1s;
+  -webkit-transition: background-color 0.1s;
+  -moz-transition: background-color 0.1s;
+  -ms-transition: background-color 0.1s;
+  -o-transition: background-color 0.1s;
 }

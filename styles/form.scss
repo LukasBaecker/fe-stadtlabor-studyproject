@@ -50,10 +50,12 @@
 .loader,
 .spinnerDiv {
   position: fixed;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
   z-index: 21;
-  background-color: rgba($color: #666, $alpha: 0.6);
+  background-color: $color-base;
   text-align: center;
   padding-top: 50vh;
 }

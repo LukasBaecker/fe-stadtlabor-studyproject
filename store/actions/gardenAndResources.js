@@ -14,10 +14,10 @@ export const setResources = (resources) => {
     payload: { resources: resources },
   };
 };
-export const setFilterCategories = (resources) => {
+export const setFilterCategories = (categories) => {
   return {
     type: "SET_FILTERCATEGORIES",
-    payload: { resources: resources },
+    payload: { categories: categories },
   };
 };
 export const setFilteredLocations = (locations) => {

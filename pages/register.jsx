@@ -65,7 +65,7 @@ function signUp() {
   return (
     <>
       <Head>
-        <title>Sign Up</title>
+        <title>Sign Up!</title>
       </Head>
       {show ? (
         <>

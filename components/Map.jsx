@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { MapContainer, LayersControl, TileLayer } from "react-leaflet";
 import L from "leaflet";
@@ -16,7 +16,6 @@ function Map() {
   const filtered_locations = useSelector((state) => state.filtered_locations);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const locationActivate = useSelector((state) => state.location_active);
-
   //that was for polygons but may be changed to marker design
   const polygonStyle = {
     // the fillColor is adapted from a property which can be changed by the user (segment)

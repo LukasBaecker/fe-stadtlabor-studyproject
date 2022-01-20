@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import { Formik, Field, Form } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { setLocationActive } from "../store/actions";
+import { setCurrentPoint, setLocationActive } from "../store/actions";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -276,15 +277,15 @@ const FiltercategorieList = (props) => {
  *Component for the Navigation Popup showing a list of all gardens
  */
 const GardenList = () => {
+  const dispatch = useDispatch();
+  const currentPoint = useSelector((state) => state.currentPoint);
   const filteredLocations = useSelector((state) => state.filtered_locations);
   const resources = useSelector((state) => state.resources);
-  console.log("to be shown", resources);
+
   const getResourceInformation = (id) => {
-    console.log(id);
     let resourceInformation = {};
     resources.forEach((r) => {
       if (r.resource_id === id) {
-        console.log(r);
         resourceInformation = r;
       }
     });
@@ -295,32 +296,47 @@ const GardenList = () => {
       return <p>please wait</p>;
     } else {
       return filteredLocations.features.map((e) => (
-        <div key={e.id}>
-          <h4>{e.properties.name}</h4>
+        <>
+          <div
+            key={"gardenlistelement" + e.id}
+            className={
+              currentPoint === e.id ? "activeGardenDiv gardenDiv" : "gardenDiv"
+            }
+            onClick={() => {
+              dispatch(setCurrentPoint(e.id));
+            }}>
+            <h4>
+              {currentPoint === e.id ? <Image src='/imgs/marker.svg' /> : <></>}
+              {e.properties.name}
+            </h4>
 
-          <p>
-            {e.properties.address} | {e.properties.phone} | {e.properties.email}
-          </p>
+            <p>
+              {e.properties.address} | {e.properties.phone} |{" "}
+              {e.properties.email}
+            </p>
 
-          <p>Resources ({e.properties.resources.length}) </p>
-          <ul>
-            {e.properties.resources.map((element) => (
-              <li key={element}>
-                {getResourceInformation(element).resource_name}(
-                {getResourceInformation(element).resource_status})
-              </li>
-            ))}
-          </ul>
-
-          <Dropdown.Divider />
-        </div>
+            <p>Resources ({e.properties.resources.length}) </p>
+            <ul>
+              {e.properties.resources.map((element) => (
+                <li key={"listelement" + element}>
+                  {getResourceInformation(element).resource_name}(
+                  {getResourceInformation(element).resource_status})
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Dropdown.Divider key={"divider" + e.id} />
+        </>
       ));
     }
   };
   return <> {gardenListReturner()}</>;
 };
-export default MapNav;
 
-/*
+const nearestGardenList = () => {
+  //if
+  /*
 http://giv-project15:9000/api/v1/gardens/all/get_nearest_gardens?x=9.99579&y=51.80490
 */
+};
+export default MapNav;

@@ -4,23 +4,22 @@ import Spinner from "react-bootstrap/Spinner";
 function Loader() {
   return (
     <>
-      <div className="loader">
+      <div className='loader'>
         {" "}
         <Spinner
-          animation="border"
-          className="loader-spinner"
-          variant="secondary"
+          animation='border'
+          className='loader-spinner'
+          variant='secondary'
         />
       </div>
-      ;
     </>
   );
 }
 
 export function CenterSpinner() {
   return (
-    <div className="spinnerDiv">
-      <Spinner animation="border" role="status" variant="secondary"></Spinner>
+    <div className='spinnerDiv'>
+      <Spinner animation='border' role='status' variant='secondary'></Spinner>
     </div>
   );
 }

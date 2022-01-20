@@ -10,27 +10,28 @@ import Collapse from "react-bootstrap/Collapse";
 import Button from "react-bootstrap/Button";
 
 const MapMarker = (props) => {
+  const dispatch = useDispatch();
   const currentPoint = useSelector((state) => state.currentPoint);
   const [openList, setOpenList] = useState(false);
   const resources = useSelector((state) => state.resources);
 
   const iconLink = () => {
     if (currentPoint === props.point.id) {
+      return "/imgs/marker.svg";
     }
+    return "/imgs/marker_inactive.svg";
   };
   var icon = L.icon({
-    iconUrl: "/imgs/marker.svg",
+    iconUrl: iconLink(),
     iconAnchor: [21, 42],
     iconSize: [42, 42], // size of the icon
     shadowAnchor: [4, 62], // the same for the shadow
     popupAnchor: [0, -42], // props.point from which the popup should open relative to the iconAnchor
   });
   const getResourceInformation = (id) => {
-    console.log(id);
     let resourceInformation = {};
     resources.forEach((r) => {
       if (r.resource_id === id) {
-        console.log(r);
         resourceInformation = r;
       }
     });
@@ -60,7 +61,12 @@ const MapMarker = (props) => {
       position={[
         props.point.properties.latitude,
         props.point.properties.longitude,
-      ]}>
+      ]}
+      eventHandlers={{
+        click: (e) => {
+          dispatch(setCurrentPoint(props.point.id));
+        },
+      }}>
       <Popup
         key={
           "keyPopup" +

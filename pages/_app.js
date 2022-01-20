@@ -44,7 +44,6 @@ function MyApp({ Component, pageProps }) {
         const cont = await req.json();
         dispatch(setResources(cont));
         cont.forEach((element) => {
-          console.log("to be dispatched", element);
           pushResourceFilter(element);
         });
         const request = await fetch(
@@ -60,7 +59,6 @@ function MyApp({ Component, pageProps }) {
           dispatch(logoutUser());
           router.push("/login");
         } else {
-          console.log(content);
           content.features.forEach((el) => {
             var garden = el;
             var resOfGarden = [];
@@ -75,7 +73,6 @@ function MyApp({ Component, pageProps }) {
             };
             setGardensWithResources(gardensWithResources.push(garden));
           });
-          console.log("to be dispatched", gardensWithResources);
           dispatch(
             setFilteredLocations({ ...content, features: gardensWithResources })
           );
