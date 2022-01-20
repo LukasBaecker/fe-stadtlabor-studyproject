@@ -3,7 +3,7 @@ import router, { useRouter } from "next/router";
 
 import Header from "../../../components/Header";
 import { CenterSpinner } from "../../../components/Loader";
-import { joinGarden } from "../../../helpers/manageGarden";
+import { joinGarden, leaveGarden } from "../../../helpers/manageGarden";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -252,7 +252,6 @@ function Content() {
         {pageState === 2 && <Events />}
         {pageState === 3 && <Members />}
         {pageState === 4 && <Shareables />}
-        {!isMember && <JoinButton />}
       </div>
     </>
   );
@@ -264,15 +263,18 @@ Rendered, when the user clicks the Info Button in ButtonGroup.
 Shows general informatino about the garden community, e.g. description.
 */
 function Info() {
-  const { gardenDetails } = useContext(GardenContext);
+  const { gardenDetails, isMember } = useContext(GardenContext);
 
   return (
-    <div className={styles.pagePartContent}>
-      <h5>{gardenDetails.email}</h5>
-      <h5>{gardenDetails.phone}</h5>
-      <hr />
-      {gardenDetails.description}
-    </div>
+    <>
+      <div className={styles.pagePartContent}>
+        <h5>{gardenDetails.email}</h5>
+        <h5>{gardenDetails.phone}</h5>
+        <hr />
+        {gardenDetails.description}
+      </div>
+      {isMember ? <LeaveButton /> : <JoinButton />}
+    </>
   );
 }
 
@@ -912,6 +914,64 @@ function JoinButton() {
             style={{ left: leftPosition }}
           >
             Join!
+          </Button>
+        </>
+      ) : null}
+    </>
+  );
+}
+
+/*
+Button to join the garden.
+Only shows up when 
+*/
+function LeaveButton() {
+  // function to calculate left position in px of element
+  const getPosition = () => {
+    const pxBody = document.body.clientWidth;
+    const pxHtml = window.innerWidth;
+    const pos = pxHtml / 2 + pxBody / 2 - 20;
+    return pos;
+  };
+
+  //state-variable to store left position in px
+  const [leftPosition, setLeftPosition] = useState(getPosition());
+
+  // function to execute on window resizing
+  // keeps the element where it is supposed to be
+  const onResize = () => {
+    const pos = getPosition();
+    setLeftPosition(pos);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // only show button if user is not logged in
+  const { loggedIn, gardenId, userDetails } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    const success = await leaveGarden(userDetails, gardenId);
+    if (success) {
+      router.reload();
+    } else {
+      console.log("not successful");
+    }
+  };
+
+  return (
+    <>
+      {loggedIn ? (
+        <>
+          <Button
+            onClick={handleClick}
+            className={styles.joinButton}
+            style={{ left: leftPosition }}
+            variant="danger"
+          >
+            Leave!
           </Button>
         </>
       ) : null}
