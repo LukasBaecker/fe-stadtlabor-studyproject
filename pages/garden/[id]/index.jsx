@@ -217,25 +217,30 @@ function Content() {
                 className={styles.menuButtonIcon}
               />
             </Button>
-            <Button variant="primary" onClick={() => setPageState(2)}>
-              <img
-                src="/imgs/icons8-kalender-bearbeiten-100.png"
-                alt="Events"
-                className={styles.menuButtonIcon}
-              />
-            </Button>
-            {
-              // Only show list of members, if user is part of the garden
-              isMember && (
-                <Button variant="primary" onClick={() => setPageState(3)}>
+            {gardenDetails.primary_purpose == "GARDEN" && (
+              <>
+                <Button variant="primary" onClick={() => setPageState(2)}>
                   <img
-                    src="/imgs/icons8-benutzergruppen-100.png"
-                    alt="Members"
+                    src="/imgs/icons8-kalender-bearbeiten-100.png"
+                    alt="Events"
                     className={styles.menuButtonIcon}
                   />
                 </Button>
-              )
-            }
+                {
+                  // Only show list of members, if user is part of the garden
+                  isMember && (
+                    <Button variant="primary" onClick={() => setPageState(3)}>
+                      <img
+                        src="/imgs/icons8-benutzergruppen-100.png"
+                        alt="Members"
+                        className={styles.menuButtonIcon}
+                      />
+                    </Button>
+                  )
+                }
+              </>
+            )}
+
             <Button variant="primary" onClick={() => setPageState(4)}>
               <img
                 src="/imgs/icons8-bohrmaschine-100.png"
