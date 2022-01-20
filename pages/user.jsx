@@ -20,11 +20,45 @@ function user() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
-  const [gardens, setGardens] = useState([
-    { id: 1, name: "Garden 1" },
-    { id: 2, name: "Garden 2" },
-    { id: 3, name: "Garden 3" },
-  ]);
+  const [gardens, setGardens] = useState([]);
+
+  async function getGardenName(gardenId) {
+    try {
+      const request = await fetch(
+        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${gardenId}/`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
+      const gardenInfo = await request.json();
+      return new Promise((resolve, reject) => {
+        if (request.status == 200) {
+          resolve({
+            id: gardenId,
+            name: gardenInfo.properties.name,
+          });
+        } else {
+          reject({ id: gardenId, name: "unknown" });
+        }
+      });
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
+  async function getGardenNames(gardenIdList) {
+    let l = [];
+    for (let i = 0; i < gardenIdList.length; i++) {
+      let r = await getGardenName(gardenIdList[i]);
+      l.push(r);
+    }
+    return new Promise((resolve, reject) => {
+      resolve(l);
+    });
+  }
+
   useEffect(() => {
     (async () => {
       try {
@@ -42,13 +76,17 @@ function user() {
           router.push("/login");
         } else {
           setUsername(content.first_name);
+
+          // Get garden info for each garden user is a member of
+          const names = await getGardenNames(content.garden);
+          setGardens(names);
           setLoading(false);
         }
       } catch (e) {
         console.log("error: ", e);
       }
     })();
-  });
+  }, []);
 
   const content = () => {
     return (
@@ -99,10 +137,12 @@ function Gardens({ gardens }) {
     gridTemplateColumns: "300px ".repeat(gardens.length) + lastWidth,
   };
 
+  console.log("later", gardens);
+
   return (
     <div className={styles.Gardens} style={style}>
       {gardens.map((garden) => (
-        <Garden key={garden.id} gardenName={garden.name} />
+        <Garden key={garden.id} gardenId={garden.id} gardenName={garden.name} />
       ))}
       <GardenController />
     </div>
@@ -110,11 +150,11 @@ function Gardens({ gardens }) {
 }
 
 //Garden Item
-function Garden({ gardenName }) {
+function Garden({ gardenId, gardenName }) {
   return (
     <button
       className={[styles.Item, styles.Garden].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
+      onClick={(e) => router.push(`/garden/${gardenId}/`)}
     >
       {gardenName}
     </button>
