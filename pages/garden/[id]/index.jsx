@@ -202,7 +202,7 @@ function Content() {
 
       {/* Set Header */}
       <Header
-        caption="Garden"
+        caption=""
         name={gardenDetails.name}
         imgUrl="/imgs/markus-spiske-bk11wZwb9F4-unsplash-square.jpg"
       />
