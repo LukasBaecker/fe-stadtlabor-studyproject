@@ -186,9 +186,9 @@ function Map() {
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
+      onClick={(e) => router.push("/map/")}
     >
-      Mapview
+      Garden Map
     </button>
   );
 }
@@ -198,7 +198,7 @@ function Variety() {
   return (
     <button
       className={[styles.Item, styles.Variety].join(" ")}
-      onClick={(e) => defaultButtonClick(e)}
+      onClick={(e) => router.push("/cropvariaty/")}
     >
       Variety
     </button>
