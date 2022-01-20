@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Marker, useMap } from "react-leaflet";
 import useGeoLocation from "../hooks/useGeoLocation.js";
 import L from "leaflet";
@@ -14,10 +14,11 @@ const LocationMarker = () => {
   const map = useMap();
   const location = useGeoLocation();
 
-  location.loaded &&
-    !location.error &&
-    map.flyTo([location.coordinates.lat, location.coordinates.lng], 15);
-
+  useEffect(() => {
+    location.loaded &&
+      !location.error &&
+      map.flyTo([location.coordinates.lat, location.coordinates.lng], 15);
+  }, []);
   return (
     location.loaded &&
     !location.error && (

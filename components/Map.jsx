@@ -5,7 +5,7 @@ import L from "leaflet";
 import MapMarker from "../components/MapMarker.jsx";
 import LocationMarker from "../components/LocationMarker.jsx";
 import { useMediaQuery } from "react-responsive";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   shadowUrl:

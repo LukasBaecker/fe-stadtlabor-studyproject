@@ -25,7 +25,17 @@ const MapMarker = (props) => {
     shadowAnchor: [4, 62], // the same for the shadow
     popupAnchor: [0, -42], // props.point from which the popup should open relative to the iconAnchor
   });
-
+  const getResourceInformation = (id) => {
+    console.log(id);
+    let resourceInformation = {};
+    resources.forEach((r) => {
+      if (r.resource_id === id) {
+        console.log(r);
+        resourceInformation = r;
+      }
+    });
+    return resourceInformation;
+  };
   var locString =
     "" +
     props.point.properties.latitude +
@@ -34,8 +44,8 @@ const MapMarker = (props) => {
     "°E";
   const listResources = props.point.properties.resources.map((element) => (
     <li key={element}>
-      {resources.find((e) => (e.resource_id = element)).resource_name} (
-      {resources.find((e) => (e.resource_id = element)).resource_status})
+      {getResourceInformation(element).resource_name}(
+      {getResourceInformation(element).resource_status})
     </li>
   ));
   return (

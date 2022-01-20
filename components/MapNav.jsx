@@ -187,13 +187,17 @@ const FiltercategorieList = (props) => {
     } else {
       Object.keys(filterlist).forEach((e) => {
         var thisResource = [];
+        var positionOfCat = 1 + categories.indexOf(e, 0);
+
         if (filterlist[e]) {
-          thisResource = resources.filter(
-            (resource) => resource.resource_name === e
-          );
-          thisResource.forEach((elem) => {
-            filteredResources.push(elem);
-          });
+          if (positionOfCat > 0) {
+            thisResource = resources.filter(
+              (resource) => resource.category === positionOfCat
+            );
+            thisResource.forEach((elem) => {
+              filteredResources.push(elem);
+            });
+          }
         }
       });
 
@@ -211,7 +215,7 @@ const FiltercategorieList = (props) => {
         }
       });
       var newCollection = { ...locations, features: filteredGardens };
-      console.log("new", newCollection);
+
       dispatch(setFilteredLocations(newCollection));
     }
   };
@@ -274,7 +278,18 @@ const FiltercategorieList = (props) => {
 const GardenList = () => {
   const filteredLocations = useSelector((state) => state.filtered_locations);
   const resources = useSelector((state) => state.resources);
-
+  console.log("to be shown", resources);
+  const getResourceInformation = (id) => {
+    console.log(id);
+    let resourceInformation = {};
+    resources.forEach((r) => {
+      if (r.resource_id === id) {
+        console.log(r);
+        resourceInformation = r;
+      }
+    });
+    return resourceInformation;
+  };
   const gardenListReturner = () => {
     if (filteredLocations.features === undefined) {
       return <p>please wait</p>;
@@ -288,17 +303,11 @@ const GardenList = () => {
           </p>
 
           <p>Resources ({e.properties.resources.length}) </p>
-
           <ul>
             {e.properties.resources.map((element) => (
               <li key={element}>
-                {resources.find((e) => (e.resource_id = element)).resource_name}{" "}
-                (
-                {
-                  resources.find((e) => (e.resource_id = element))
-                    .resource_status
-                }
-                )
+                {getResourceInformation(element).resource_name}(
+                {getResourceInformation(element).resource_status})
               </li>
             ))}
           </ul>

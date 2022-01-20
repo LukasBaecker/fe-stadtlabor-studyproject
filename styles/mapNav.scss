@@ -94,7 +94,6 @@
   max-width: 800px !important;
   left: 50vw;
   transform: translateX(-50%);
-  transition-duration: 200ms;
   bottom: 0;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
@@ -105,37 +104,46 @@
   -moz-border-radius: 20px 20px 0 0;
   -ms-border-radius: 20px 20px 0 0;
   -o-border-radius: 20px 20px 0 0;
+  transition: max-height 300ms;
+  -webkit-transition: max-height 300ms;
+  -moz-transition: max-height 300ms;
+  -ms-transition: max-height 300ms;
+  -o-transition: max-height 300ms;
 }
 
 .mapNavExtraContainer.hidden {
   overflow-y: hidden;
   bottom: 0;
   opacity: 0;
-  height: 0px;
+  max-height: 0px;
   padding: 0;
-  transition-duration: 200ms;
+  transition: max-height 300ms;
+  -webkit-transition: max-height 300ms;
+  -moz-transition: max-height 300ms;
+  -ms-transition: max-height 300ms;
+  -o-transition: max-height 300ms;
 }
 
 .filterElement {
   color: black;
   .filterCheck {
     fill-opacity: 0;
-    transition: all 0.2s;
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    -ms-transition: all 0.2s;
-    -o-transition: all 0.2s;
+    transition: height 0.4s;
+    -webkit-transition: height 0.4s;
+    -moz-transition: height 0.4s;
+    -ms-transition: height 0.4s;
+    -o-transition: height 0.4s;
   }
 }
 .filterElement.checked {
   .filterCheck {
     color: $color-primary;
     fill-opacity: 1;
-    transition: all 0.2s;
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    -ms-transition: all 0.2s;
-    -o-transition: all 0.2s;
+    transition: height 0.4s;
+    -webkit-transition: height 0.4s;
+    -moz-transition: height 0.4s;
+    -ms-transition: height 0.4s;
+    -o-transition: height 0.4s;
   }
   text-decoration: underline;
   text-decoration-color: $color-primary;
