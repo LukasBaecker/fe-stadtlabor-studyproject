@@ -173,7 +173,9 @@ function GardenController() {
       </button>
       <button
         className={styles.GardenControllerPart}
-        onClick={(e) => defaultButtonClick(e)}
+        onClick={(e) =>
+          router.push({ pathname: "/map", query: { action: "join" } })
+        }
       >
         Join a Garden
       </button>
