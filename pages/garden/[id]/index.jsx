@@ -538,6 +538,9 @@ function AddEvent({ setPopupVisible }) {
   );
 }
 
+/*
+Component to remove an event from a garden
+*/
 function RemoveEvent({ eventId, setPopupVisible }) {
   const { gardenId, setEvents } = useContext(GardenContext);
 
@@ -745,6 +748,9 @@ function ItemDetails({ item, setPopupVisible }) {
   }
 }
 
+/*
+Component to remove a shareable item from a garden
+*/
 function RemoveShareable({ shareableId, setPopupVisible }) {
   const { gardenId, setResources } = useContext(GardenContext);
 
