@@ -539,7 +539,7 @@ function AddEvent({ setPopupVisible }) {
 }
 
 function RemoveEvent({ eventId, setPopupVisible }) {
-  const { setEvents } = useContext(GardenContext);
+  const { gardenId, setEvents } = useContext(GardenContext);
 
   const handleClick = async () => {
     try {
