@@ -394,6 +394,7 @@ function EventDetails({ event, setPopupVisible }) {
   Hence this strange construct here...
   */
   const [visible, setVisible] = useState(true);
+  const { isMember } = useContext(GardenContext);
   if (visible) {
     return (
       <div className={styles.popup}>
@@ -403,6 +404,13 @@ function EventDetails({ event, setPopupVisible }) {
           Location: {event.venue}
           <hr />
           {event.description}
+          <br />
+          {isMember && (
+            <RemoveEvent
+              eventId={event.event_id}
+              setPopupVisible={setPopupVisible}
+            />
+          )}
           <button
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
@@ -527,6 +535,43 @@ function AddEvent({ setPopupVisible }) {
         </button>
       </div>
     </div>
+  );
+}
+
+function RemoveEvent({ eventId, setPopupVisible }) {
+  const { setEvents } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    try {
+      const del = await fetch(
+        `http://giv-project15.uni-muenster.de/api/v1/events/${eventId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (del.status === 204) {
+        fetchEvents(gardenId, setEvents);
+        setPopupVisible(false);
+      } else {
+        throw new Erorr("Something went wrong");
+      }
+    } catch (e) {
+      console.log("error:", e);
+    }
+  };
+
+  return (
+    <Button
+      variant="danger"
+      className={styles.removeButton}
+      onClick={() => handleClick()}
+    >
+      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+    </Button>
   );
 }
 

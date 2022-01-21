@@ -108,6 +108,11 @@ $dateBorderRadius: 15px;
   font-size: 300%;
 }
 
+.removeButton {
+  float: right;
+  scale: 75%;
+}
+
 .joinButton {
   @include floatingButton();
   height: 70px;
