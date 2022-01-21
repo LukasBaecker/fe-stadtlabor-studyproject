@@ -547,7 +547,7 @@ function RemoveEvent({ eventId, setPopupVisible }) {
   const handleClick = async () => {
     try {
       const del = await fetch(
-        `http://giv-project15.uni-muenster.de/api/v1/events/${eventId}`,
+        `http://giv-project15.uni-muenster.de:9000/api/v1/events/${eventId}`,
         {
           method: "DELETE",
           headers: {
@@ -757,7 +757,7 @@ function RemoveShareable({ shareableId, setPopupVisible }) {
   const handleClick = async () => {
     try {
       const del = await fetch(
-        `http://giv-project15.uni-muenster.de/api/v1/gardens/resources/${shareableId}`,
+        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/${shareableId}`,
         {
           method: "DELETE",
           headers: {
