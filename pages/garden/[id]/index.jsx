@@ -708,6 +708,7 @@ function ItemDetails({ item, setPopupVisible }) {
   Hence this strange construct here...
   */
   const [visible, setVisible] = useState(true);
+  const { isMember } = useContext(GardenContext);
   if (visible) {
     return (
       <div className={styles.popup}>
@@ -721,6 +722,12 @@ function ItemDetails({ item, setPopupVisible }) {
             : null}
           <hr />
           {item.description}
+          {isMember && (
+            <RemoveShareable
+              shareableId={item.resource_id}
+              setPopupVisible={setPopupVisible}
+            />
+          )}
           <button
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
@@ -736,6 +743,43 @@ function ItemDetails({ item, setPopupVisible }) {
     }
     return null;
   }
+}
+
+function RemoveShareable({ shareableId, setPopupVisible }) {
+  const { gardenId, setResources } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    try {
+      const del = await fetch(
+        `http://giv-project15.uni-muenster.de/api/v1/gardens/resources/${shareableId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (del.status === 204) {
+        fetchResources(gardenId, setResources);
+        setPopupVisible(false);
+      } else {
+        throw new Erorr("Something went wrong");
+      }
+    } catch (e) {
+      console.log("error:", e);
+    }
+  };
+
+  return (
+    <Button
+      variant="danger"
+      className={styles.removeButton}
+      onClick={() => handleClick()}
+    >
+      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+    </Button>
+  );
 }
 
 // Popup to add a new shareable
