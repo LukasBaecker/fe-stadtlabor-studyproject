@@ -40,6 +40,44 @@ $card-radius: 50px;
   }
 }
 
+@keyframes clicking {
+  0% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+  80% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+  85% {
+    transform: translate(-1px, -3px);
+    -webkit-transform: translate(-1px, -3px);
+    -moz-transform: translate(-1px, -3px);
+    -ms-transform: translate(-1px, -3px);
+    -o-transform: translate(-1px, -3px);
+  }
+  95% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+}
+
 .WhyJoinElement {
   width: 100vw;
   z-index: 1;
@@ -200,30 +238,47 @@ $card-radius: 50px;
   -o-transform: translateX(-50%);
 }
 .decoImageSecond {
+  max-width: unset;
   position: relative;
   z-index: 1;
   margin-left: 50%;
   transform: translateX(-50%);
-  width: 70%;
+  height: 70vh;
+  width: auto;
   border-radius: $card-radius;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -o-transform: translateX(-50%);
 }
+.decoImageSecond.desktop {
+  height: 70vh;
+  width: auto;
+}
 .signup {
   margin: auto;
-  width: 70%;
+  width: 100%;
   z-index: 2;
-  button {
+  .signupButton {
+    margin-left: 50%;
     background-color: $color-primary;
     color: white;
     min-height: 70px;
-    width: 100%;
+    width: 70%;
     border-radius: 25px;
     font-size: 2rem;
     border: none;
     z-index: 2;
+    transition: all 300ms;
+    -webkit-transition: all 300ms;
+    -moz-transition: all 300ms;
+    -ms-transition: all 300ms;
+    -o-transition: all 300ms;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
   }
   .signUpIcon {
     margin-left: 10px;
@@ -245,29 +300,27 @@ $card-radius: 50px;
     transition-duration: 0.5s;
   }
 }
-.mapButton {
-  margin: auto;
-  width: 70%;
-  margin-bottom: 10%;
-
-  button {
-    background-color: $color-primary;
-    color: white;
-    width: 100%;
-    border-radius: 20px;
-    font-size: 2rem;
-    border: none;
-    z-index: 20;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    -ms-border-radius: 20px;
-    -o-border-radius: 20px;
-  }
-  button:hover {
-    background-color: $color-primary-hover;
-    transition-duration: 0.5s;
-  }
+.signupButton.fixedTop {
+  margin-top: 5px;
+  margin-left: 0;
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transition: all 300ms;
+  -webkit-transition: all 300ms;
+  -moz-transition: all 300ms;
+  -ms-transition: all 300ms;
+  -o-transition: all 300ms;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
 }
+.signupButton.smallerText {
+  font-size: 1.5rem !important;
+}
+
 .frontFooter {
   position: relative;
   img {
@@ -286,8 +339,13 @@ $card-radius: 50px;
   border-top-right-radius: $card-radius;
   z-index: 1;
   a {
+    color: $color-base;
+  }
+  .footerLink {
+    margin: 10px;
+  }
+  .footerLink.desktop {
     margin: 50px;
-    color: white;
   }
   .middleDiv {
     bottom: 0;
@@ -330,4 +388,114 @@ $card-radius: 50px;
   }
 }
 
+/* Image zoom on hover + Overlay colour */
+.parent {
+  margin: auto;
+  margin-left: 50%;
+  width: 70%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  float: left;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+}
+
+.child {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+/* Several different images */
+.bgMap {
+  background-image: url("/imgs/map.png");
+}
+.bgCrops {
+  background-image: url("/imgs/markusSpiske_pixabay.jpg");
+}
+
+.buttonText {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  font-size: 1.5rem;
+  color: #000 !important;
+  left: 50%;
+  top: 50%;
+  text-align: center;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+
+.parent:hover .child,
+.parent:focus .child {
+  -ms-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.parent:hover .child:before,
+.parent:focus .child:before {
+  display: block;
+}
+
+.parent:hover a,
+.parent:focus a {
+  display: block;
+}
+
+.child:before {
+  content: "";
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $color-primary-more-opaque;
+}
+.cursorIcon {
+  margin: 0 !important;
+  margin-right: 10px !important;
+  height: 1.5rem;
+  width: auto;
+  opacity: 1;
+  animation: clicking 3s infinite;
+  -webkit-animation: clicking 3s infinite;
+  transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -moz-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -ms-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -o-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+}
 @import "./popup";

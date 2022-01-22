@@ -16,6 +16,10 @@
 .form-group {
   margin-top: 20px;
   margin-bottom: 20px;
+
+  input {
+    margin-right: 5px;
+  }
 }
 .errorForm {
   border-color: $color-danger;

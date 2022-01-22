@@ -18,13 +18,14 @@ let Yup = require("yup");
 import Navigation from "../components/Navigation.jsx";
 import BootstrapButton from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSeedling, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { useMediaQuery } from "react-responsive";
 
 import styles from "../styles/Home.module.scss";
 
 export default function Home() {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [offsetY, setOffsetY] = useState(0);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ export default function Home() {
           style={{ transform: "translateY(" + offsetY * -0.5 + "px)" }}
         />
 
-        <SignupButton />
+        <SignupButton offsetY={offsetY} />
         <Advantages />
 
         {/* Login-Popup: Only visible if loginShown is True */}
@@ -77,7 +78,11 @@ export default function Home() {
         <Container className={styles.siteElement}>
           <Image
             src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
-            className={styles.decoImage}
+            className={
+              isTabletOrMobile
+                ? styles.decoImage
+                : `${styles.decoImage} ${styles.desktop}`
+            }
           />
         </Container>
 
@@ -87,7 +92,11 @@ export default function Home() {
           <MapButton />
           <Image
             src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
-            className={styles.decoImageSecond}
+            className={
+              isTabletOrMobile
+                ? styles.decoImageSecond
+                : `${styles.decoImageSecond} ${styles.desktop}`
+            }
             fluid
           />
           <Footer />
@@ -132,49 +141,82 @@ function LoginButton({ toggleLoginPopup }) {
   );
 }
 
-function SignupButton() {
+function SignupButton(props) {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const lang = useSelector((state) => state.lang);
   const router = useRouter();
+
   function onSignupButtonClick() {
     router.push("/register");
   }
-
   return (
     <div className={styles.signup}>
-      <button onClick={() => onSignupButtonClick()}>
+      <Button
+        variant='primary'
+        onClick={() => onSignupButtonClick()}
+        className={
+          isTabletOrMobile
+            ? props.offsetY < window.innerHeight * 0.6
+              ? `${styles.signupButton} ${styles.smallerText}`
+              : `${styles.signupButton} ${styles.fixedTop} ${styles.smallerText}`
+            : props.offsetY < window.innerHeight * 0.6
+            ? styles.signupButton
+            : `${styles.signupButton} ${styles.fixedTop}`
+        }>
         {lang === "eng" ? "Sign up now!" : "Jetzt registrieren!"}
         <Image src='/imgs/marker_white.svg' className={styles.signUpIcon} />
-      </button>
+      </Button>
     </div>
   );
 }
 function MapButton() {
   const lang = useSelector((state) => state.lang);
   const router = useRouter();
-  function onMapButtonClick() {
-    router.push("/map");
-  }
 
   return (
-    <div className={styles.mapButton}>
-      <Button variant='primary' onClick={() => onMapButtonClick()}>
-        {lang === "eng" ? "Go to our map" : "Schau dir unsere Karte an"}
-      </Button>
-    </div>
+    <>
+      <div className={styles.parent} onClick={() => router.push("/map")}>
+        <div className={`${styles.child} ${styles.bgMap}`}>
+          <div
+            className={styles.buttonText}
+            onClick={() => router.push("/map")}>
+            <Image
+              src={"/icons/arrow-pointer-solid.svg"}
+              className={styles.cursorIcon}
+            />
+            {lang === "eng" ? "Go to our map" : "Schau dir unsere Karte an"}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
 function WhyJoin() {
+  const lang = useSelector((state) => state.lang);
   return (
     <Container className={styles.WhyJoinElement}>
       <div className={styles.whyJoin}>
-        <h2>Why Join?</h2>
-        Garden Up is the first plattform giving you the unique chance to get in
-        contact with your local urban gardening projects or to share your own
-        and become part of a greener world. Be a member of a social community of
-        garden and plant lovers and experience mutual support. Share tools you
-        like to lend, borrow things you do not have, share seeds others may need
-        and even more.
+        <h2>{lang === "eng" ? "WHY JOIN?" : "WIESO BEITRETEN?"}</h2>
+        {lang === "eng" ? (
+          <p>
+            Garden Up is the first plattform giving you the unique chance to get
+            in contact with your local urban gardening projects or to share your
+            own and become part of a greener world. Be a member of a social
+            community of garden and plant lovers and experience mutual support.
+            Share tools you like to lend, borrow things you do not have, share
+            seeds others may need and even more.
+          </p>
+        ) : (
+          <p>
+            Garden Up is the first plattform giving you the unique chance to get
+            in contact with your local urban gardening projects or to share your
+            own and become part of a greener world. Be a member of a social
+            community of garden and plant lovers and experience mutual support.
+            Share tools you like to lend, borrow things you do not have, share
+            seeds others may need and even more.
+          </p>
+        )}
       </div>
     </Container>
   );
@@ -186,7 +228,7 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(false);
-
+  const lang = useSelector((state) => state.lang);
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -195,9 +237,15 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
     email: Yup.string()
       .email("*enter a valid mail")
       .required("*please enter your email"),
-    password: Yup.string().required("*please enter your password."),
+    password: Yup.string().required("*please enter your password"),
   });
-
+  // Schema for yup
+  const validationSchemaGerman = Yup.object().shape({
+    email: Yup.string()
+      .email("*gib eine valide Mailadresse an")
+      .required("*bitte gib deine Email an"),
+    password: Yup.string().required("*bitte gib dein Passwort ein"),
+  });
   const onClose = () => toggleLoginPopup(false);
   if (isVisible) {
     return (
@@ -212,7 +260,11 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                 onClose={() => setShowError(false)}
                 dismissible>
                 <Alert.Heading>Ups!</Alert.Heading>
-                <p>Email or password is wrong.</p>
+                {lang === "eng" ? (
+                  <p>Email or password is wrong.</p>
+                ) : (
+                  <p>Email oder Passwort ist falsch.</p>
+                )}
               </Alert>
             </>
           ) : (
@@ -221,7 +273,9 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
           <Formik
             initialValues={{ email: "", password: "" }}
             // Hooks up our validationSchema to Formik
-            validationSchema={validationSchema}
+            validationSchema={
+              lang === "eng" ? validationSchema : validationSchemaGerman
+            }
             onSubmit={(values, { setSubmitting, resetForm }) => {
               setSubmitting(true);
               fetch(
@@ -265,11 +319,11 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
             }) => (
               <Form onSubmit={handleSubmit} className='mx-auto'>
                 <Form.Group className='form-group' controlId='formEmail'>
-                  <Form.Label>Email :</Form.Label>
+                  <Form.Label>Email:</Form.Label>
                   <Form.Control
                     type='text'
                     name='email'
-                    placeholder='Email'
+                    placeholder=''
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.email}
@@ -284,10 +338,12 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                 <Form.Group
                   className='form-group'
                   controlId='formBasicPassword'>
-                  <Form.Label>Password :</Form.Label>
+                  <Form.Label>
+                    {lang === "eng" ? "Password:" : "Passwort:"}
+                  </Form.Label>
                   <Form.Control
                     type='password'
-                    placeholder='Password'
+                    placeholder=''
                     name='password'
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -325,7 +381,8 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
 //Component that lists the advantages with Images and texts
 function Advantages() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const items = [
+  const lang = useSelector((state) => state.lang);
+  const itemsEnglish = [
     {
       id: 1,
       url: "/imgs/icons8-hands.svg",
@@ -342,6 +399,23 @@ function Advantages() {
       text: "Grow the urban garden together",
     },
   ];
+  const itemsGerman = [
+    {
+      id: 1,
+      url: "/imgs/icons8-hands.svg",
+      text: "Verbinde dich mit der Urban Gardening Community in deiner Stadt.",
+    },
+    {
+      id: 2,
+      url: "/imgs/icons8-shovel.svg",
+      text: "Leihe nützliches Werkzeug und teile deines mit anderen Gärter*innen",
+    },
+    {
+      id: 3,
+      url: "/imgs/icons8-plant.svg",
+      text: "Lasst uns gemeinsam die Stadt grüner machen!",
+    },
+  ];
   return (
     <Container className={styles.firstSiteElement}>
       <div
@@ -350,14 +424,20 @@ function Advantages() {
             ? styles.advantages
             : `${styles.advantages} ${styles.desktop}`
         }>
-        <h2>Advantages of GardenUp</h2>
+        <h2>{lang === "eng" ? "WHAT IS GARDEN UP?" : "WAS IST GARDEN UP?"}</h2>
         <Container className={styles.advantagesContainer}>
           <Row xs={1} sm={3}>
-            {items.map((item) => (
-              <Col key={item.id} className={styles.advantagesCol}>
-                <AdvantagesItem url={item.url} text={item.text} />
-              </Col>
-            ))}
+            {lang === "eng"
+              ? itemsEnglish.map((item) => (
+                  <Col key={item.id} className={styles.advantagesCol}>
+                    <AdvantagesItem url={item.url} text={item.text} />
+                  </Col>
+                ))
+              : itemsGerman.map((item) => (
+                  <Col key={item.id} className={styles.advantagesCol}>
+                    <AdvantagesItem url={item.url} text={item.text} />
+                  </Col>
+                ))}
           </Row>
         </Container>
       </div>
@@ -383,12 +463,27 @@ function AdvantagesItem({ url, text }) {
 
 // Page Footer with About and Privacy Policy Links
 function Footer() {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   return (
     <div id={styles.Footer}>
       <div className={styles.middleDiv} />
       <div className={styles.bottomDiv}>
-        <a href='/about'>About</a>
-        <a className={styles.privacy} href='/privacy'>
+        <a
+          className={
+            isTabletOrMobile
+              ? styles.footerLink
+              : `${styles.footerLink} ${styles.desktop}`
+          }
+          href='/about'>
+          About
+        </a>
+        <a
+          className={
+            isTabletOrMobile
+              ? styles.footerLink
+              : `${styles.footerLink} ${styles.desktop}`
+          }
+          href='/privacy'>
           Privacy Policy
         </a>
       </div>
