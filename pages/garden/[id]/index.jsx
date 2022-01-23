@@ -1,10 +1,11 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Button from "react-bootstrap/Button";
 import Header from "../../../components/Header";
 import { CenterSpinner } from "../../../components/Loader";
+import { joinGarden, leaveGarden } from "../../../helpers/manageGarden";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 
@@ -71,6 +72,8 @@ function garden() {
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+  const [isMember, setIsMember] = useState(false);
 
   // controls if an error message is shown instead of the garden
   const [showError, setShowError] = useState(false);
@@ -95,6 +98,8 @@ function garden() {
             console.log("unauthenticated");
           } else {
             setLoggedIn(true);
+            setUserDetails(content);
+            setIsMember(content.garden.includes(parseInt(id)));
           }
         } catch (e) {
           console.log("error: ", e);
@@ -154,6 +159,8 @@ function garden() {
         setLoading,
         pageState,
         setPageState,
+        userDetails,
+        isMember,
       }}
     >
       {loading ? (
@@ -185,8 +192,8 @@ Entire page content:
 Everything that is shown, when the page is not loading
 */
 function Content() {
-  const { pageState, setPageState } = useContext(GardenContext);
-  const { gardenDetails } = useContext(GardenContext);
+  const { pageState, setPageState, gardenDetails, isMember } =
+    useContext(GardenContext);
   return (
     <>
       <Head>
@@ -195,7 +202,7 @@ function Content() {
 
       {/* Set Header */}
       <Header
-        caption="Garden"
+        caption=""
         name={gardenDetails.name}
         imgUrl="/imgs/markus-spiske-bk11wZwb9F4-unsplash-square.jpg"
       />
@@ -210,20 +217,30 @@ function Content() {
                 className={styles.menuButtonIcon}
               />
             </Button>
-            <Button variant="primary" onClick={() => setPageState(2)}>
-              <img
-                src="/imgs/icons8-kalender-bearbeiten-100.png"
-                alt="Events"
-                className={styles.menuButtonIcon}
-              />
-            </Button>
-            <Button variant="primary" onClick={() => setPageState(3)}>
-              <img
-                src="/imgs/icons8-benutzergruppen-100.png"
-                alt="Members"
-                className={styles.menuButtonIcon}
-              />
-            </Button>
+            {gardenDetails.primary_purpose == "GARDEN" && (
+              <>
+                <Button variant="primary" onClick={() => setPageState(2)}>
+                  <img
+                    src="/imgs/icons8-kalender-bearbeiten-100.png"
+                    alt="Events"
+                    className={styles.menuButtonIcon}
+                  />
+                </Button>
+                {
+                  // Only show list of members, if user is part of the garden
+                  isMember && (
+                    <Button variant="primary" onClick={() => setPageState(3)}>
+                      <img
+                        src="/imgs/icons8-benutzergruppen-100.png"
+                        alt="Members"
+                        className={styles.menuButtonIcon}
+                      />
+                    </Button>
+                  )
+                }
+              </>
+            )}
+
             <Button variant="primary" onClick={() => setPageState(4)}>
               <img
                 src="/imgs/icons8-bohrmaschine-100.png"
@@ -251,15 +268,18 @@ Rendered, when the user clicks the Info Button in ButtonGroup.
 Shows general informatino about the garden community, e.g. description.
 */
 function Info() {
-  const { gardenDetails } = useContext(GardenContext);
+  const { gardenDetails, isMember } = useContext(GardenContext);
 
   return (
-    <div className={styles.pagePartContent}>
-      <h5>{gardenDetails.email}</h5>
-      <h5>{gardenDetails.phone}</h5>
-      <hr />
-      {gardenDetails.description}
-    </div>
+    <>
+      <div className={styles.pagePartContent}>
+        <h5>{gardenDetails.email}</h5>
+        <h5>{gardenDetails.phone}</h5>
+        <hr />
+        {gardenDetails.description}
+      </div>
+      {isMember ? <LeaveButton /> : <JoinButton />}
+    </>
   );
 }
 
@@ -374,6 +394,7 @@ function EventDetails({ event, setPopupVisible }) {
   Hence this strange construct here...
   */
   const [visible, setVisible] = useState(true);
+  const { isMember } = useContext(GardenContext);
   if (visible) {
     return (
       <div className={styles.popup}>
@@ -383,6 +404,13 @@ function EventDetails({ event, setPopupVisible }) {
           Location: {event.venue}
           <hr />
           {event.description}
+          <br />
+          {isMember && (
+            <RemoveEvent
+              eventId={event.event_id}
+              setPopupVisible={setPopupVisible}
+            />
+          )}
           <button
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
@@ -507,6 +535,46 @@ function AddEvent({ setPopupVisible }) {
         </button>
       </div>
     </div>
+  );
+}
+
+/*
+Component to remove an event from a garden
+*/
+function RemoveEvent({ eventId, setPopupVisible }) {
+  const { gardenId, setEvents } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    try {
+      const del = await fetch(
+        `http://giv-project15.uni-muenster.de:9000/api/v1/events/${eventId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (del.status === 204) {
+        fetchEvents(gardenId, setEvents);
+        setPopupVisible(false);
+      } else {
+        throw new Erorr("Something went wrong");
+      }
+    } catch (e) {
+      console.log("error:", e);
+    }
+  };
+
+  return (
+    <Button
+      variant="danger"
+      className={styles.removeButton}
+      onClick={() => handleClick()}
+    >
+      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+    </Button>
   );
 }
 
@@ -643,6 +711,7 @@ function ItemDetails({ item, setPopupVisible }) {
   Hence this strange construct here...
   */
   const [visible, setVisible] = useState(true);
+  const { isMember } = useContext(GardenContext);
   if (visible) {
     return (
       <div className={styles.popup}>
@@ -656,6 +725,12 @@ function ItemDetails({ item, setPopupVisible }) {
             : null}
           <hr />
           {item.description}
+          {isMember && (
+            <RemoveShareable
+              shareableId={item.resource_id}
+              setPopupVisible={setPopupVisible}
+            />
+          )}
           <button
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
@@ -671,6 +746,46 @@ function ItemDetails({ item, setPopupVisible }) {
     }
     return null;
   }
+}
+
+/*
+Component to remove a shareable item from a garden
+*/
+function RemoveShareable({ shareableId, setPopupVisible }) {
+  const { gardenId, setResources } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    try {
+      const del = await fetch(
+        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/${shareableId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (del.status === 204) {
+        fetchResources(gardenId, setResources);
+        setPopupVisible(false);
+      } else {
+        throw new Erorr("Something went wrong");
+      }
+    } catch (e) {
+      console.log("error:", e);
+    }
+  };
+
+  return (
+    <Button
+      variant="danger"
+      className={styles.removeButton}
+      onClick={() => handleClick()}
+    >
+      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+    </Button>
+  );
 }
 
 // Popup to add a new shareable
@@ -843,6 +958,121 @@ function AddButton({ ExecuteFunction }) {
           {popupVisible && (
             <ExecuteFunction setPopupVisible={setPopupVisible} />
           )}
+        </>
+      ) : null}
+    </>
+  );
+}
+
+/*
+Button to join the garden.
+Only shows up when 
+*/
+function JoinButton() {
+  // function to calculate left position in px of element
+  const getPosition = () => {
+    const pxBody = document.body.clientWidth;
+    const pxHtml = window.innerWidth;
+    const pos = pxHtml / 2 + pxBody / 2 - 20;
+    return pos;
+  };
+
+  //state-variable to store left position in px
+  const [leftPosition, setLeftPosition] = useState(getPosition());
+
+  // function to execute on window resizing
+  // keeps the element where it is supposed to be
+  const onResize = () => {
+    const pos = getPosition();
+    setLeftPosition(pos);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // only show button if user is not logged in
+  const { loggedIn, gardenId, userDetails } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    const success = await joinGarden(userDetails, gardenId);
+    if (success) {
+      router.reload();
+    } else {
+      console.log("not successful");
+    }
+  };
+
+  return (
+    <>
+      {loggedIn ? (
+        <>
+          <Button
+            onClick={handleClick}
+            className={styles.joinButton}
+            style={{ left: leftPosition }}
+          >
+            Join!
+          </Button>
+        </>
+      ) : null}
+    </>
+  );
+}
+
+/*
+Button to join the garden.
+Only shows up when 
+*/
+function LeaveButton() {
+  // function to calculate left position in px of element
+  const getPosition = () => {
+    const pxBody = document.body.clientWidth;
+    const pxHtml = window.innerWidth;
+    const pos = pxHtml / 2 + pxBody / 2 - 20;
+    return pos;
+  };
+
+  //state-variable to store left position in px
+  const [leftPosition, setLeftPosition] = useState(getPosition());
+
+  // function to execute on window resizing
+  // keeps the element where it is supposed to be
+  const onResize = () => {
+    const pos = getPosition();
+    setLeftPosition(pos);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // only show button if user is not logged in
+  const { loggedIn, gardenId, userDetails } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    const success = await leaveGarden(userDetails, gardenId);
+    if (success) {
+      router.reload();
+    } else {
+      console.log("not successful");
+    }
+  };
+
+  return (
+    <>
+      {loggedIn ? (
+        <>
+          <Button
+            onClick={handleClick}
+            className={styles.joinButton}
+            style={{ left: leftPosition }}
+            variant="danger"
+          >
+            Leave!
+          </Button>
         </>
       ) : null}
     </>

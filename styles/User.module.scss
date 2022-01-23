@@ -65,6 +65,7 @@
 .Garden {
   background-color: $color-tertiary;
   color: white;
+  //font-size set additionally in inline style in component
 }
 
 .GardenController {
@@ -91,7 +92,7 @@
       rgba(255, 255, 255, 0.1),
       rgba(255, 255, 255, 0.1)
     ),
-    url("/imgs/map.png");
+    url("/imgs/map.PNG");
 }
 
 .Variety {
