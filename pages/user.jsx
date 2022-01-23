@@ -25,7 +25,7 @@ function user() {
   async function getGardenName(gardenId) {
     try {
       const request = await fetch(
-        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${gardenId}/`,
+        `http://giv-project15.uni-muenster.de:8000/api/v1/gardens/all/${gardenId}/`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ function user() {
     (async () => {
       try {
         const request = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
+          "http://giv-project15.uni-muenster.de:8000/api/v1/users/user",
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -155,8 +155,7 @@ function Garden({ gardenId, gardenName }) {
     <button
       className={[styles.Item, styles.Garden].join(" ")}
       onClick={(e) => router.push(`/garden/${gardenId}/`)}
-      style={{ fontSize: "1.5rem" }}
-    >
+      style={{ fontSize: "1.5rem" }}>
       {gardenName}
     </button>
   );
@@ -175,8 +174,7 @@ function GardenController() {
         className={styles.GardenControllerPart}
         onClick={(e) =>
           router.push({ pathname: "/map", query: { action: "join" } })
-        }
-      >
+        }>
         Join a Garden
       </button>
     </Container>
@@ -188,8 +186,7 @@ function Map() {
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
-      onClick={(e) => router.push("/map/")}
-    >
+      onClick={(e) => router.push("/map/")}>
       Garden Map
     </button>
   );
@@ -200,8 +197,7 @@ function Variety() {
   return (
     <button
       className={[styles.Item, styles.Variety].join(" ")}
-      onClick={(e) => router.push("/cropvariaty/")}
-    >
+      onClick={(e) => router.push("/cropvariaty/")}>
       Variety
     </button>
   );

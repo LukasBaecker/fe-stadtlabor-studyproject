@@ -15,39 +15,13 @@ import store from "../store/configurateStore.js";
 import { PersistGate } from "redux-persist/integration/react";
 import CenterSpinner from "../components/Loader.jsx";
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(true);
-  const [resourceFilter, setResourceFilter] = useState([]);
-  const [gardensWithResources, setGardensWithResources] = useState([]);
-  const pushResourceFilter = (element) => {
-    {
-      if (
-        !resourceFilter.includes(element.resource_name) &&
-        (!(typeof element === "string") ||
-          !(element.resource_name instanceof String))
-      ) {
-        setResourceFilter(resourceFilter.push(element.resource_name));
-      }
-    }
-  };
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
-        const req = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/all",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
-        const cont = await req.json();
-        dispatch(setResources(cont));
-        cont.forEach((element) => {
-          pushResourceFilter(element);
-        });
         const request = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/",
+          "http://giv-project15.uni-muenster.de:8000/api/v1/users/user",
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -57,34 +31,12 @@ function MyApp({ Component, pageProps }) {
         const content = await request.json();
         if (content.detail === "Unauthenticated!") {
           dispatch(logoutUser());
-          router.push("/login");
+          setLoading(false);
         } else {
-          content.features.forEach((el) => {
-            var garden = el;
-            var resOfGarden = [];
-            cont.forEach((r) => {
-              if (r.garden === el.id) {
-                resOfGarden.push(r.resource_id);
-              }
-            });
-            garden = {
-              ...el,
-              properties: { ...el.properties, resources: resOfGarden },
-            };
-            setGardensWithResources(gardensWithResources.push(garden));
-          });
-          dispatch(
-            setFilteredLocations({ ...content, features: gardensWithResources })
-          );
-          dispatch(
-            setGardenLocations({ ...content, features: gardensWithResources })
-          );
+          setLoading(false);
         }
       } catch (e) {
         console.log("error: ", e);
-      } finally {
-        dispatch(setFilterCategories(resourceFilter));
-        setLoading(false);
       }
     })();
   }, []);
