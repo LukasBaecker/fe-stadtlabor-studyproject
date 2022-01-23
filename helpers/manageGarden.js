@@ -1,20 +1,19 @@
+import { gardenPostUrl, userPutUrl, deleteGardenUrl } from "./urls";
+
 /**
  * Function to create a new garden
  * @param {json} values JSON-object of values passed to Garden-POST API
  * @returns {Promise<int>} ID of newly created garden, -1 for error
  */
 export async function createGarden(values) {
-  const response = await fetch(
-    "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(values),
-    }
-  );
+  const response = await fetch(gardenPostUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(values),
+  });
   const content = await response.json();
 
   return new Promise((resolve, reject) => {
@@ -37,17 +36,14 @@ export async function joinGarden(user, gardenId) {
   delete user["id"];
   user["garden"] = [...user["garden"], gardenId];
 
-  const response = await fetch(
-    "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(user),
-    }
-  );
+  const response = await fetch(userPutUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(user),
+  });
 
   return new Promise((resolve, reject) => {
     if (response.status == 200) {
@@ -69,17 +65,14 @@ export async function leaveGarden(user, gardenId) {
   delete user["id"];
   user["garden"] = user["garden"].filter((item) => item !== parseInt(gardenId));
 
-  const response = await fetch(
-    "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(user),
-    }
-  );
+  const response = await fetch(userPutUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(user),
+  });
 
   return new Promise((resolve, reject) => {
     if (response.status == 200) {
@@ -96,16 +89,13 @@ export async function leaveGarden(user, gardenId) {
  * @returns {Promise<boolean>} Indicates, whether deleting the garden was successful
  */
 export async function deleteGarden(id) {
-  const deleteRequest = await fetch(
-    `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/${id}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }
-  );
+  const deleteRequest = await fetch(deleteGardenUrl(id), {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
 
   return new Promise((resolve, reject) => {
     if (deleteRequest.status == 200) {
