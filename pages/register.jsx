@@ -15,6 +15,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { CenterSpinner } from "../components/Loader";
+import { userRegisterPostUrl } from "../helpers/urls";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -70,10 +71,11 @@ function signUp() {
       {show ? (
         <>
           <Alert
-            className='alertBox'
-            variant='danger'
+            className="alertBox"
+            variant="danger"
             onClose={() => setShow(false)}
-            dismissible>
+            dismissible
+          >
             <Alert.Heading>Error</Alert.Heading>
             <p>{message}</p>
           </Alert>
@@ -85,7 +87,7 @@ function signUp() {
       {showSuccess ? (
         <>
           <CenterSpinner />
-          <Alert className='alertBox' variant='primary'>
+          <Alert className="alertBox" variant="primary">
             <Alert.Heading>Congratulation</Alert.Heading>
             <p>
               Your account has been created! You will be redirected shortly.
@@ -100,7 +102,7 @@ function signUp() {
       ) : (
         <Container className={styles.signupDiv}>
           <Row className={styles.test}>
-            <Col className='form-div' xs={12} md={6}>
+            <Col className="form-div" xs={12} md={6}>
               <h2>Registration</h2>
               <Formik
                 initialValues={{
@@ -119,21 +121,18 @@ function signUp() {
                   // When button submits form and form is in the process of submitting, submit button is disabled
                   setSubmitting(true);
 
-                  fetch(
-                    "http://giv-project15.uni-muenster.de:9000/api/v1/users/register",
-                    {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      credentials: "include",
-                      body: JSON.stringify({
-                        first_name: values.first_name,
-                        last_name: values.last_name,
-                        email: values.email,
-                        password: values.password,
-                        phone: values.contact,
-                      }),
-                    }
-                  )
+                  fetch(userRegisterPostUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                      first_name: values.first_name,
+                      last_name: values.last_name,
+                      email: values.email,
+                      password: values.password,
+                      phone: values.contact,
+                    }),
+                  })
                     .then((res) => {
                       if (res.status == 200) {
                         res.json().then((result) => {
@@ -160,7 +159,8 @@ function signUp() {
                       setSubmitting(false);
                       console.log(err.message);
                     });
-                }}>
+                }}
+              >
                 {/* Callback function containing Formik state and helpers that handle common form actions */}
                 {({
                   values,
@@ -171,14 +171,14 @@ function signUp() {
                   handleSubmit,
                   isSubmitting,
                 }) => (
-                  <Form onSubmit={handleSubmit} className='mx-auto'>
-                    <Form.Group className='form-group' controlId='formSurname'>
+                  <Form onSubmit={handleSubmit} className="mx-auto">
+                    <Form.Group className="form-group" controlId="formSurname">
                       <Form.Label>Last Name :</Form.Label>
                       <Form.Control
-                        type='text'
+                        type="text"
                         /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name='last_name'
-                        placeholder=''
+                        name="last_name"
+                        placeholder=""
                         /* Set onChange to handleChange */
                         onChange={handleChange}
                         /* Set onBlur to handleBlur */
@@ -193,20 +193,21 @@ function signUp() {
                         }
                       />
                       {touched.last_name && errors.last_name ? (
-                        <div className='errorForm-message'>
+                        <div className="errorForm-message">
                           {errors.last_name}
                         </div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className='form-group'
-                      controlId='formFirstName'>
+                      className="form-group"
+                      controlId="formFirstName"
+                    >
                       <Form.Label>First Name :</Form.Label>
                       <Form.Control
-                        type='text'
+                        type="text"
                         /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name='first_name'
-                        placeholder=''
+                        name="first_name"
+                        placeholder=""
                         /* Set onChange to handleChange */
                         onChange={handleChange}
                         /* Set onBlur to handleBlur */
@@ -221,20 +222,21 @@ function signUp() {
                         }
                       />
                       {touched.first_name && errors.first_name ? (
-                        <div className='errorForm-message'>
+                        <div className="errorForm-message">
                           {errors.first_name}
                         </div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className='form-group'
-                      controlId='formEmail'
-                      className='form-group'>
+                      className="form-group"
+                      controlId="formEmail"
+                      className="form-group"
+                    >
                       <Form.Label>Email :</Form.Label>
                       <Form.Control
-                        type='text'
-                        name='email'
-                        placeholder=''
+                        type="text"
+                        name="email"
+                        placeholder=""
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.email}
@@ -243,16 +245,16 @@ function signUp() {
                         }
                       />
                       {touched.email && errors.email ? (
-                        <div className='errorForm-message'>{errors.email}</div>
+                        <div className="errorForm-message">{errors.email}</div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group className='form-group' controlId='formContact'>
+                    <Form.Group className="form-group" controlId="formContact">
                       <Form.Label>Phone Number:</Form.Label>
                       <Form.Control
-                        type='text'
+                        type="text"
                         /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name='contact'
-                        placeholder=''
+                        name="contact"
+                        placeholder=""
                         /* Set onChange to handleChange */
                         onChange={handleChange}
                         /* Set onBlur to handleBlur */
@@ -265,17 +267,17 @@ function signUp() {
                         }
                       />
                       {touched.contact && errors.contact ? (
-                        <div className='errorForm-message'>
+                        <div className="errorForm-message">
                           {errors.contact}
                         </div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group controlId='formBasicPassword'>
+                    <Form.Group controlId="formBasicPassword">
                       <Form.Label>Password :</Form.Label>
                       <Form.Control
-                        type='password'
-                        placeholder=''
-                        name='password'
+                        type="password"
+                        placeholder=""
+                        name="password"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
@@ -286,19 +288,20 @@ function signUp() {
                         }
                       />
                       {touched.password && errors.password ? (
-                        <div className='errorForm-message'>
+                        <div className="errorForm-message">
                           {errors.password}
                         </div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className='form-group'
-                      controlId='formRepeatPassword'>
+                      className="form-group"
+                      controlId="formRepeatPassword"
+                    >
                       <Form.Label>confirm Password :</Form.Label>
                       <Form.Control
-                        type='password'
-                        placeholder=''
-                        name='repeatPassword'
+                        type="password"
+                        placeholder=""
+                        name="repeatPassword"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.repeatPassword}
@@ -309,15 +312,15 @@ function signUp() {
                         }
                       />
                       {touched.repeatPassword && errors.repeatPassword ? (
-                        <div className='errorForm-message'>
+                        <div className="errorForm-message">
                           {errors.repeatPassword}
                         </div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group className='form-group' controlId='formTerms'>
+                    <Form.Group className="form-group" controlId="formTerms">
                       <Field
-                        type='checkbox'
-                        name='acceptTerms'
+                        type="checkbox"
+                        name="acceptTerms"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={
@@ -335,10 +338,11 @@ function signUp() {
                       </Form.Label>
                     </Form.Group>
                     <Button
-                      className='form-group'
-                      variant='primary'
-                      type='submit'
-                      disabled={isSubmitting}>
+                      className="form-group"
+                      variant="primary"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
                       Register your account
                     </Button>
                   </Form>
@@ -347,7 +351,7 @@ function signUp() {
             </Col>
             <Col className={styles.imageDiv} xs={12} md={6}>
               <Image
-                src='/imgs/jed-owen-1JgUGDdcWnM-unsplash.jpg'
+                src="/imgs/jed-owen-1JgUGDdcWnM-unsplash.jpg"
                 className={styles.img}
               />
             </Col>
@@ -355,13 +359,14 @@ function signUp() {
         </Container>
       )}
       {termsShown ? (
-        <div className='popup'>
-          <div className='popup_inner'>
+        <div className="popup">
+          <div className="popup_inner">
             <p>TEst</p>
             <button
-              className='popupCloseButton'
-              onClick={() => setTermsShown(false)}>
-              <FontAwesomeIcon className='closeIcon' icon={faTimes} />
+              className="popupCloseButton"
+              onClick={() => setTermsShown(false)}
+            >
+              <FontAwesomeIcon className="closeIcon" icon={faTimes} />
             </button>
           </div>
         </div>

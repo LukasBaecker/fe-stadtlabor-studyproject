@@ -11,9 +11,7 @@ import { useSelector } from "react-redux";
 import { CenterSpinner } from "../components/Loader";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
 import { logoutUser } from "../store/actions/auth";
-function defaultButtonClick(e) {
-  alert("Button pressed:\n" + e.target.textContent);
-}
+import { getGardenUrl, userGetUrl } from "../helpers/urls";
 
 function user() {
   const dispatch = useDispatch();
@@ -24,14 +22,11 @@ function user() {
 
   async function getGardenName(gardenId) {
     try {
-      const request = await fetch(
-        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${gardenId}/`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      const request = await fetch(getGardenUrl(gardenId), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
       const gardenInfo = await request.json();
       return new Promise((resolve, reject) => {
         if (request.status == 200) {
@@ -62,14 +57,11 @@ function user() {
   useEffect(() => {
     (async () => {
       try {
-        const request = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        const request = await fetch(userGetUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         const content = await request.json();
         if (content.detail === "Unauthenticated!") {
           dispatch(logoutUser());
@@ -90,17 +82,17 @@ function user() {
 
   const content = () => {
     return (
-      <div className='bodyBox'>
+      <div className="bodyBox">
         {/* Set Header */}
         <Header
-          caption='Welcome back'
+          caption="Welcome back"
           name={username}
-          imgUrl='https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'
+          imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
         />
         {/* Page Content */}
         <div className={styles.Content}>
-          <Row xs='1' sm='2' className={styles.Row}>
-            <Col xs='12' sm='12' className={styles.ColGardens}>
+          <Row xs="1" sm="2" className={styles.Row}>
+            <Col xs="12" sm="12" className={styles.ColGardens}>
               <Gardens gardens={gardens} />
             </Col>
             <Col className={styles.Col}>
@@ -166,7 +158,8 @@ function GardenController() {
       <button
         className={styles.GardenControllerPart}
         style={{ borderRight: "1px solid black" }}
-        onClick={() => router.push("/creategarden")}>
+        onClick={() => router.push("/creategarden")}
+      >
         Create new Garden
       </button>
       <button

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/actions/auth.js";
 import { setLanguage } from "../store/actions/index.js";
+import { userLogoutPostUrl } from "../helpers/urls";
 import Dropdown from "react-bootstrap/Dropdown";
 function Navigation() {
   const router = useRouter();
@@ -12,7 +13,7 @@ function Navigation() {
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const logout = () => {
-    fetch("http://giv-project15.uni-muenster.de:9000/api/v1/users/logout", {
+    fetch(userLogoutPostUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -32,8 +33,8 @@ function Navigation() {
 
   return (
     <>
-      <Dropdown id='languageDropdown'>
-        <Dropdown.Toggle variant='primary' id='languageDropdownToggle'>
+      <Dropdown id="languageDropdown">
+        <Dropdown.Toggle variant="primary" id="languageDropdownToggle">
           {lang === "eng" ? "UK" : "DE"}
         </Dropdown.Toggle>
 
@@ -46,52 +47,55 @@ function Navigation() {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <div className='navigation-wrap'>
-        <input type='checkbox' className='navigation-toggler' />
+      <div className="navigation-wrap">
+        <input type="checkbox" className="navigation-toggler" />
 
-        <div className='hamburger'>
+        <div className="hamburger">
           <div></div>
         </div>
-        <div className='menu'>
+        <div className="menu">
           <div>
             <div>
               <ul>
-                <li key='home'>
-                  <Link href='/'>Home</Link>
+                <li key="home">
+                  <Link href="/">Home</Link>
                 </li>
                 <li>
-                  <Link href='/map'>Resources Map</Link>
+                  <Link href="/map">Resources Map</Link>
                 </li>
-                <li key='user'>
-                  <Link href='/user'>User Page</Link>
+                <li key="user">
+                  <Link href="/user">User Page</Link>
                 </li>
                 {isAuth ? (
-                  <li key='logoutIn'>
+                  <li key="logoutIn">
                     <Button
-                      variant='danger'
+                      variant="danger"
                       onClick={() => {
                         logout();
-                      }}>
+                      }}
+                    >
                       Logout
                     </Button>
                   </li>
                 ) : (
-                  <li key='loginOut'>
+                  <li key="loginOut">
                     <Button
-                      variant='secondary'
+                      variant="secondary"
                       onClick={() => {
                         router.push("/login");
-                      }}>
+                      }}
+                    >
                       Login
                     </Button>
                     {"  "}
                     {lang === "eng" ? "or" : "oder"}
                     {"  "}
                     <Button
-                      variant='secondary'
+                      variant="secondary"
                       onClick={() => {
                         router.push("/register");
-                      }}>
+                      }}
+                    >
                       Sign Up!
                     </Button>
                   </li>

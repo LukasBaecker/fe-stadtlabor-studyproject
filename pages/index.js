@@ -19,6 +19,7 @@ import Navigation from "../components/Navigation.jsx";
 import BootstrapButton from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { userLoginPostUrl } from "../helpers/urls";
 
 import { useMediaQuery } from "react-responsive";
 
@@ -59,13 +60,13 @@ export default function Home() {
 
         <Image
           id={styles.mainLogo}
-          src='/garden.svg'
+          src="/garden.svg"
           style={{ transform: "translate(-50%, " + offsetY * 0.7 + "px)" }}
         />
         {/* Image of greenhouse in background */}
         <Image
           id={styles.mainBackground}
-          src='/imgs/greenhouse.png'
+          src="/imgs/greenhouse.png"
           style={{ transform: "translateY(" + offsetY * -0.5 + "px)" }}
         />
 
@@ -77,7 +78,7 @@ export default function Home() {
 
         <Container className={styles.siteElement}>
           <Image
-            src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
+            src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
             className={
               isTabletOrMobile
                 ? styles.decoImage
@@ -91,7 +92,7 @@ export default function Home() {
         <div className={styles.frontFooter}>
           <MapButton />
           <Image
-            src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
+            src="/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg"
             className={
               isTabletOrMobile
                 ? styles.decoImageSecond
@@ -115,8 +116,8 @@ function LoginButton({ toggleLoginPopup }) {
 
   return (
     <>
-      <Dropdown id='languageDropdown'>
-        <Dropdown.Toggle variant='secondary' id='languageDropdownToggle'>
+      <Dropdown id="languageDropdown">
+        <Dropdown.Toggle variant="secondary" id="languageDropdownToggle">
           {lang === "eng" ? "US" : "DE"}
         </Dropdown.Toggle>
 
@@ -131,9 +132,10 @@ function LoginButton({ toggleLoginPopup }) {
       </Dropdown>
       <div className={styles.login}>
         <Button
-          variant='secondary'
+          variant="secondary"
           className={styles.loginButton}
-          onClick={() => onLoginButtonClick()}>
+          onClick={() => onLoginButtonClick()}
+        >
           Login
         </Button>
       </div>
@@ -152,7 +154,7 @@ function SignupButton(props) {
   return (
     <div className={styles.signup}>
       <Button
-        variant='primary'
+        variant="primary"
         onClick={() => onSignupButtonClick()}
         className={
           isTabletOrMobile
@@ -162,9 +164,10 @@ function SignupButton(props) {
             : props.offsetY < window.innerHeight * 0.6
             ? styles.signupButton
             : `${styles.signupButton} ${styles.fixedTop}`
-        }>
+        }
+      >
         {lang === "eng" ? "Sign up now!" : "Jetzt registrieren!"}
-        <Image src='/imgs/marker_white.svg' className={styles.signUpIcon} />
+        <Image src="/imgs/marker_white.svg" className={styles.signUpIcon} />
       </Button>
     </div>
   );
@@ -179,7 +182,8 @@ function MapButton() {
         <div className={`${styles.child} ${styles.bgMap}`}>
           <div
             className={styles.buttonText}
-            onClick={() => router.push("/map")}>
+            onClick={() => router.push("/map")}
+          >
             <Image
               src={"/icons/arrow-pointer-solid.svg"}
               className={styles.cursorIcon}
@@ -255,10 +259,11 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
           {showError ? (
             <>
               <Alert
-                className='alertInPopup'
-                variant='danger'
+                className="alertInPopup"
+                variant="danger"
                 onClose={() => setShowError(false)}
-                dismissible>
+                dismissible
+              >
                 <Alert.Heading>Ups!</Alert.Heading>
                 {lang === "eng" ? (
                   <p>Email or password is wrong.</p>
@@ -278,15 +283,12 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
             }
             onSubmit={(values, { setSubmitting, resetForm }) => {
               setSubmitting(true);
-              fetch(
-                "http://giv-project15.uni-muenster.de:9000/api/v1/users/login",
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  credentials: "include",
-                  body: JSON.stringify(values),
-                }
-              )
+              fetch(userLoginPostUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(values),
+              })
                 .then((res) => {
                   if (res.ok) {
                     res.json().then((result) => {
@@ -306,7 +308,8 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                   console.log("Login: Denied");
                   console.log(err.message);
                 });
-            }}>
+            }}
+          >
             {/* Callback function containing Formik state and helpers that handle common form actions */}
             {({
               values,
@@ -317,13 +320,13 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
               handleSubmit,
               isSubmitting,
             }) => (
-              <Form onSubmit={handleSubmit} className='mx-auto'>
-                <Form.Group className='form-group' controlId='formEmail'>
+              <Form onSubmit={handleSubmit} className="mx-auto">
+                <Form.Group className="form-group" controlId="formEmail">
                   <Form.Label>Email:</Form.Label>
                   <Form.Control
-                    type='text'
-                    name='email'
-                    placeholder=''
+                    type="text"
+                    name="email"
+                    placeholder=""
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.email}
@@ -332,19 +335,20 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                     }
                   />
                   {touched.email && errors.email ? (
-                    <div className='errorForm-message'>{errors.email}</div>
+                    <div className="errorForm-message">{errors.email}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group
-                  className='form-group'
-                  controlId='formBasicPassword'>
+                  className="form-group"
+                  controlId="formBasicPassword"
+                >
                   <Form.Label>
                     {lang === "eng" ? "Password:" : "Passwort:"}
                   </Form.Label>
                   <Form.Control
-                    type='password'
-                    placeholder=''
-                    name='password'
+                    type="password"
+                    placeholder=""
+                    name="password"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.password}
@@ -353,15 +357,16 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                     }
                   />
                   {touched.password && errors.password ? (
-                    <div className='errorForm-message'>{errors.password}</div>
+                    <div className="errorForm-message">{errors.password}</div>
                   ) : null}
                 </Form.Group>
 
                 <BootstrapButton
-                  className='form-group'
-                  variant='secondary'
-                  type='submit'
-                  disabled={isSubmitting}>
+                  className="form-group"
+                  variant="secondary"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
                   Login
                 </BootstrapButton>
               </Form>
@@ -423,7 +428,8 @@ function Advantages() {
           isTabletOrMobile
             ? styles.advantages
             : `${styles.advantages} ${styles.desktop}`
-        }>
+        }
+      >
         <h2>{lang === "eng" ? "WHAT IS GARDEN UP?" : "WAS IST GARDEN UP?"}</h2>
         <Container className={styles.advantagesContainer}>
           <Row xs={1} sm={3}>
@@ -474,7 +480,8 @@ function Footer() {
               ? styles.footerLink
               : `${styles.footerLink} ${styles.desktop}`
           }
-          href='/about'>
+          href="/about"
+        >
           About
         </a>
         <a
@@ -483,7 +490,8 @@ function Footer() {
               ? styles.footerLink
               : `${styles.footerLink} ${styles.desktop}`
           }
-          href='/privacy'>
+          href="/privacy"
+        >
           Privacy Policy
         </a>
       </div>
