@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { CenterSpinner } from "../components/Loader";
 import NotAuthenticated from "../components/NotAuthenticated.jsx";
 import { logoutUser } from "../store/actions/auth";
+import { getGardenUrl, userGetUrl } from "../helpers/urls";
 
 function user() {
   const dispatch = useDispatch();
@@ -21,14 +22,11 @@ function user() {
 
   async function getGardenName(gardenId) {
     try {
-      const request = await fetch(
-        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${gardenId}/`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      const request = await fetch(getGardenUrl(gardenId), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
       const gardenInfo = await request.json();
       return new Promise((resolve, reject) => {
         if (request.status == 200) {
@@ -59,14 +57,11 @@ function user() {
   useEffect(() => {
     (async () => {
       try {
-        const request = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        const request = await fetch(userGetUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         const content = await request.json();
         if (content.detail === "Unauthenticated!") {
           dispatch(logoutUser());

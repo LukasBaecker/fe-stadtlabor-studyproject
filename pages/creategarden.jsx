@@ -15,6 +15,7 @@ import {
   joinGarden,
   deleteGarden,
 } from "../helpers/manageGarden";
+import { userGetUrl } from "../helpers/urls";
 //import { message } from "antd";
 let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
@@ -53,14 +54,11 @@ const CreateGarden = () => {
     (async () => {
       try {
         // Check if user is authenticated
-        const request = await fetch(
-          "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        const request = await fetch(userGetUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         const content = await request.json();
         if (content.detail === "Unauthenticated!") {
           console.log("unauthenticated");

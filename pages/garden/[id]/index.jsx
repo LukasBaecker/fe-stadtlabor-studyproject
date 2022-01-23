@@ -4,6 +4,16 @@ import router, { useRouter } from "next/router";
 import Header from "../../../components/Header";
 import { CenterSpinner } from "../../../components/Loader";
 import { joinGarden, leaveGarden } from "../../../helpers/manageGarden";
+import {
+  eventsGetUrl,
+  resourcesGetUrl,
+  userGetUrl,
+  getGardenUrl,
+  eventsPostUrl,
+  eventDeleteUrl,
+  resourceDeleteUrl,
+  resourcePostUrl,
+} from "../../../helpers/urls";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -22,14 +32,11 @@ then filters them by garden-id to only show the relevant ones
 async function fetchEvents(id, setEvents) {
   // Fetch events
   try {
-    const request = await fetch(
-      `http://giv-project15.uni-muenster.de:9000/api/v1/events/all`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    );
+    const request = await fetch(eventsGetUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
     const cont = await request.json();
     const evts = cont.filter((evt) => evt.garden == id);
     setEvents(evts);
@@ -45,14 +52,11 @@ then filters them by garden-id to only show the relevant ones
 async function fetchResources(id, setResources) {
   // Fetch Resources
   try {
-    const request = await fetch(
-      "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/all",
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    );
+    const request = await fetch(resourcesGetUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
     const cont = await request.json();
     const resources = cont.filter((resource) => resource.garden == id);
     setResources(resources);
@@ -85,14 +89,11 @@ function garden() {
       (async () => {
         // check if user is logged in
         try {
-          const request = await fetch(
-            "http://giv-project15.uni-muenster.de:9000/api/v1/users/user",
-            {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-            }
-          );
+          const request = await fetch(userGetUrl, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
           const content = await request.json();
           if (content.detail === "Unauthenticated!") {
             console.log("unauthenticated");
@@ -107,14 +108,11 @@ function garden() {
 
         // Fetch general garden information
         try {
-          const request = await fetch(
-            `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/all/${id}/`,
-            {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-            }
-          );
+          const request = await fetch(getGardenUrl(id), {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
           const cont = await request.json();
           if (cont.detail === "Not found.") {
             throw new Error("Garden not found");
@@ -452,7 +450,7 @@ function AddEvent({ setPopupVisible }) {
       description,
     };
 
-    fetch("http://giv-project15.uni-muenster.de:9000/api/v1/events/", {
+    fetch(eventsPostUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -546,16 +544,13 @@ function RemoveEvent({ eventId, setPopupVisible }) {
 
   const handleClick = async () => {
     try {
-      const del = await fetch(
-        `http://giv-project15.uni-muenster.de:9000/api/v1/events/${eventId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      const del = await fetch(eventDeleteUrl(eventId), {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
       if (del.status === 204) {
         fetchEvents(gardenId, setEvents);
         setPopupVisible(false);
@@ -756,16 +751,13 @@ function RemoveShareable({ shareableId, setPopupVisible }) {
 
   const handleClick = async () => {
     try {
-      const del = await fetch(
-        `http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/${shareableId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      const del = await fetch(resourceDeleteUrl(shareableId), {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
       if (del.status === 204) {
         fetchResources(gardenId, setResources);
         setPopupVisible(false);
@@ -814,17 +806,14 @@ function AddShareable({ setPopupVisible }) {
       category,
     };
 
-    fetch(
-      "http://giv-project15.uni-muenster.de:9000/api/v1/gardens/resources/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(values),
-      }
-    )
+    fetch(resourcePostUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values),
+    })
       .then((res) => {
         if (res.status == 200) {
           res.json().then((result) => {

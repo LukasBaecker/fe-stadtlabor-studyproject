@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Alert from "react-bootstrap/Alert";
 import CenterSpinner from "../components/Loader.jsx";
 import Navigation from "../components/Navigation.jsx";
+import { userLoginPostUrl } from "../helpers/urls";
 
 // Schema for yup
 const validationSchema = Yup.object().shape({
@@ -43,22 +44,24 @@ const SignIn = () => {
       ) : (
         <>
           <Navigation />
-          <div className='bodyBox'>
+          <div className="bodyBox">
             <div
               style={{
                 width: "80%",
                 marginLeft: "auto",
                 marginRight: "auto",
                 marginTop: "80px",
-              }}>
+              }}
+            >
               <h2>Sign in</h2>
               {showError ? (
                 <>
                   <Alert
-                    className='alertInPopup'
-                    variant='danger'
+                    className="alertInPopup"
+                    variant="danger"
                     onClose={() => setShowError(false)}
-                    dismissible>
+                    dismissible
+                  >
                     <Alert.Heading>Ups!</Alert.Heading>
                     <p>Email or password is wrong.</p>
                   </Alert>
@@ -74,15 +77,12 @@ const SignIn = () => {
                   setLoading(true);
                   setShowError(false);
                   setSubmitting(true);
-                  fetch(
-                    "http://giv-project15.uni-muenster.de:9000/api/v1/users/login",
-                    {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      credentials: "include",
-                      body: JSON.stringify(values),
-                    }
-                  )
+                  fetch(userLoginPostUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(values),
+                  })
                     .then((res) => {
                       if (res.status == 200) {
                         res.json().then((result) => {
@@ -102,7 +102,8 @@ const SignIn = () => {
                       console.log("Login: Denied");
                       console.log(err.message);
                     });
-                }}>
+                }}
+              >
                 {/* Callback function containing Formik state and helpers that handle common form actions */}
                 {({
                   values,
@@ -113,13 +114,13 @@ const SignIn = () => {
                   handleSubmit,
                   isSubmitting,
                 }) => (
-                  <Form onSubmit={handleSubmit} className='mx-auto'>
-                    <Form.Group className='form-group' controlId='formEmail'>
+                  <Form onSubmit={handleSubmit} className="mx-auto">
+                    <Form.Group className="form-group" controlId="formEmail">
                       <Form.Label>Email :</Form.Label>
                       <Form.Control
-                        type='text'
-                        name='email'
-                        placeholder='Email'
+                        type="text"
+                        name="email"
+                        placeholder="Email"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.email}
@@ -128,17 +129,18 @@ const SignIn = () => {
                         }
                       />
                       {touched.email && errors.email ? (
-                        <div className='errorForm-message'>{errors.email}</div>
+                        <div className="errorForm-message">{errors.email}</div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className='form-group'
-                      controlId='formBasicPassword'>
+                      className="form-group"
+                      controlId="formBasicPassword"
+                    >
                       <Form.Label>Password :</Form.Label>
                       <Form.Control
-                        type='password'
-                        placeholder='Password'
-                        name='password'
+                        type="password"
+                        placeholder="Password"
+                        name="password"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
@@ -149,17 +151,18 @@ const SignIn = () => {
                         }
                       />
                       {touched.password && errors.password ? (
-                        <div className='errorForm-message'>
+                        <div className="errorForm-message">
                           {errors.password}
                         </div>
                       ) : null}
                     </Form.Group>
 
                     <Button
-                      className='form-group'
-                      variant='secondary'
-                      type='submit'
-                      disabled={isSubmitting}>
+                      className="form-group"
+                      variant="secondary"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
                       Login
                     </Button>
                   </Form>
