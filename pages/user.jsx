@@ -137,8 +137,6 @@ function Gardens({ gardens }) {
     gridTemplateColumns: "300px ".repeat(gardens.length) + lastWidth,
   };
 
-  console.log("later", gardens);
-
   return (
     <div className={styles.Gardens} style={style}>
       {gardens.map((garden) => (
