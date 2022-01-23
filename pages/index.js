@@ -3,26 +3,37 @@ import { useSelector } from "react-redux";
 import router, { useRouter } from "next/router";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import { Formik } from "formik";
-import { loginUser } from "../store/actions/auth.js";
 import { useDispatch } from "react-redux";
+import { loginUser } from "../store/actions/auth.js";
+import { setLanguage } from "../store/actions/index.js";
+import { CenterSpinner } from "../components/Loader";
 let Yup = require("yup");
+import Navigation from "../components/Navigation.jsx";
 import BootstrapButton from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSeedling, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
+import { useMediaQuery } from "react-responsive";
 
 import styles from "../styles/Home.module.scss";
 
 export default function Home() {
-  const router = useRouter();
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [offsetY, setOffsetY] = useState(0);
-  const currentUser = useSelector((state) => state.auth);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
   // Parallax Scroll Effect on Page Top
   const handleScroll = () => setOffsetY(window.scrollY);
+  //get the height if the viewport
+  let intViewportHeight = window.innerHeight;
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -31,106 +42,181 @@ export default function Home() {
 
   // Boolean State indicating whether the Login Window is currently Shown
   const [loginShown, setLoginShown] = useState(false);
-  const content = () => {
-    return (
-      <React.Fragment>
-        <div className='bodyBox'>
-          <div className={styles.title}>
-            <LoginButton offsetY={offsetY} toggleLoginPopup={setLoginShown} />
-            {/* Page Title */}
-            <h1
-              style={{ transform: "translate(-50%, " + offsetY * 0.5 + "px)" }}>
-              GardenUp!
-            </h1>
 
-            {/* Image of greenhouse in background */}
-            <Image
-              src='/imgs/greenhouse.png'
-              style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}
-            />
+  return (
+    <React.Fragment>
+      <div className={styles.title}>
+        {isAuth ? (
+          <Navigation />
+        ) : (
+          <LoginButton
+            className={styles.loginButton}
+            toggleLoginPopup={setLoginShown}
+          />
+        )}
 
-            <SignupButton />
-            <WhyJoin />
-          </div>
+        {/* Page Title */}
 
-          {/* Login-Popup: Only visible if loginShown is True */}
-          <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
+        <Image
+          id={styles.mainLogo}
+          src='/garden.svg'
+          style={{ transform: "translate(-50%, " + offsetY * 0.7 + "px)" }}
+        />
+        {/* Image of greenhouse in background */}
+        <Image
+          id={styles.mainBackground}
+          src='/imgs/greenhouse.png'
+          style={{ transform: "translateY(" + offsetY * -0.5 + "px)" }}
+        />
 
-          <Container className={styles.siteElement}>
-            <Image
-              src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
-              className={styles.decoImage}
-            />
-          </Container>
+        <SignupButton offsetY={offsetY} />
+        <Advantages />
 
-          <Advantages />
+        {/* Login-Popup: Only visible if loginShown is True */}
+        <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
 
-          <div className={styles.frontFooter}>
-            <SignupButton />
-            <Image
-              src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
-              className={styles.decoImage}
-              fluid
-            />
-            <Footer />
-          </div>
+        <Container className={styles.siteElement}>
+          <Image
+            src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
+            className={
+              isTabletOrMobile
+                ? styles.decoImage
+                : `${styles.decoImage} ${styles.desktop}`
+            }
+          />
+        </Container>
+
+        <WhyJoin />
+
+        <div className={styles.frontFooter}>
+          <MapButton />
+          <Image
+            src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
+            className={
+              isTabletOrMobile
+                ? styles.decoImageSecond
+                : `${styles.decoImageSecond} ${styles.desktop}`
+            }
+            fluid
+          />
+          <Footer />
         </div>
-      </React.Fragment>
-    );
-  };
-  const redirecter = () => {
-    router.push("/user");
-    return <></>;
-  };
-  return <>{currentUser.isAuthenticated ? redirecter() : content()}</>;
+      </div>
+    </React.Fragment>
+  );
 }
 
-function LoginButton({ offsetY, toggleLoginPopup }) {
+function LoginButton({ toggleLoginPopup }) {
+  const dispatch = useDispatch();
+  const lang = useSelector((state) => state.lang);
   function onLoginButtonClick() {
     toggleLoginPopup(true);
   }
 
   return (
-    <div className={styles.login}>
-      <button
-        onClick={() => onLoginButtonClick()}
-        style={{ transform: "translateY(" + offsetY * 0.5 + "px)" }}>
-        Log in!
-      </button>
-    </div>
+    <>
+      <Dropdown id='languageDropdown'>
+        <Dropdown.Toggle variant='secondary' id='languageDropdownToggle'>
+          {lang === "eng" ? "US" : "DE"}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => dispatch(setLanguage("eng"))}>
+            English
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => dispatch(setLanguage("ger"))}>
+            Deutsch
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <div className={styles.login}>
+        <Button
+          variant='secondary'
+          className={styles.loginButton}
+          onClick={() => onLoginButtonClick()}>
+          Login
+        </Button>
+      </div>
+    </>
   );
 }
 
-function SignupButton() {
+function SignupButton(props) {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
+  const lang = useSelector((state) => state.lang);
   const router = useRouter();
+
   function onSignupButtonClick() {
     router.push("/register");
   }
-
   return (
     <div className={styles.signup}>
-      <button onClick={() => onSignupButtonClick()}>
-        Sign up!
-        <FontAwesomeIcon className={styles.signUpIcon} icon={faSeedling} />
-      </button>
+      <Button
+        variant='primary'
+        onClick={() => onSignupButtonClick()}
+        className={
+          isTabletOrMobile
+            ? props.offsetY < window.innerHeight * 0.6
+              ? `${styles.signupButton} ${styles.smallerText}`
+              : `${styles.signupButton} ${styles.fixedTop} ${styles.smallerText}`
+            : props.offsetY < window.innerHeight * 0.6
+            ? styles.signupButton
+            : `${styles.signupButton} ${styles.fixedTop}`
+        }>
+        {lang === "eng" ? "Sign up now!" : "Jetzt registrieren!"}
+        <Image src='/imgs/marker_white.svg' className={styles.signUpIcon} />
+      </Button>
     </div>
+  );
+}
+function MapButton() {
+  const lang = useSelector((state) => state.lang);
+  const router = useRouter();
+
+  return (
+    <>
+      <div className={styles.parent} onClick={() => router.push("/map")}>
+        <div className={`${styles.child} ${styles.bgMap}`}>
+          <div
+            className={styles.buttonText}
+            onClick={() => router.push("/map")}>
+            <Image
+              src={"/icons/arrow-pointer-solid.svg"}
+              className={styles.cursorIcon}
+            />
+            {lang === "eng" ? "Go to our map" : "Schau dir unsere Karte an"}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
 function WhyJoin() {
+  const lang = useSelector((state) => state.lang);
   return (
     <Container className={styles.WhyJoinElement}>
       <div className={styles.whyJoin}>
-        <h2>Why Join?</h2>
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-        voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-        ipsum dolor sit amet.
+        <h2>{lang === "eng" ? "WHY JOIN?" : "WIESO BEITRETEN?"}</h2>
+        {lang === "eng" ? (
+          <p>
+            Garden Up is the first plattform giving you the unique chance to get
+            in contact with your local urban gardening projects or to share your
+            own and become part of a greener world. Be a member of a social
+            community of garden and plant lovers and experience mutual support.
+            Share tools you like to lend, borrow things you do not have, share
+            seeds others may need and even more.
+          </p>
+        ) : (
+          <p>
+            Garden Up is the first plattform giving you the unique chance to get
+            in contact with your local urban gardening projects or to share your
+            own and become part of a greener world. Be a member of a social
+            community of garden and plant lovers and experience mutual support.
+            Share tools you like to lend, borrow things you do not have, share
+            seeds others may need and even more.
+          </p>
+        )}
       </div>
     </Container>
   );
@@ -138,9 +224,12 @@ function WhyJoin() {
 
 // Popup that appears when a user clicks the Login Button
 function LoginPopup({ isVisible, toggleLoginPopup }) {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showError, setShowError] = useState(false);
+  const lang = useSelector((state) => state.lang);
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const router = useRouter();
   // Schema for yup
@@ -148,13 +237,20 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
     email: Yup.string()
       .email("*enter a valid mail")
       .required("*please enter your email"),
-    password: Yup.string().required("*please enter your password."),
+    password: Yup.string().required("*please enter your password"),
   });
-
+  // Schema for yup
+  const validationSchemaGerman = Yup.object().shape({
+    email: Yup.string()
+      .email("*gib eine valide Mailadresse an")
+      .required("*bitte gib deine Email an"),
+    password: Yup.string().required("*bitte gib dein Passwort ein"),
+  });
   const onClose = () => toggleLoginPopup(false);
   if (isVisible) {
     return (
       <div className={styles.popup}>
+        {loading ? <CenterSpinner /> : <></>}
         <div className={styles.popup_inner}>
           {showError ? (
             <>
@@ -164,7 +260,11 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                 onClose={() => setShowError(false)}
                 dismissible>
                 <Alert.Heading>Ups!</Alert.Heading>
-                <p>Email or password is wrong.</p>
+                {lang === "eng" ? (
+                  <p>Email or password is wrong.</p>
+                ) : (
+                  <p>Email oder Passwort ist falsch.</p>
+                )}
               </Alert>
             </>
           ) : (
@@ -173,7 +273,9 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
           <Formik
             initialValues={{ email: "", password: "" }}
             // Hooks up our validationSchema to Formik
-            validationSchema={validationSchema}
+            validationSchema={
+              lang === "eng" ? validationSchema : validationSchemaGerman
+            }
             onSubmit={(values, { setSubmitting, resetForm }) => {
               setSubmitting(true);
               fetch(
@@ -191,6 +293,8 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                       resetForm();
                       dispatch(loginUser(result.jwt));
                       console.log("Login: Success");
+                      setLoading(true);
+                      router.push("/user");
                     });
                   } else {
                     throw new Error("Something went wrong");
@@ -215,11 +319,11 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
             }) => (
               <Form onSubmit={handleSubmit} className='mx-auto'>
                 <Form.Group className='form-group' controlId='formEmail'>
-                  <Form.Label>Email :</Form.Label>
+                  <Form.Label>Email:</Form.Label>
                   <Form.Control
                     type='text'
                     name='email'
-                    placeholder='Email'
+                    placeholder=''
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.email}
@@ -234,10 +338,12 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                 <Form.Group
                   className='form-group'
                   controlId='formBasicPassword'>
-                  <Form.Label>Password :</Form.Label>
+                  <Form.Label>
+                    {lang === "eng" ? "Password:" : "Passwort:"}
+                  </Form.Label>
                   <Form.Control
                     type='password'
-                    placeholder='Password'
+                    placeholder=''
                     name='password'
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -274,34 +380,64 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
 
 //Component that lists the advantages with Images and texts
 function Advantages() {
-  const items = [
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
+  const lang = useSelector((state) => state.lang);
+  const itemsEnglish = [
     {
       id: 1,
-      url: "/imgs/icons8-hands-60 1.png",
+      url: "/imgs/icons8-hands.svg",
       text: "Connect with your local urban gardening community",
     },
     {
       id: 2,
-      url: "/imgs/icons8-shovel-50 1.png",
+      url: "/imgs/icons8-shovel.svg",
       text: "Find useful tools in your local neighborhood and share yours",
     },
     {
       id: 3,
-      url: "/imgs/icons8-plant-60.png",
+      url: "/imgs/icons8-plant.svg",
       text: "Grow the urban garden together",
     },
   ];
+  const itemsGerman = [
+    {
+      id: 1,
+      url: "/imgs/icons8-hands.svg",
+      text: "Verbinde dich mit der Urban Gardening Community in deiner Stadt.",
+    },
+    {
+      id: 2,
+      url: "/imgs/icons8-shovel.svg",
+      text: "Leihe nützliches Werkzeug und teile deines mit anderen Gärter*innen",
+    },
+    {
+      id: 3,
+      url: "/imgs/icons8-plant.svg",
+      text: "Lasst uns gemeinsam die Stadt grüner machen!",
+    },
+  ];
   return (
-    <Container className={styles.siteElement}>
-      <div className={styles.advantages}>
-        <h2>Advantages of GardenUp</h2>
+    <Container className={styles.firstSiteElement}>
+      <div
+        className={
+          isTabletOrMobile
+            ? styles.advantages
+            : `${styles.advantages} ${styles.desktop}`
+        }>
+        <h2>{lang === "eng" ? "WHAT IS GARDEN UP?" : "WAS IST GARDEN UP?"}</h2>
         <Container className={styles.advantagesContainer}>
           <Row xs={1} sm={3}>
-            {items.map((item) => (
-              <Col key={item.id} className={styles.advantagesCol}>
-                <AdvantagesItem url={item.url} text={item.text} />
-              </Col>
-            ))}
+            {lang === "eng"
+              ? itemsEnglish.map((item) => (
+                  <Col key={item.id} className={styles.advantagesCol}>
+                    <AdvantagesItem url={item.url} text={item.text} />
+                  </Col>
+                ))
+              : itemsGerman.map((item) => (
+                  <Col key={item.id} className={styles.advantagesCol}>
+                    <AdvantagesItem url={item.url} text={item.text} />
+                  </Col>
+                ))}
           </Row>
         </Container>
       </div>
@@ -327,11 +463,29 @@ function AdvantagesItem({ url, text }) {
 
 // Page Footer with About and Privacy Policy Links
 function Footer() {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   return (
     <div id={styles.Footer}>
       <div className={styles.middleDiv} />
       <div className={styles.bottomDiv}>
-        About <br /> Privacy Policy
+        <a
+          className={
+            isTabletOrMobile
+              ? styles.footerLink
+              : `${styles.footerLink} ${styles.desktop}`
+          }
+          href='/about'>
+          About
+        </a>
+        <a
+          className={
+            isTabletOrMobile
+              ? styles.footerLink
+              : `${styles.footerLink} ${styles.desktop}`
+          }
+          href='/privacy'>
+          Privacy Policy
+        </a>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@
 @import "./map.scss";
 @import "./mapNav.scss";
 @import "./error.scss";
+@import "./popup";
 //import font
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300;1,400&family=Mr+Dafoe&display=swap");
 
@@ -24,6 +25,7 @@ $theme-colors: (
 
 html,
 body {
+  overflow-x: hidden;
   padding: 0;
   margin: 0;
   font-family: "Montserrat", sans-serif;

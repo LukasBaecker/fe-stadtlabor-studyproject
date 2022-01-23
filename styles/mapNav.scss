@@ -24,11 +24,12 @@
     -o-border-radius: 0 20px 0 0;
   }
   .activeLocation {
-    background-color: $color-primary;
+    background-color: $color-tertiary;
   }
   .activeLocation:hover {
-    background-color: $color-primary-hover;
+    background-color: $color-tertiary-hover;
   }
+  overflow-y: hidden;
   border-radius: 20px 20px 0 0;
   height: 60px;
   background-color: $color-base;
@@ -61,35 +62,138 @@
 }
 
 .mapNavExtraContainer {
-  opacity: 1;
-  height: 100vh;
+  h2 {
+    margin-bottom: 0.8rem;
+  }
+  h4 {
+    img {
+      height: 1.2rem;
+      width: auto;
+      margin-right: 5px;
+    }
+    font-size: 1.2rem;
+  }
+  li {
+    list-style: none;
+
+    label {
+      margin-left: 10px;
+    }
+  }
+  .dropdown-divider {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 10%;
+    margin-right: 10%;
+    color: $color-secondary;
+    height: 2px;
+  }
+  button {
+    margin-top: 30px;
+  }
+  overflow-y: scroll;
+  position: absolute;
+  z-index: 2;
   background-color: #fff;
+  padding: 30px;
+  padding-bottom: 90px;
+  opacity: 1;
+  max-height: 90vh;
   width: 100vw;
   max-width: 800px !important;
-  padding-bottom: 60px;
-  z-index: 2;
-  position: absolute;
   left: 50vw;
   transform: translateX(-50%);
-  transition-duration: 200ms;
   bottom: 0;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -o-transform: translateX(-50%);
+  border-radius: 20px 20px 0 0;
+  -webkit-border-radius: 20px 20px 0 0;
+  -moz-border-radius: 20px 20px 0 0;
+  -ms-border-radius: 20px 20px 0 0;
+  -o-border-radius: 20px 20px 0 0;
+  transition: max-height 300ms;
+  -webkit-transition: max-height 300ms;
+  -moz-transition: max-height 300ms;
+  -ms-transition: max-height 300ms;
+  -o-transition: max-height 300ms;
 }
 
 .mapNavExtraContainer.hidden {
+  overflow-y: hidden;
   bottom: 0;
   opacity: 0;
-  height: 60px;
-  transition-duration: 200ms;
+  max-height: 0px;
+  padding: 0;
+  transition: max-height 300ms;
+  -webkit-transition: max-height 300ms;
+  -moz-transition: max-height 300ms;
+  -ms-transition: max-height 300ms;
+  -o-transition: max-height 300ms;
 }
 
-.filterContainer {
-  background-color: green;
+.filterElement {
+  margin: 10px;
+  margin-left: 15%;
+  color: black;
+  svg {
+    margin-right: 5px;
+  }
+  .filterCheck {
+    fill-opacity: 0;
+    transition: height 0.4s;
+    -webkit-transition: height 0.4s;
+    -moz-transition: height 0.4s;
+    -ms-transition: height 0.4s;
+    -o-transition: height 0.4s;
+  }
 }
+.filterElement.checked {
+  .filterCheck {
+    color: $color-primary;
+    fill-opacity: 1;
+    transition: height 0.4s;
+    -webkit-transition: height 0.4s;
+    -moz-transition: height 0.4s;
+    -ms-transition: height 0.4s;
+    -o-transition: height 0.4s;
+  }
+  text-decoration: underline;
+  text-decoration-color: $color-primary;
+  -moz-text-decoration-color: $color-primary;
+}
+.gardenDiv {
+  background-color: white;
+  padding: 0.8rem;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  transition: background-color 0.1s;
+  -webkit-transition: background-color 0.1s;
+  -moz-transition: background-color 0.1s;
+  -ms-transition: background-color 0.1s;
+  -o-transition: background-color 0.1s;
+}
+.gardenDiv:hover {
+  cursor: pointer;
+}
+.activeGardenDiv {
+  h4 {
+    text-decoration: underline $color-primary;
+  }
 
-.listContainer {
-  background-color: hotpink;
+  background-color: $color-base;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  transition: background-color 0.1s;
+  -webkit-transition: background-color 0.1s;
+  -moz-transition: background-color 0.1s;
+  -ms-transition: background-color 0.1s;
+  -o-transition: background-color 0.1s;
 }

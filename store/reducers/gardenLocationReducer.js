@@ -2,7 +2,7 @@ import { SET_GARDEN_LOCATIONS } from "../actions/gardenAndResources.js";
 
 const initialState = {};
 
-export default function (state = initialState, action) {
+const gardenLocationReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_GARDEN_LOCATIONS:
       let locations = action.payload.locations;
@@ -11,4 +11,6 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-}
+};
+
+export default gardenLocationReducer;
