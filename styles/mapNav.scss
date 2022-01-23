@@ -63,7 +63,7 @@
 
 .mapNavExtraContainer {
   h2 {
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
   }
   h4 {
     img {
@@ -132,7 +132,23 @@
   -ms-transition: max-height 300ms;
   -o-transition: max-height 300ms;
 }
-
+.sortList {
+  img {
+    height: 1.5rem;
+    width: auto;
+    margin-right: 5px;
+  }
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 30em;
+  -webkit-border-radius: 30em;
+  -moz-border-radius: 30em;
+  -ms-border-radius: 30em;
+  -o-border-radius: 30em;
+}
 .filterElement {
   margin: 10px;
   margin-left: 15%;

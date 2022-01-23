@@ -25,8 +25,8 @@ const MapNav = (props) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   const [showList, setShowList] = useState(false);
-  const [showNearest, setShowNearest] = useState(false);
   const locationActive = useSelector((state) => state.location_active);
+  const lang = useSelector((state) => state.lang);
   const filtercategories = useSelector((state) => state.filtercategories);
 
   function useOutsideAlerter(ref) {
@@ -67,17 +67,7 @@ const MapNav = (props) => {
             </Col>
             <Col
               onClick={() => {
-                setShowFilters(false);
                 setShowList(false);
-                setShowNearest(!showNearest);
-              }}>
-              {" "}
-              <FontAwesomeIcon className='mapNavIcon' icon={faBullseye} />
-            </Col>
-            <Col
-              onClick={() => {
-                setShowList(false);
-                setShowNearest(false);
                 setShowFilters(!showFilters);
               }}>
               {" "}
@@ -88,26 +78,12 @@ const MapNav = (props) => {
               id='colLast'
               onClick={() => {
                 setShowFilters(false);
-                setShowNearest(false);
                 setShowList(!showList);
               }}>
               <FontAwesomeIcon className='mapNavIcon' icon={faListUl} />
             </Col>
           </Row>
         </Container>
-        <div
-          className={
-            showNearest
-              ? "mapNavExtraContainer nearestContainer"
-              : "mapNavExtraContainer hidden"
-          }>
-          <h2>Gardens near your location</h2>
-          {locationActive ? (
-            <>Show list of nearest</>
-          ) : (
-            <p>Please activate your location to use this feature.</p>
-          )}
-        </div>
         <div
           className={
             showFilters
@@ -123,6 +99,14 @@ const MapNav = (props) => {
               ? "mapNavExtraContainer listContainer"
               : "mapNavExtraContainer hidden"
           }>
+          <div className='sortList'>
+            <img
+              src='/icons/arrow-down-short-wide-solid.svg'
+              alt='sort the list'
+            />
+            {lang === "eng" ? "nearest first" : "in der Nähe zuerst"}
+          </div>
+
           <h2>List of Gardens</h2>
           <Dropdown.Divider />
           <GardenList />
@@ -311,8 +295,7 @@ const GardenList = () => {
             </h4>
 
             <p>
-              {e.properties.address} | {e.properties.phone} |{" "}
-              {e.properties.email}
+              {e.properties.address} | {e.properties.email}
             </p>
 
             <p>Resources ({e.properties.resources.length}) </p>
@@ -333,10 +316,4 @@ const GardenList = () => {
   return <> {gardenListReturner()}</>;
 };
 
-const nearestGardenList = () => {
-  //if
-  /*
-http://giv-project15:9000/api/v1/gardens/all/get_nearest_gardens?x=9.99579&y=51.80490
-*/
-};
 export default MapNav;

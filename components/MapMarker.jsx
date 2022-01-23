@@ -5,12 +5,18 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentPoint } from "../store/actions";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import Dropdown from "react-bootstrap/Dropdown";
+import {
+  faChevronDown,
+  faCopy,
+  faInfo,
+} from "@fortawesome/free-solid-svg-icons";
 import Collapse from "react-bootstrap/Collapse";
 import Button from "react-bootstrap/Button";
 
 const MapMarker = (props) => {
   const dispatch = useDispatch();
+  const lang = useSelector((state) => state.lang);
   const currentPoint = useSelector((state) => state.currentPoint);
   const [openList, setOpenList] = useState(false);
   const resources = useSelector((state) => state.resources);
@@ -78,11 +84,11 @@ const MapMarker = (props) => {
         <div className='popupInfos'>
           <h1>{props.point.properties.name}</h1>
           <p>
-            Address: {props.point.properties.address}
+            {lang === "eng" ? "Adress: " : "Adresse: "}{" "}
+            {props.point.properties.address}
             <br />
-            Phone: {props.point.properties.phone}
-            <br />
-            Mail: {props.point.properties.email}
+            {lang === "eng" ? "Contact: " : "Kontakt: "}{" "}
+            {props.point.properties.email}
           </p>
           <div
             className='popupDropdownResources'
@@ -90,7 +96,8 @@ const MapMarker = (props) => {
               setOpenList(!openList);
             }}>
             <p>
-              Resources ({props.point.properties.resources.length}){" "}
+              {lang === "eng" ? "Resources" : "Ressourcen "}(
+              {props.point.properties.resources.length}){" "}
               <FontAwesomeIcon
                 className={
                   openList ? "dropdownIcon dropdownOpened" : "dropdownIcon"
@@ -103,12 +110,19 @@ const MapMarker = (props) => {
             <ul>{listResources}</ul>
           </Collapse>
         </div>
-        <div>
+        <Dropdown.Divider />
+        <div className='markerPopupButton'>
           <CopyToClipboard text={locString}>
-            <Button className='copyLinkButton' onClick={() => {}}>
-              click here to copy coordinates
+            <Button onClick={() => {}}>
+              <FontAwesomeIcon icon={faCopy} />
             </Button>
           </CopyToClipboard>
+          <Button onClick={() => {}}>
+            <FontAwesomeIcon icon={faInfo} />
+          </Button>
+          <Button className=' join' onClick={() => {}}>
+            Join
+          </Button>
         </div>
       </Popup>
     </Marker>
