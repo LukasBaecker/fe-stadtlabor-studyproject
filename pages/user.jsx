@@ -155,6 +155,7 @@ function Garden({ gardenId, gardenName }) {
     <button
       className={[styles.Item, styles.Garden].join(" ")}
       onClick={(e) => router.push(`/garden/${gardenId}/`)}
+      style={{ fontSize: "1.5rem" }}
     >
       {gardenName}
     </button>
