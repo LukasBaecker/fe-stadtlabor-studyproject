@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import { Formik, Field, Form } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { setLocationActive } from "../store/actions";
+import { setCurrentPoint, setLocationActive } from "../store/actions";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -13,6 +14,7 @@ import {
   faMapMarkerAlt,
   faFilter,
   faCheck,
+  faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
 import filteredLocationsReducer from "../store/reducers/filteredLocationsReducer";
 import { setFilteredLocations } from "../store/actions/gardenAndResources";
@@ -23,6 +25,7 @@ const MapNav = (props) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   const [showList, setShowList] = useState(false);
+  const [showNearest, setShowNearest] = useState(false);
   const locationActive = useSelector((state) => state.location_active);
   const filtercategories = useSelector((state) => state.filtercategories);
 
@@ -64,26 +67,47 @@ const MapNav = (props) => {
             </Col>
             <Col
               onClick={() => {
+                setShowFilters(false);
                 setShowList(false);
+                setShowNearest(!showNearest);
+              }}>
+              {" "}
+              <FontAwesomeIcon className='mapNavIcon' icon={faBullseye} />
+            </Col>
+            <Col
+              onClick={() => {
+                setShowList(false);
+                setShowNearest(false);
                 setShowFilters(!showFilters);
               }}>
               {" "}
               <FontAwesomeIcon className='mapNavIcon' icon={faFilter} />
             </Col>
+
             <Col
+              id='colLast'
               onClick={() => {
                 setShowFilters(false);
+                setShowNearest(false);
                 setShowList(!showList);
               }}>
-              {" "}
-              <FontAwesomeIcon className='mapNavIcon' icon={faListUl} />
-            </Col>
-            <Col id='colLast'>
-              {" "}
               <FontAwesomeIcon className='mapNavIcon' icon={faListUl} />
             </Col>
           </Row>
         </Container>
+        <div
+          className={
+            showNearest
+              ? "mapNavExtraContainer nearestContainer"
+              : "mapNavExtraContainer hidden"
+          }>
+          <h2>Gardens near your location</h2>
+          {locationActive ? (
+            <>Show list of nearest</>
+          ) : (
+            <p>Please activate your location to use this feature.</p>
+          )}
+        </div>
         <div
           className={
             showFilters
@@ -91,7 +115,7 @@ const MapNav = (props) => {
               : "mapNavExtraContainer hidden"
           }>
           <h2>Filter</h2>
-          <FiltercategorieList categories={filtercategories} />
+          <FiltercategorieList />
         </div>
         <div
           className={
@@ -108,18 +132,45 @@ const MapNav = (props) => {
   );
 };
 
+/*
+ *Component for the Popup showing all filtering options to filter garden locations on the map
+ */
 const FiltercategorieList = (props) => {
   const dispatch = useDispatch();
-  const categories = props.categories;
+  //all possible categories
+  const categories = [
+    "Tools",
+    "Seeds",
+    "Fertilizers",
+    "Compost",
+    "ConstructionMaterial",
+    "Gardens",
+    "Other",
+  ];
+  //load all gardenlocations to filter from
   const locations = useSelector((state) => state.locations);
+  //TODO: in future work the resources can be filtered or even searched for
+  //load all resources to show in the filter menu
   const resources = useSelector((state) => state.resources);
-  const [filterlist, setFilterlist] = useState({});
-
+  //state to safe wich categories are active or not
+  const [filterlist, setFilterlist] = useState({
+    Tools: true,
+    Seeds: true,
+    Fertilizers: true,
+    Compost: true,
+    ConstructionMaterial: true,
+    Gardens: true,
+    Other: true,
+    all: true,
+    noResources: true,
+  });
+  //change one element in the status
   const setOneFilterElement = (element, boolean) => {
     setFilterlist((filterlist) => {
       return { ...filterlist, [element]: boolean, all: false };
     });
   };
+  //activate oder deactivate all categories
   const setAllFilterElements = (boolean) => {
     Object.keys(filterlist).forEach((e) => {
       setFilterlist((filterlist) => {
@@ -127,22 +178,7 @@ const FiltercategorieList = (props) => {
       });
     });
   };
-
-  const initialState = () => {
-    setFilterlist((filterlist) => {
-      return { ...filterlist, all: true, noResources: true };
-    });
-    categories.forEach((e) => {
-      setFilterlist((filterlist) => {
-        return { ...filterlist, [e]: true };
-      });
-    });
-  };
-
-  useEffect(() => {
-    initialState();
-  }, []);
-
+  //submitting the current filtering selection and save the filtered locations to the redux store
   const getFilteredLocations = () => {
     var filteredResources = [];
     var gardenIds = [];
@@ -152,13 +188,17 @@ const FiltercategorieList = (props) => {
     } else {
       Object.keys(filterlist).forEach((e) => {
         var thisResource = [];
+        var positionOfCat = 1 + categories.indexOf(e, 0);
+
         if (filterlist[e]) {
-          thisResource = resources.filter(
-            (resource) => resource.resource_name === e
-          );
-          thisResource.forEach((elem) => {
-            filteredResources.push(elem);
-          });
+          if (positionOfCat > 0) {
+            thisResource = resources.filter(
+              (resource) => resource.category === positionOfCat
+            );
+            thisResource.forEach((elem) => {
+              filteredResources.push(elem);
+            });
+          }
         }
       });
 
@@ -176,9 +216,11 @@ const FiltercategorieList = (props) => {
         }
       });
       var newCollection = { ...locations, features: filteredGardens };
+
       dispatch(setFilteredLocations(newCollection));
     }
   };
+  //add all categories to the menu by mapping a div for each
   const listItems = categories.map((element) => (
     <div
       key={element}
@@ -231,36 +273,70 @@ const FiltercategorieList = (props) => {
     </>
   );
 };
+/*
+ *Component for the Navigation Popup showing a list of all gardens
+ */
 const GardenList = () => {
+  const dispatch = useDispatch();
+  const currentPoint = useSelector((state) => state.currentPoint);
   const filteredLocations = useSelector((state) => state.filtered_locations);
   const resources = useSelector((state) => state.resources);
 
-  const gardenListReturner = filteredLocations.features.map((e) => (
-    <div key={e.id}>
-      <h4>{e.properties.name}</h4>
+  const getResourceInformation = (id) => {
+    let resourceInformation = {};
+    resources.forEach((r) => {
+      if (r.resource_id === id) {
+        resourceInformation = r;
+      }
+    });
+    return resourceInformation;
+  };
+  const gardenListReturner = () => {
+    if (filteredLocations.features === undefined) {
+      return <p>please wait</p>;
+    } else {
+      return filteredLocations.features.map((e) => (
+        <>
+          <div
+            key={"gardenlistelement" + e.id}
+            className={
+              currentPoint === e.id ? "activeGardenDiv gardenDiv" : "gardenDiv"
+            }
+            onClick={() => {
+              dispatch(setCurrentPoint(e.id));
+            }}>
+            <h4>
+              {currentPoint === e.id ? <Image src='/imgs/marker.svg' /> : <></>}
+              {e.properties.name}
+            </h4>
 
-      <p>
-        {e.properties.address} | {e.properties.phone} | {e.properties.email}
-      </p>
+            <p>
+              {e.properties.address} | {e.properties.phone} |{" "}
+              {e.properties.email}
+            </p>
 
-      <p>Resources ({e.properties.resources.length}) </p>
-
-      <ul>
-        {e.properties.resources.map((element) => (
-          <li>
-            {resources.find((e) => (e.resource_id = element)).resource_name} (
-            {resources.find((e) => (e.resource_id = element)).resource_status})
-          </li>
-        ))}
-      </ul>
-
-      <Dropdown.Divider />
-    </div>
-  ));
-  return <> {gardenListReturner}</>;
+            <p>Resources ({e.properties.resources.length}) </p>
+            <ul>
+              {e.properties.resources.map((element) => (
+                <li key={"listelement" + element}>
+                  {getResourceInformation(element).resource_name}(
+                  {getResourceInformation(element).resource_status})
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Dropdown.Divider key={"divider" + e.id} />
+        </>
+      ));
+    }
+  };
+  return <> {gardenListReturner()}</>;
 };
-export default MapNav;
 
-/*
+const nearestGardenList = () => {
+  //if
+  /*
 http://giv-project15:9000/api/v1/gardens/all/get_nearest_gardens?x=9.99579&y=51.80490
 */
+};
+export default MapNav;

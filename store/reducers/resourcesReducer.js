@@ -1,8 +1,8 @@
-import {SET_RESOURCES } from "../actions/gardenAndResources.js";
+import { SET_RESOURCES } from "../actions/gardenAndResources.js";
 
 const initialState = {};
 
-export default function (state = initialState, action) {
+const resourcesReducer =(state = initialState, action) => {
   switch (action.type) {
     case SET_RESOURCES:
       let resources = action.payload.resources;
@@ -11,5 +11,6 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-};
+}
 
+export default resourcesReducer

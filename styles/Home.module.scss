@@ -4,67 +4,130 @@ $card-radius: 50px;
 
 @keyframes wiggle {
   0% {
-    transform: translateX(50px) rotate(0deg);
-    -webkit-transform: translateX(50px) rotate(0deg);
-    -moz-transform: translateX(50px) rotate(0deg);
-    -ms-transform: translateX(50px) rotate(0deg);
-    -o-transform: translateX(50px) rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
   }
   80% {
-    transform: translateX(50px) rotate(0deg);
-    -webkit-transform: translateX(50px) rotate(0deg);
-    -moz-transform: translateX(50px) rotate(0deg);
-    -ms-transform: translateX(50px) rotate(0deg);
-    -o-transform: translateX(50px) rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
   }
   85% {
-    transform: translateX(50px) rotate(5deg);
-    -webkit-transform: translateX(50px) rotate(5deg);
-    -moz-transform: translateX(50px) rotate(5deg);
-    -ms-transform: translateX(50px) rotate(5deg);
-    -o-transform: translateX(50px) rotate(5deg);
+    transform: rotate(5deg);
+    -webkit-transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    -o-transform: rotate(5deg);
   }
   95% {
-    transform: translateX(50px) rotate(-5deg);
-    -webkit-transform: translateX(50px) rotate(-5deg);
-    -moz-transform: translateX(50px) rotate(-5deg);
-    -ms-transform: translateX(50px) rotate(-5deg);
-    -o-transform: translateX(50px) rotate(-5deg);
+    transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    -moz-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+    -o-transform: rotate(-5deg);
   }
   100% {
-    transform: translateX(50px) rotate(0deg);
-    -webkit-transform: translateX(50px) rotate(0deg);
-    -moz-transform: translateX(50px) rotate(0deg);
-    -ms-transform: translateX(50px) rotate(0deg);
-    -o-transform: translateX(50px) rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+  }
+}
+
+@keyframes clicking {
+  0% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+  80% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+  85% {
+    transform: translate(-1px, -3px);
+    -webkit-transform: translate(-1px, -3px);
+    -moz-transform: translate(-1px, -3px);
+    -ms-transform: translate(-1px, -3px);
+    -o-transform: translate(-1px, -3px);
+  }
+  95% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
   }
 }
 
 .WhyJoinElement {
-  position: relative;
+  width: 100vw;
   z-index: 1;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(rgba(0, 0, 0, 0) 60%, $color-base 60%);
 }
 
 .siteElement {
   position: relative;
+  width: 100vw;
+  max-width: 100vw;
   margin: 0;
-  padding-top: 20px;
-  padding-bottom: 20px;
   padding-left: 0;
   padding-right: 0;
   z-index: 2;
   background-color: $color-base;
 }
+.firstSiteElement {
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  z-index: 2;
+  background-color: $color-base;
+  background-color: $color-base;
+  border-radius: $card-radius $card-radius 0 0;
+  -webkit-border-radius: $card-radius $card-radius 0 0;
+  -moz-border-radius: $card-radius $card-radius 0 0;
+  -ms-border-radius: $card-radius $card-radius 0 0;
+  -o-border-radius: $card-radius $card-radius 0 0;
+}
 
 .title {
-  img {
-    width: 100%;
-    z-index: 0;
+  #mainLogo {
+    width: 70vw;
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    z-index: 1;
   }
 
+  #mainBackground {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    height: 75vh;
+    width: 100vw;
+    object-fit: cover;
+    z-index: 0;
+  }
   h1 {
     position: absolute;
     left: 50%;
@@ -75,45 +138,82 @@ $card-radius: 50px;
   }
 
   .login {
-    position: absolute;
-    width: 100px;
-    height: 30px;
-    right: 0px;
-    top: 0px;
-    z-index: 1;
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+
     button {
-      background-color: $color-primary;
-      color: $color-primary;
-      height: 50px;
-      width: 100%;
-      border-radius: 18px;
+      color: #000 !important;
+      background-color: rgba(255, 255, 255, 0.5);
       font-size: 1rem;
       padding-left: 20px;
       padding-right: 20px;
-      border: 2px solid $color-primary;
-      background-color: $color-base;
-      transition-duration: 500ms;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition-duration: 100ms;
     }
     button:hover {
-      transition-duration: 500ms;
-      background-color: $color-primary;
-      color: white;
+      transition-duration: 100ms;
+      background-color: rgba(255, 255, 255, 0.8);
     }
   }
 
   .signup {
-    margin-top: -150px;
-    z-index: 2;
+    margin-top: 60vh;
+    z-index: 3;
     position: relative;
   }
 }
+.advantages {
+  .advantagesCol {
+  }
 
-.whyJoin {
+  h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  img {
+    margin: 0;
+    margin-top: 50%;
+    width: 100%;
+    padding: 0;
+  }
+
+  .advantageText {
+    padding: 18px;
+    margin: auto;
+  }
+  z-index: 1;
   position: relative;
   margin-top: -35px;
-  width: 100%;
+  width: 100vw;
   background-color: $color-secondary;
-  padding: 100px;
+  padding: 10%;
+  padding-top: 25%;
+  padding-bottom: 25%;
+}
+.advantages.desktop {
+  img {
+    margin-top: 10%;
+    margin-bottom: 10%;
+    width: 75%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+  }
+  padding: 10%;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+.whyJoin {
+  position: relative;
+  width: 100%;
+  background-color: $color-base;
+  padding: 10%;
   border-radius: $card-radius;
   z-index: 1;
 
@@ -127,40 +227,65 @@ $card-radius: 50px;
 .decoImage {
   position: relative;
   z-index: 1;
-  width: 100%;
+  margin-left: 50%;
+  margin-top: -35px;
+  transform: translateX(-50%);
+  width: 70%;
   border-radius: $card-radius;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
 }
-
+.decoImageSecond {
+  max-width: unset;
+  position: relative;
+  z-index: 1;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  height: 70vh;
+  width: auto;
+  border-radius: $card-radius;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+}
+.decoImageSecond.desktop {
+  height: 70vh;
+  width: auto;
+}
 .signup {
   margin: auto;
-  width: 70%;
+  width: 100%;
   z-index: 2;
-  button {
+  .signupButton {
+    margin-left: 50%;
     background-color: $color-primary;
     color: white;
-    height: 70px;
-    width: 100%;
+    min-height: 70px;
+    width: 70%;
     border-radius: 25px;
     font-size: 2rem;
     border: none;
     z-index: 2;
+    transition: all 300ms;
+    -webkit-transition: all 300ms;
+    -moz-transition: all 300ms;
+    -ms-transition: all 300ms;
+    -o-transition: all 300ms;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
   }
   .signUpIcon {
+    margin-left: 10px;
     font-size: 2rem;
-    opacity: 0;
-    transform: translateX(50px);
-    -webkit-transform: translateX(50px);
-    -moz-transform: translateX(50px);
-    -ms-transform: translateX(50px);
-    -o-transform: translateX(50px);
-    transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
-    -moz-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
-    -ms-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
-    -o-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
-    -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
-  }
-
-  button:hover .signUpIcon {
+    line-height: 2rem;
+    height: 2rem;
+    width: auto;
     opacity: 1;
     animation: wiggle 1.5s infinite;
     -webkit-animation: wiggle 1.5s infinite;
@@ -171,37 +296,29 @@ $card-radius: 50px;
     -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
   }
   button:hover {
-    background-color: #3fb97e;
+    background-color: $color-primary-hover;
     transition-duration: 0.5s;
   }
 }
-
-.advantages {
-  position: relative;
-  z-index: 2;
-  margin-top: 35px;
-  margin-bottom: 25px;
-
-  .advantagesCol {
-    margin-top: 25px;
-    margin-bottom: 25px;
-  }
-
-  h2 {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-
-  img {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-  }
-
-  .advantageText {
-    padding: 18px;
-    margin: auto;
-  }
+.signupButton.fixedTop {
+  margin-top: 5px;
+  margin-left: 0;
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transition: all 300ms;
+  -webkit-transition: all 300ms;
+  -moz-transition: all 300ms;
+  -ms-transition: all 300ms;
+  -o-transition: all 300ms;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+}
+.signupButton.smallerText {
+  font-size: 1.5rem !important;
 }
 
 .frontFooter {
@@ -212,30 +329,32 @@ $card-radius: 50px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
-
-  .signup {
-    position: relative;
-    z-index: 2;
-    margin-bottom: -35px;
-  }
 }
 
 #Footer {
   position: relative;
-  padding-top: 50px;
+  padding-top: 20px;
   background-color: $color-secondary;
   border-top-left-radius: $card-radius;
   border-top-right-radius: $card-radius;
   z-index: 1;
-
+  a {
+    color: $color-base;
+  }
+  .footerLink {
+    margin: 10px;
+  }
+  .footerLink.desktop {
+    margin: 50px;
+  }
   .middleDiv {
     bottom: 0;
-    height: 200px;
+    height: 70px;
     background-color: #785f55;
-    width: 100%;
     border-top-left-radius: $card-radius;
     border-top-right-radius: $card-radius;
-    margin-bottom: -150px;
+    margin-bottom: -50px;
+    width: 100%;
   }
 
   .bottomDiv {
@@ -248,10 +367,135 @@ $card-radius: 50px;
     line-height: 200%;
     background-color: $color-tertiary;
     width: 100%;
-    height: 150px;
+    height: 50px;
     border-top-left-radius: $card-radius;
     border-top-right-radius: $card-radius;
   }
 }
 
+.logoutButton {
+  button {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    width: 120px;
+    height: 50px;
+    border-radius: 18px;
+    font-size: 1rem;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* Image zoom on hover + Overlay colour */
+.parent {
+  margin: auto;
+  margin-left: 50%;
+  width: 70%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  float: left;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+}
+
+.child {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+/* Several different images */
+.bgMap {
+  background-image: url("/imgs/map.png");
+}
+.bgCrops {
+  background-image: url("/imgs/markusSpiske_pixabay.jpg");
+}
+
+.buttonText {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  font-size: 1.5rem;
+  color: #000 !important;
+  left: 50%;
+  top: 50%;
+  text-align: center;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+
+.parent:hover .child,
+.parent:focus .child {
+  -ms-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.parent:hover .child:before,
+.parent:focus .child:before {
+  display: block;
+}
+
+.parent:hover a,
+.parent:focus a {
+  display: block;
+}
+
+.child:before {
+  content: "";
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $color-primary-more-opaque;
+}
+.cursorIcon {
+  margin: 0 !important;
+  margin-right: 10px !important;
+  height: 1.5rem;
+  width: auto;
+  opacity: 1;
+  animation: clicking 3s infinite;
+  -webkit-animation: clicking 3s infinite;
+  transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -moz-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -ms-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -o-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+}
 @import "./popup";

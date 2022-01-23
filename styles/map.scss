@@ -14,6 +14,7 @@
 
 .leaflet-control-layers {
   background-color: $color-base;
+  top: 60px;
 }
 /* Radio element, when checked */
 input[type="radio"]:checked {
@@ -75,4 +76,85 @@ input[type="radio"]:checked {
   -moz-transition: transform 0.75s;
   -ms-transition: transform 0.75s;
   -o-transition: transform 0.75s;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+  }
+  85% {
+    transform: rotate(5deg);
+    -webkit-transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    -o-transform: rotate(5deg);
+  }
+  95% {
+    transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    -moz-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+    -o-transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+  }
+}
+
+.signUpButtonDivMap {
+  position: fixed;
+  top: 0px;
+  right: 80px;
+
+  z-index: 2;
+  margin-left: 80px;
+  .signupButtonMap {
+    min-height: 60px;
+    background-color: $color-primary;
+    color: white;
+    border-radius: 0 0 20px 20px;
+    border: none;
+    z-index: 2;
+    -webkit-border-radius: 0 0 20px 20px;
+    -moz-border-radius: 0 0 20px 20px;
+    -ms-border-radius: 0 0 20px 20px;
+    -o-border-radius: 0 0 20px 20px;
+  }
+  .signUpIconMap {
+    margin-left: 10px;
+    font-size: 2rem;
+    line-height: 2rem;
+    height: 2rem;
+    width: auto;
+    opacity: 1;
+    animation: wiggle 1.5s infinite;
+    -webkit-animation: wiggle 1.5s infinite;
+    transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -moz-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -ms-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -o-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+    -webkit-transition: all 0.5s cubic-bezier(0.14, 0.59, 1, 1.01);
+  }
+  button:hover {
+    background-color: $color-primary-hover;
+    transition-duration: 0.5s;
+  }
+}
+.signupButtonMap.smallerTextMap {
+  font-size: 1.5rem !important;
 }
