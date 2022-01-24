@@ -8,6 +8,15 @@ const backendApiUrl = backendBaseUrl + "/api/v1";
 //URL to GET User details
 export const userGetUrl = backendApiUrl + "/users/user";
 
+/**
+ * function to generate URL to GET user details by ID
+ * @param {number} userId User-ID to generate URL for
+ * @returns {string} URL
+ */
+export function userGetById(userId) {
+  return backendApiUrl + `/users/users_in_garden/${userId}`;
+}
+
 //URL to PUT user Details
 export const userPutUrl = backendApiUrl + "/users/user";
 
