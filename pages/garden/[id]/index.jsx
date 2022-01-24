@@ -14,6 +14,7 @@ import {
   resourceDeleteUrl,
   resourcePostUrl,
   userGetById,
+  cropsGetUrl,
 } from "../../../helpers/urls";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
@@ -41,6 +42,27 @@ async function fetchEvents(id, setEvents) {
     const cont = await request.json();
     const evts = cont.filter((evt) => evt.garden == id);
     setEvents(evts);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function fetchCrops(id, setCrops) {
+  try {
+    const request = await fetch(cropsGetUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    if (request.status === 200) {
+      const crops = await request.json();
+      const cropsFiltered = crops.filter((crop) =>
+        crop.gardens.includes(parseInt(id))
+      );
+      setCrops(cropsFiltered);
+    } else {
+      throw new Error("Something went wrong fetching crops");
+    }
   } catch (e) {
     console.log(e);
   }
@@ -109,6 +131,7 @@ function garden() {
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
   const [members, setMembers] = useState([]);
+  const [crops, setCrops] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState({});
   const [isMember, setIsMember] = useState(false);
@@ -167,6 +190,7 @@ function garden() {
 
         fetchEvents(id, setEvents); // fetch events
         fetchResources(id, setResources); // fetch resources
+        fetchCrops(id, setCrops);
       })();
       setDataFetched(true);
       setLoading(false);
@@ -178,6 +202,7 @@ function garden() {
   // 2: Events
   // 3: Members
   // 4: Sharables
+  // 5: Crops
   const [pageState, setPageState] = useState(1);
 
   return (
@@ -196,6 +221,7 @@ function garden() {
         userDetails,
         members,
         isMember,
+        crops,
       }}
     >
       {loading ? (
@@ -273,6 +299,13 @@ function Content() {
                     </Button>
                   )
                 }
+                <Button variant="primary" onClick={() => setPageState(5)}>
+                  <img
+                    src="/imgs/icons8-plant-60-white.png"
+                    alt="Crops"
+                    className={styles.menuButtonIcon}
+                  />
+                </Button>
               </>
             )}
 
@@ -292,6 +325,7 @@ function Content() {
         {pageState === 2 && <Events />}
         {pageState === 3 && <Members />}
         {pageState === 4 && <Shareables />}
+        {pageState === 5 && <Crops />}
       </div>
     </>
   );
@@ -649,6 +683,139 @@ function Member({ member }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/*
+Crops Page:
+Rendered, when the user clicks the Crops button in ButtonGroup.
+*/
+function Crops() {
+  const { crops } = useContext(GardenContext);
+
+  return (
+    <div className={styles.pagePartContent}>
+      <h2>Crops ({crops.length})</h2>
+      <div className={styles.listing}>
+        {/* first show all admin members */}
+        {crops.map((crop) => (
+          <Crop key={crop.crop_id} crop={crop} />
+        ))}
+      </div>
+      <AddButton ExecuteFunction={AddCrop} />
+    </div>
+  );
+}
+
+function Crop({ crop }) {
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  return (
+    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
+      <img
+        src="/imgs/icons8-plant-60.png"
+        alt="pictur of crop"
+        className={
+          // assign multiple classes to element
+          [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
+        }
+      />
+      <div className={styles.listItemContent}>
+        <div className={styles.listItemDetail}>
+          <h3>{crop.name}</h3>
+        </div>
+      </div>
+      {popupVisible && (
+        <CropDetail crop={crop} setPopupVisible={setPopupVisible} />
+      )}
+    </div>
+  );
+}
+
+function CropDetail({ crop, setPopupVisible }) {
+  /*
+  I know this looks like really strange programming...
+  For some  reason I was not able to manage to get x-button
+  to change state using setPopupVisible() directly.
+  But it does work when executing this function in the else{} clause...
+  Hence this strange construct here...
+  */
+
+  const [visible, setVisible] = useState(true);
+  const { isMember } = useContext(GardenContext);
+  if (visible) {
+    return (
+      <div className={styles.popup}>
+        <div className={styles.popup_inner}>
+          <h3>{crop.name}</h3>
+          <hr />
+          {crop.description}
+          {isMember && (
+            <RemoveCrop
+              cropId={crop.crop_id}
+              setPopupVisible={setPopupVisible}
+            />
+          )}
+          <button
+            className={styles.popupCloseButton}
+            onClick={() => setVisible(false)}
+          >
+            X
+          </button>
+        </div>
+      </div>
+    );
+  } else {
+    setPopupVisible(false);
+    return null;
+  }
+}
+
+function AddCrop({ setPopupVisible }) {
+  const [showError, setShowError] = useState(false);
+
+  const handleSubmit = () => {
+    console.log("not implemented yet");
+  };
+
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popup_inner} onSubmit={handleSubmit}>
+        <h3>New Shareable</h3>
+        {showError ? (
+          <ErrorAlert
+            setShowError={setShowError}
+            heading="Ups"
+            message="Something weng wrong creating crop"
+          />
+        ) : (
+          <></>
+        )}
+
+        <button
+          className={styles.popupCloseButton}
+          onClick={() => setPopupVisible(false)}
+        >
+          X
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function RemoveCrop({ cropId, setPopupVisible }) {
+  const handleClick = async () => {
+    console.log("not implemented yet");
+  };
+
+  return (
+    <Button
+      variant="danger"
+      className={styles.removeButton}
+      onClick={() => handleClick()}
+    >
+      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+    </Button>
   );
 }
 
