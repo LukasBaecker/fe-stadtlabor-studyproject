@@ -13,6 +13,7 @@ import {
   eventDeleteUrl,
   resourceDeleteUrl,
   resourcePostUrl,
+  userGetById,
 } from "../../../helpers/urls";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
@@ -45,6 +46,38 @@ async function fetchEvents(id, setEvents) {
   }
 }
 
+/**
+ * Function to fetch all members of a garden
+ * @param {Array.<number>} ids List of ids of users to fetch
+ * @param {function} setMembers function to set Members
+ */
+async function fetchMembers(ids, setMembers) {
+  const getMemberById = async (userId) => {
+    const userRequest = await fetch(userGetById(userId), {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    return new Promise(async (resolve, reject) => {
+      if (userRequest.status === 200) {
+        resolve(await userRequest.json());
+      } else {
+        reject({ id: userId, first_name: "unknown", last_name: "error" });
+      }
+    });
+  };
+
+  const memberList = [];
+  for (let i = 0; i < ids.length; i++) {
+    const user = await getMemberById(ids[i]);
+    delete user.email;
+    delete user.garden;
+    memberList.push(user);
+  }
+  setMembers(memberList);
+}
+
 /*
 Function to fetch all resources in database,
 then filters them by garden-id to only show the relevant ones
@@ -75,6 +108,7 @@ function garden() {
   const [gardenDetails, setGardenDetails] = useState("");
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
+  const [members, setMembers] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState({});
   const [isMember, setIsMember] = useState(false);
@@ -118,6 +152,8 @@ function garden() {
             throw new Error("Garden not found");
           } else {
             setGardenDetails(cont.properties);
+            const members = cont.properties.members;
+            fetchMembers([1, 2, 3], setMembers);
           }
         } catch (e) {
           if (e.message === "Garden not found") {
@@ -158,6 +194,7 @@ function garden() {
         pageState,
         setPageState,
         userDetails,
+        members,
         isMember,
       }}
     >
@@ -580,32 +617,14 @@ Shows all members of the community and their role (admin or normal member).
 Admins can remove members or promote members to admins.
 */
 function Members() {
-  const [members, setMembers] = useState([
-    { id: 1, name: "John Doe", role: "admin" },
-    { id: 3, name: "Garten Zwerg", role: "member" },
-    { id: 4, name: "Max Mustermann", role: "member" },
-    { id: 5, name: "Julia Julietta", role: "member" },
-    { id: 6, name: "Harry Potter", role: "member" },
-    { id: 7, name: "James Bond", role: "member" },
-    { id: 8, name: "Santa Claus", role: "admin" },
-  ]);
-
-  //sort all members into admins and normal members
-  // so we can list them systematically
-  const admins = members.filter((member) => member.role === "admin");
-  const normalMembers = members.filter((member) => member.role === "member");
+  const { members } = useContext(GardenContext);
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Members</h2>
+      <h2>Members ({members.length})</h2>
       <div className={styles.listing}>
         {/* first show all admin members */}
-        {admins.map((member) => (
-          <Member key={member.id} member={member} />
-        ))}
-
-        {/* now show all normal members */}
-        {normalMembers.map((member) => (
+        {members.map((member) => (
           <Member key={member.id} member={member} />
         ))}
       </div>
@@ -626,8 +645,7 @@ function Member({ member }) {
       />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
-          {member.role}
-          <h3>{member.name}</h3>
+          <h3>{`${member.first_name} ${member.last_name}`}</h3>
         </div>
       </div>
     </div>
