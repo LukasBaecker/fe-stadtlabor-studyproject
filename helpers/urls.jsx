@@ -89,3 +89,6 @@ export const resourcePostUrl = backendApiUrl + "/gardens/resources/";
 export function resourceDeleteUrl(resourceId) {
   return backendApiUrl + `/gardens/resources/${resourceId}`;
 }
+
+//URL to GET list of crops
+export const cropsGetUrl = backendApiUrl + "/crops/";
