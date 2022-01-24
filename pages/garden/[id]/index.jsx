@@ -279,13 +279,6 @@ function Content() {
             </Button>
             {gardenDetails.primary_purpose == "GARDEN" && (
               <>
-                <Button variant="primary" onClick={() => setPageState(2)}>
-                  <img
-                    src="/imgs/icons8-kalender-bearbeiten-100.png"
-                    alt="Events"
-                    className={styles.menuButtonIcon}
-                  />
-                </Button>
                 {
                   // Only show list of members, if user is part of the garden
                   isMember && (
@@ -298,6 +291,13 @@ function Content() {
                     </Button>
                   )
                 }
+                <Button variant="primary" onClick={() => setPageState(2)}>
+                  <img
+                    src="/imgs/icons8-kalender-bearbeiten-100.png"
+                    alt="Events"
+                    className={styles.menuButtonIcon}
+                  />
+                </Button>
                 <Button variant="primary" onClick={() => setPageState(5)}>
                   <img
                     src="/imgs/icons8-plant-60-white.png"
