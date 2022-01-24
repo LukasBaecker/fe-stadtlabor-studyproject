@@ -175,8 +175,7 @@ function garden() {
             throw new Error("Garden not found");
           } else {
             setGardenDetails(cont.properties);
-            const members = cont.properties.members;
-            fetchMembers([1, 2, 3], setMembers);
+            fetchMembers(cont.properties.members, setMembers);
           }
         } catch (e) {
           if (e.message === "Garden not found") {
