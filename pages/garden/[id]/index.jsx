@@ -1113,13 +1113,13 @@ function AddButton({ ExecuteFunction }) {
   }, []);
 
   // only show button if user is logged in
-  const { loggedIn } = useContext(GardenContext);
+  const { loggedIn, isMember } = useContext(GardenContext);
 
   const [popupVisible, setPopupVisible] = useState(false);
 
   return (
     <>
-      {loggedIn ? (
+      {loggedIn && isMember ? (
         <>
           <Button
             onClick={() => setPopupVisible(true)}
