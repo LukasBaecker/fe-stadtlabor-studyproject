@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setLanguage } from "../store/actions/index.js";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import React from "react";
 let Yup = require("yup");
@@ -15,8 +14,8 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
-import Dropdown from "react-bootstrap/Dropdown";
 import { CenterSpinner } from "../components/Loader";
+import LanguageSelector from "../components/LanguageSelector";
 import { userRegisterPostUrl } from "../helpers/urls";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,7 +71,6 @@ const validationSchemaDE = Yup.object().shape({
 });
 
 function signUp() {
-  const dispatch = useDispatch();
   const lang = useSelector((state) => state.lang);
   const [show, setShow] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -91,20 +89,7 @@ function signUp() {
       <Head>
         <title>{lang === "eng" ? "Sign Up!" : "Registrieren!"}</title>
       </Head>
-      <Dropdown id="languageDropdown">
-        <Dropdown.Toggle variant="secondary" id="languageDropdownToggle">
-          {lang === "eng" ? "US" : "DE"}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => dispatch(setLanguage("eng"))}>
-            English
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => dispatch(setLanguage("ger"))}>
-            Deutsch
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <LanguageSelector />
       {show ? (
         <>
           <Alert
