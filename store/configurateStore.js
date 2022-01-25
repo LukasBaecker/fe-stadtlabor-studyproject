@@ -17,18 +17,8 @@ if (isClient) {
   const persistConfig = {
     key: "root",
     storage,
-    // blacklist: ["auth"],
+    blacklist: ["location_position", "location_active", "currentPoint"],
     transforms: [
-      // Create a transformer by passing the reducer key and configuration. Values
-      // shown below are the available configurations with default values
-      expireReducer("auth", {
-        // (Optional) Key to be used for the time relative to which store is to be expired
-        persistedAtKey: "__persisted_at",
-        // (Required) Seconds after which store will be expired
-        expireSeconds: 60,
-        // (Optional) State to be used for resetting e.g. provide initial reducer state
-        expiredState: { isAuthenticated: false, user: {} },
-      }),
       // You can add more `expireReducer` calls here for different reducers
       // that you may want to expire
     ],

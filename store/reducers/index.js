@@ -7,6 +7,7 @@ import locationActiveReducer from "./locationActiveReducer.js";
 import filtercategoriesReducer from "./filtercategoriesReducer.js";
 import filteredLocationsReducer from "./filteredLocationsReducer.js";
 import currentPointReducer from "./currentPointReducer.js";
+import locationPositionReducer from "./locationPositionReducer.js";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   filtered_locations: filteredLocationsReducer,
   resources: resourcesReducer,
   location_active: locationActiveReducer,
+  location_position: locationPositionReducer,
   filtercategories: filtercategoriesReducer,
   currentPoint: currentPointReducer,
 });

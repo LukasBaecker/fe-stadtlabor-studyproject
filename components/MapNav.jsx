@@ -1,20 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
-import { Formik, Field, Form } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPoint, setLocationActive } from "../store/actions";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
+import isEmpty from "../helpers/isEmpty";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { joinGarden } from "../helpers/manageGarden";
+import { useRouter } from "next/router";
 import {
   faListUl,
   faMapMarkerAlt,
   faFilter,
   faCheck,
   faBullseye,
+  faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import filteredLocationsReducer from "../store/reducers/filteredLocationsReducer";
 import { setFilteredLocations } from "../store/actions/gardenAndResources";
@@ -25,9 +28,35 @@ const MapNav = (props) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   const [showList, setShowList] = useState(false);
-  const [showNearest, setShowNearest] = useState(false);
   const locationActive = useSelector((state) => state.location_active);
+  const lang = useSelector((state) => state.lang);
   const filtercategories = useSelector((state) => state.filtercategories);
+  const [scrollTop, setScrollTop] = useState(true);
+  const [scrollTopFilter, setScrollTopFilter] = useState(true);
+  const listInnerRef = useRef();
+  const filterInnerRef = useRef();
+
+  const onScrollList = () => {
+    if (listInnerRef.current) {
+      const { scrollTop } = listInnerRef.current;
+      if (scrollTop < 5) {
+        setScrollTop(true);
+      } else {
+        setScrollTop(false);
+      }
+    }
+  };
+
+  const onScrollFilter = () => {
+    if (filterInnerRef.current) {
+      const { scrollTopFilter } = filterInnerRef.current;
+      if (scrollTopFilter < 5) {
+        setScrollTopFilter(true);
+      } else {
+        setScrollTopFilter(false);
+      }
+    }
+  };
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -67,17 +96,7 @@ const MapNav = (props) => {
             </Col>
             <Col
               onClick={() => {
-                setShowFilters(false);
                 setShowList(false);
-                setShowNearest(!showNearest);
-              }}>
-              {" "}
-              <FontAwesomeIcon className='mapNavIcon' icon={faBullseye} />
-            </Col>
-            <Col
-              onClick={() => {
-                setShowList(false);
-                setShowNearest(false);
                 setShowFilters(!showFilters);
               }}>
               {" "}
@@ -88,7 +107,6 @@ const MapNav = (props) => {
               id='colLast'
               onClick={() => {
                 setShowFilters(false);
-                setShowNearest(false);
                 setShowList(!showList);
               }}>
               <FontAwesomeIcon className='mapNavIcon' icon={faListUl} />
@@ -97,24 +115,19 @@ const MapNav = (props) => {
         </Container>
         <div
           className={
-            showNearest
-              ? "mapNavExtraContainer nearestContainer"
-              : "mapNavExtraContainer hidden"
-          }>
-          <h2>Gardens near your location</h2>
-          {locationActive ? (
-            <>Show list of nearest</>
-          ) : (
-            <p>Please activate your location to use this feature.</p>
-          )}
-        </div>
-        <div
-          className={
             showFilters
               ? "mapNavExtraContainer filterContainer"
               : "mapNavExtraContainer hidden"
-          }>
+          }
+          onScroll={() => onScrollFilter()}
+          ref={filterInnerRef}>
           <h2>Filter</h2>
+          <ScrollWheel scrollTop={scrollTopFilter} />
+          <p className='advice'>
+            {lang === "eng"
+              ? "by resource-categories: First choose the categories you want to enable/disable and then click on the button bellow to confirm."
+              : "nach Ressourcen-Kategorien: Wähle die gewünschten Kategorien und wende den Filter mit Klick auf den Button an."}
+          </p>
           <FiltercategorieList />
         </div>
         <div
@@ -122,10 +135,22 @@ const MapNav = (props) => {
             showList
               ? "mapNavExtraContainer listContainer"
               : "mapNavExtraContainer hidden"
-          }>
+          }
+          onScroll={() => onScrollList()}
+          ref={listInnerRef}>
           <h2>List of Gardens</h2>
+          <ScrollWheel scrollTop={scrollTop} />
+          <p className='advice'>
+            {locationActive
+              ? lang === "eng"
+                ? "The list is sorted by nearest gardens first"
+                : "Die Liste ist nach der Entfernung zu den Gärten sortiert."
+              : lang === "eng"
+              ? "Activate your device location to see the distance from your place to the garden locations."
+              : "Aktiviere den Ortungsdienst, um die Entfernung zu den Gärten zu sehen."}
+          </p>
           <Dropdown.Divider />
-          <GardenList />
+          <GardenList user={props.user} />
         </div>
       </div>
     </>
@@ -267,7 +292,8 @@ const FiltercategorieList = (props) => {
       <Button
         onClick={() => {
           getFilteredLocations();
-        }}>
+        }}
+        className='filterButton'>
         Filter
       </Button>
     </>
@@ -276,11 +302,13 @@ const FiltercategorieList = (props) => {
 /*
  *Component for the Navigation Popup showing a list of all gardens
  */
-const GardenList = () => {
+const GardenList = (props) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const currentPoint = useSelector((state) => state.currentPoint);
   const filteredLocations = useSelector((state) => state.filtered_locations);
   const resources = useSelector((state) => state.resources);
+  const lang = useSelector((state) => state.lang);
 
   const getResourceInformation = (id) => {
     let resourceInformation = {};
@@ -291,6 +319,17 @@ const GardenList = () => {
     });
     return resourceInformation;
   };
+  const distance = (dist) => {
+    const distKm = Math.round((Number(dist.slice(0, -2)) / 1000) * 10) / 10;
+    return (
+      <p>
+        <Image src='/icons/person-walking-solid.svg' />
+        {distKm}
+        {"km"}
+      </p>
+    );
+  };
+
   const gardenListReturner = () => {
     if (filteredLocations.features === undefined) {
       return <p>please wait</p>;
@@ -311,19 +350,54 @@ const GardenList = () => {
             </h4>
 
             <p>
-              {e.properties.address} | {e.properties.phone} |{" "}
-              {e.properties.email}
+              {e.properties.address} | {e.properties.email}
             </p>
+            {e.properties.distance != 0 ? (
+              distance(e.properties.distance)
+            ) : (
+              <></>
+            )}
 
-            <p>Resources ({e.properties.resources.length}) </p>
+            <p>
+              {lang === "eng" ? "Resources" : "Ressourcen"} (
+              {e.properties.resources.length}){" "}
+            </p>
             <ul>
               {e.properties.resources.map((element) => (
                 <li key={"listelement" + element}>
-                  {getResourceInformation(element).resource_name}(
-                  {getResourceInformation(element).resource_status})
+                  {getResourceInformation(element).resource_name} (
+                  {getResourceInformation(element).resource_status ===
+                  "AVAILABLE FOR DONATION"
+                    ? lang === "eng"
+                      ? "donation"
+                      : "abzugeben"
+                    : lang === "eng"
+                    ? "to borrow"
+                    : "zu verleihen"}
+                  )
                 </li>
               ))}
             </ul>
+            <Button
+              className='infoButton'
+              onClick={() => {
+                router.push("/garden/" + e.id);
+              }}>
+              <FontAwesomeIcon icon={faInfo} />
+            </Button>
+            {!isEmpty(props.user) ? (
+              props.user.garden.includes(e.id) ? (
+                <Button
+                  variant='secondary'
+                  className='join'
+                  onClick={() => {}}
+                  disabled>
+                  {lang === "eng" ? "Member" : "Mitglied"}
+                </Button>
+              ) : (
+                <JoinButton userDetails={props.user} gardenId={e.id} />
+              )
+            ) : null}
           </div>
           <Dropdown.Divider key={"divider" + e.id} />
         </>
@@ -333,10 +407,43 @@ const GardenList = () => {
   return <> {gardenListReturner()}</>;
 };
 
-const nearestGardenList = () => {
-  //if
-  /*
-http://giv-project15:9000/api/v1/gardens/all/get_nearest_gardens?x=9.99579&y=51.80490
-*/
+const ScrollWheel = (props) => {
+  return (
+    <div
+      className={
+        props.scrollTop ? "scrolldown-wrapper" : "scrolldown-wrapper hidden"
+      }>
+      <div className='scrolldown'>
+        <svg height='30' width='10'>
+          <circle className='scrolldown-p1' cx='5' cy='15' r='2' />
+          <circle className='scrolldown-p2' cx='5' cy='15' r='2' />
+        </svg>
+      </div>
+    </div>
+  );
 };
+const JoinButton = (props) => {
+  const router = useRouter();
+  const handleTheClick = async (userDetails, gardenId) => {
+    const success = await joinGarden(userDetails, gardenId);
+    if (success) {
+      router.reload();
+    } else {
+      console.log("not successful");
+    }
+  };
+
+  return (
+    <>
+      <Button
+        className='join'
+        onClick={() => {
+          handleTheClick(props.userDetails, props.gardenId);
+        }}>
+        Join
+      </Button>
+    </>
+  );
+};
+
 export default MapNav;

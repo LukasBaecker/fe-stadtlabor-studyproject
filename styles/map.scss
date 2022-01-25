@@ -14,6 +14,7 @@
 
 .leaflet-control-layers {
   background-color: $color-base;
+  visibility: hidden;
   top: 60px;
 }
 /* Radio element, when checked */
@@ -32,19 +33,41 @@ input[type="radio"]:checked {
   max-width: 300px;
   max-height: 400px;
   word-break: keep-all;
+  .dropdown-divider {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 3%;
+    margin-right: 3%;
+    color: $color-secondary;
+    height: 2px;
+  }
   h1 {
     font-size: 1.5rem;
     word-break: keep-all;
     float: left;
     display: inline;
   }
-  .copyLinkButton {
-    width: 100%;
-    border-radius: 8px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    -ms-border-radius: 8px;
-    -o-border-radius: 8px;
+  .markerPopupButton {
+    margin: 10px;
+    margin-left: 25px;
+    button {
+      width: 60px;
+      height: 60px;
+      margin-right: 5px;
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+    }
+    button.join {
+      width: 120px;
+      border-radius: 30em;
+      -webkit-border-radius: 30em;
+      -moz-border-radius: 30em;
+      -ms-border-radius: 30em;
+      -o-border-radius: 30em;
+    }
   }
 }
 .popupInfos {

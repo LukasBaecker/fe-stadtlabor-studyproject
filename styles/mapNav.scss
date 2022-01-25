@@ -39,6 +39,9 @@
   left: 50vw;
   transform: translateX(-50%);
   bottom: 0;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
@@ -54,6 +57,7 @@
   font-size: 40px;
   margin-left: 50%;
   margin-top: 10px;
+  margin-bottom: 20px;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
@@ -63,11 +67,12 @@
 
 .mapNavExtraContainer {
   h2 {
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
+    margin-left: 30px;
   }
   h4 {
     img {
-      height: 1.2rem;
+      height: 1.3rem;
       width: auto;
       margin-right: 5px;
     }
@@ -95,10 +100,10 @@
   position: absolute;
   z-index: 2;
   background-color: #fff;
-  padding: 30px;
+  padding-top: 30px;
   padding-bottom: 90px;
   opacity: 1;
-  max-height: 90vh;
+  max-height: 80vh;
   width: 100vw;
   max-width: 800px !important;
   left: 50vw;
@@ -132,11 +137,21 @@
   -ms-transition: max-height 300ms;
   -o-transition: max-height 300ms;
 }
-
+.advice {
+  background-color: $color-base;
+  margin: 5px;
+  padding: 20px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
 .filterElement {
   margin: 10px;
   margin-left: 15%;
   color: black;
+  font-size: 1rem;
   svg {
     margin-right: 5px;
   }
@@ -163,9 +178,22 @@
   text-decoration-color: $color-primary;
   -moz-text-decoration-color: $color-primary;
 }
+.filterElement:hover {
+  cursor: pointer;
+}
+.filterButton {
+  margin-left: 15%;
+  border-radius: 30em !important;
+  -webkit-border-radius: 30em !important;
+  -moz-border-radius: 30em !important;
+  -ms-border-radius: 30em !important;
+  -o-border-radius: 30em !important;
+}
 .gardenDiv {
   background-color: white;
+  margin: 5px;
   padding: 0.8rem;
+  padding-left: 30px;
   border-radius: 20px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -176,6 +204,29 @@
   -moz-transition: background-color 0.1s;
   -ms-transition: background-color 0.1s;
   -o-transition: background-color 0.1s;
+  button {
+    width: 60px;
+    height: 60px;
+    margin-right: 5px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+  }
+  button.join {
+    width: 120px;
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
+  img {
+    height: 1rem;
+    width: auto;
+    margin-right: 5px;
+  }
 }
 .gardenDiv:hover {
   cursor: pointer;
@@ -196,4 +247,70 @@
   -moz-transition: background-color 0.1s;
   -ms-transition: background-color 0.1s;
   -o-transition: background-color 0.1s;
+}
+
+/* Scroll Down */
+
+.scrolldown-wrapper {
+  opacity: 1;
+  visibility: visible;
+  z-index: 4;
+  left: 50%;
+  position: fixed;
+  text-align: center;
+  bottom: 75px;
+  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
+  -moz-transform: translate(-50%);
+  -ms-transform: translate(-50%);
+  -o-transform: translate(-50%);
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+.scrolldown-wrapper.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+}
+.scrolldown {
+  border: 2px solid #444;
+  border-radius: 30px;
+  height: 46px;
+  margin: 0 auto 8px;
+  text-align: center;
+  width: 30px;
+}
+
+.scrolldown-p1,
+.scrolldown-p2 {
+  animation-duration: 1.5s;
+  animation-name: scrolldown;
+  animation-iteration-count: infinite;
+  fill: #444;
+}
+
+.scrolldown-p2 {
+  animation-delay: 0.75s;
+}
+
+@keyframes scrolldown {
+  0% {
+    opacity: 0;
+    transform: translate(0, -8px);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 8px);
+  }
 }

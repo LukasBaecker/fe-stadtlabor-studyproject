@@ -1,17 +1,8 @@
 import { SET_CURRENT_USER } from "../actions/auth.js";
-
+import isEmpty from "../../helpers/isEmpty";
 const initialState = {
   isAuthenticated: false,
   user: {},
-};
-
-const isEmpty = (value) => {
-  return (
-    value === undefined ||
-    value === null ||
-    (typeof value === "object" && Object.keys(value).length === 0) ||
-    (typeof value === "string" && value.trim().length === 0)
-  );
 };
 
 const authReducer = (state = initialState, action) => {

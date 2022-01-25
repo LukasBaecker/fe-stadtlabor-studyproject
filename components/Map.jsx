@@ -5,14 +5,16 @@ import L from "leaflet";
 import MapMarker from "../components/MapMarker.jsx";
 import LocationMarker from "../components/LocationMarker.jsx";
 import { useMediaQuery } from "react-responsive";
+import SafeLocation from "./SafeLocation.jsx";
 import { useSelector } from "react-redux";
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/marker-shadow.png",
 });
 
-function Map() {
+function Map(props) {
   const filtered_locations = useSelector((state) => state.filtered_locations);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const locationActivate = useSelector((state) => state.location_active);
@@ -35,6 +37,7 @@ function Map() {
               key={
                 "key" + p.id + p.properties.longitude + p.properties.latitude
               }
+              user={props.user}
             />
           ))}
         </MarkerClusterGroup>
@@ -43,6 +46,7 @@ function Map() {
   };
   return (
     <>
+      <SafeLocation />
       <MapContainer
         center={[51.960667, 7.626135]}
         zoom={13}

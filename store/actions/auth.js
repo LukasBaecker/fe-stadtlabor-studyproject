@@ -1,6 +1,5 @@
 import setAuthToken from "../../helpers/setAuthToken";
 import jwt_decode from "jwt-decode";
-
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
 export const loginUser = (jwtToken) => (dispatch) => {
