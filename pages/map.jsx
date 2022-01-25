@@ -17,14 +17,18 @@ import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { useMediaQuery } from "react-responsive";
-import { resourcesGetUrl } from "../helpers/urls.jsx";
-import { getAllGardens } from "../helpers/urls.jsx";
+import {
+  resourcesGetUrl,
+  userGetUrl,
+  getAllGardens,
+} from "../helpers/urls.jsx";
 const Map = dynamic(() => import("../components/Map.jsx"), {
   ssr: false,
 });
 
 export default function mapPage() {
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const dispatch = useDispatch();
   const lang = useSelector((state) => state.lang);
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
@@ -59,10 +63,6 @@ export default function mapPage() {
           dispatch(logoutUser());
         } else {
           setUser(userInformation);
-          // Get garden info for each garden user is a member of
-          const names = await getGardenNames(content.garden);
-          setGardens(names);
-          setLoading(false);
         }
         const req = await fetch(resourcesGetUrl, {
           method: "GET",

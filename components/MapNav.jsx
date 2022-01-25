@@ -39,7 +39,6 @@ const MapNav = (props) => {
   const onScrollList = () => {
     if (listInnerRef.current) {
       const { scrollTop } = listInnerRef.current;
-      console.log(scrollTop);
       if (scrollTop < 5) {
         setScrollTop(true);
       } else {
@@ -51,7 +50,6 @@ const MapNav = (props) => {
   const onScrollFilter = () => {
     if (filterInnerRef.current) {
       const { scrollTopFilter } = filterInnerRef.current;
-      console.log(scrollTopFilter);
       if (scrollTopFilter < 5) {
         setScrollTopFilter(true);
       } else {
@@ -388,7 +386,15 @@ const GardenList = (props) => {
               <FontAwesomeIcon icon={faInfo} />
             </Button>
             {!isEmpty(props.user) ? (
-              props.user.garden.includes(e.id) ? null : (
+              props.user.garden.includes(e.id) ? (
+                <Button
+                  variant='secondary'
+                  className='join'
+                  onClick={() => {}}
+                  disabled>
+                  {lang === "eng" ? "Member" : "Mitglied"}
+                </Button>
+              ) : (
                 <JoinButton userDetails={props.user} gardenId={e.id} />
               )
             ) : null}
@@ -417,7 +423,8 @@ const ScrollWheel = (props) => {
   );
 };
 const JoinButton = (props) => {
-  const handleClick = async (userDetails, gardenId) => {
+  const router = useRouter();
+  const handleTheClick = async (userDetails, gardenId) => {
     const success = await joinGarden(userDetails, gardenId);
     if (success) {
       router.reload();
@@ -430,10 +437,13 @@ const JoinButton = (props) => {
     <>
       <Button
         className='join'
-        onClick={handleClick(props.userDetails, props.gardenId)}>
+        onClick={() => {
+          handleTheClick(props.userDetails, props.gardenId);
+        }}>
         Join
       </Button>
     </>
   );
 };
+
 export default MapNav;

@@ -146,9 +146,16 @@ const MapMarker = (props) => {
           </Button>
           {isAuth ? (
             <>
-              {" "}
               {!isEmpty(props.user) ? (
-                props.user.garden.includes(props.point.id) ? null : (
+                props.user.garden.includes(props.point.id) ? (
+                  <Button
+                    variant='secondary'
+                    className='join'
+                    onClick={() => {}}
+                    disabled>
+                    {lang === "eng" ? "Member" : "Mitglied"}
+                  </Button>
+                ) : (
                   <JoinButton
                     userDetails={props.user}
                     gardenId={props.point.id}
@@ -171,7 +178,8 @@ const MapMarker = (props) => {
 };
 
 const JoinButton = (props) => {
-  const handleClick = async (userDetails, gardenId) => {
+  const router = useRouter();
+  const handleTheClick = async (userDetails, gardenId) => {
     const success = await joinGarden(userDetails, gardenId);
     if (success) {
       router.reload();
@@ -184,7 +192,9 @@ const JoinButton = (props) => {
     <>
       <Button
         className='join'
-        onClick={handleClick(props.userDetails, props.gardenId)}>
+        onClick={() => {
+          handleTheClick(props.userDetails, props.gardenId);
+        }}>
         Join
       </Button>
     </>
