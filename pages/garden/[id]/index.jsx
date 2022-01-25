@@ -849,7 +849,7 @@ function Shareables() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>{`Shareables (${resources.length})`}</h2>
+      <h2>{`Resources (${resources.length})`}</h2>
       <div className={styles.listing}>
         {resources.map((item) => (
           <ShareableItem key={item.resource_id} item={item} />
@@ -1037,7 +1037,7 @@ function AddShareable({ setPopupVisible }) {
   return (
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
-        <h3>New Shareable</h3>
+        <h3>New Resource</h3>
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
