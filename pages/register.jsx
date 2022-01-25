@@ -36,9 +36,6 @@ const validationSchemaEN = Yup.object().shape({
     .email("*must be a valid email address")
     .max(100, "*email must be less than 100 characters long")
     .required("Email is required."),
-  contact: Yup.string()
-    .max(50, "*your phone number is to long")
-    .required("*Phone number is required."),
   password: Yup.string()
     .required("*Please enter a password.")
     .min(6, "*your password is too short - 6 charakters minimum"),
@@ -64,9 +61,6 @@ const validationSchemaDE = Yup.object().shape({
     .email("*muss eine gültige Email-Adressen sein")
     .max(100, "*Email darf nicht länger als 100 Zeichen sein")
     .required("Email ist erforderlich"),
-  contact: Yup.string()
-    .max(50, "*your phone number is to long")
-    .required("*Phone number is required."),
   password: Yup.string()
     .required("*Bitte Passwort eingeben.")
     .min(6, "*Passwort ist zu kurz - mindestens 6 Zeichen"),
@@ -162,7 +156,6 @@ function signUp() {
                   first_name: "",
                   email: "",
                   password: "",
-                  contact: "",
                   repeatPassword: "",
                   acceptTerms: false,
                 }}
@@ -184,7 +177,6 @@ function signUp() {
                       last_name: values.last_name,
                       email: values.email,
                       password: values.password,
-                      phone: values.contact,
                     }),
                   })
                     .then((res) => {
@@ -304,30 +296,6 @@ function signUp() {
                       />
                       {touched.email && errors.email ? (
                         <div className="errorForm-message">{errors.email}</div>
-                      ) : null}
-                    </Form.Group>
-                    <Form.Group className="form-group" controlId="formContact">
-                      <Form.Label>Phone Number:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name="contact"
-                        placeholder=""
-                        /* Set onChange to handleChange */
-                        onChange={handleChange}
-                        /* Set onBlur to handleBlur */
-                        onBlur={handleBlur}
-                        /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
-                        value={values.contact}
-                        /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
-                        className={
-                          touched.contact && errors.contact ? "errorForm" : null
-                        }
-                      />
-                      {touched.contact && errors.contact ? (
-                        <div className="errorForm-message">
-                          {errors.contact}
-                        </div>
                       ) : null}
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
