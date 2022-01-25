@@ -23,6 +23,9 @@ export const userLogoutPostUrl = backendApiUrl + "/users/logout";
 //URL to create a new garden (POST)
 export const gardenPostUrl = backendApiUrl + "/gardens/";
 
+//URL to get all gardens (GET)
+export const getAllGardens = backendApiUrl + "/gardens/all/";
+
 /**
  * function generates URL to GET the nearest garden
  * @param {number} x x-parameter to pass to URL
@@ -30,7 +33,7 @@ export const gardenPostUrl = backendApiUrl + "/gardens/";
  * @returns {string} URL to GET nearest gardens
  */
 export function gardenGetNearestUrl(x, y) {
-  return backendApiUrl + `/gardens/all/get_nearest_gardens?x=${x}&y=x=${y}`;
+  return backendApiUrl + `/gardens/all/get_nearest_gardens?x=${x}&y=${y}`;
 }
 
 /**

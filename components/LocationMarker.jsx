@@ -2,7 +2,17 @@ import React, { useEffect } from "react";
 import { Marker, useMap } from "react-leaflet";
 import useGeoLocation from "../hooks/useGeoLocation.js";
 import L from "leaflet";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setGardenLocations,
+  setFilteredLocations,
+  setResources,
+  setFilterCategories,
+} from "../store/actions/gardenAndResources.js";
+import { setLocationPosition } from "../store/actions/index.js";
+import { gardenGetNearestUrl } from "../helpers/urls.jsx";
+import { useState } from "react";
+
 const positionMarkerIcon = new L.Icon({
   iconUrl: "/imgs/positionIcon.png",
   iconAnchor: [15, 15],
@@ -12,37 +22,23 @@ const positionMarkerIcon = new L.Icon({
 });
 
 const LocationMarker = (props) => {
+  const dispatch = useDispatch();
   const map = useMap();
   const location = useGeoLocation();
 
   const handleLocation = () => {
     map.flyTo([location.coordinates.lat, location.coordinates.lng], 15);
-
-    (async () => {
-      try {
-        const request = await fetch(
-          "http://giv-project15:9000/api/v1/gardens/all/get_nearest_gardens?x=" +
-            location.coordinates.lng +
-            "&y=" +
-            location.coordinates.lat,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
-        const content = await request.json();
-        console.log(content);
-      } catch (e) {
-        console.log("error: ", e);
-      }
-    })();
+    dispatch(
+      setLocationPosition([location.coordinates.lng, location.coordinates.lat])
+    );
   };
+
   return (
     location.loaded &&
     !location.error && (
       <>
         {handleLocation()}
+
         <Marker
           icon={positionMarkerIcon}
           position={[

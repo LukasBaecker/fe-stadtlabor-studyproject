@@ -1,6 +1,6 @@
 import { SET_CURRENT_POINT } from "../actions";
 
-const initialState = 0;
+const initialState = -1;
 
 const currentPointReducer = (state = initialState, action) => {
   switch (action.type) {

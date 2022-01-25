@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { useMediaQuery } from "react-responsive";
+import { resourcesGetUrl } from "../helpers/urls.jsx";
+import { getAllGardens } from "../helpers/urls.jsx";
 const Map = dynamic(() => import("../components/Map.jsx"), {
   ssr: false,
 });
@@ -27,6 +29,7 @@ export default function mapPage() {
   const lang = useSelector((state) => state.lang);
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const [resourceFilter, setResourceFilter] = useState([]);
+  const [user, setUser] = useState({});
   const [gardensWithResources, setGardensWithResources] = useState([]);
   const pushResourceFilter = (element) => {
     {
@@ -46,27 +49,36 @@ export default function mapPage() {
       //TODO: make a user request to the backend to update the auth store ting and set it then as true or false
       //TODO: hier noch die User daten fetchen damit man dann im MapNav und im Marker checken kann ob der User bereits im Garten ist und der Join Button angezeigt werden kann oder nicht
       try {
-        const req = await fetch(
-          "http://giv-project15.uni-muenster.de:8000/api/v1/gardens/resources/all",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        const userRequest = await fetch(userGetUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        const userInformation = await userRequest.json();
+        if (userInformation.detail === "Unauthenticated!") {
+          dispatch(logoutUser());
+        } else {
+          setUser(userInformation);
+          // Get garden info for each garden user is a member of
+          const names = await getGardenNames(content.garden);
+          setGardens(names);
+          setLoading(false);
+        }
+        const req = await fetch(resourcesGetUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         const cont = await req.json();
         dispatch(setResources(cont));
         cont.forEach((element) => {
           pushResourceFilter(element);
         });
-        const request = await fetch(
-          "http://giv-project15.uni-muenster.de:8000/api/v1/gardens/all/",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        const request = await fetch(getAllGardens, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         const content = await request.json();
         if (content.detail === "Unauthenticated!") {
           dispatch(logoutUser());
@@ -111,8 +123,8 @@ export default function mapPage() {
       <Navigation />
       {isAuth ? <></> : <SignupButton />}
       {loading ? <CenterSpinner /> : <></>}
-      <Map />
-      <MapNavigation />
+      <Map user={user} />
+      <MapNavigation user={user} />
     </>
   );
 }

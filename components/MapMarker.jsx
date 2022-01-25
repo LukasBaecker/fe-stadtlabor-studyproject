@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentPoint } from "../store/actions";
 import Dropdown from "react-bootstrap/Dropdown";
+import isEmpty from "../helpers/isEmpty";
+import { joinGarden } from "../helpers/manageGarden";
+import { useRouter } from "next/router";
 import {
   faChevronDown,
   faCopy,
@@ -15,14 +18,22 @@ import Collapse from "react-bootstrap/Collapse";
 import Button from "react-bootstrap/Button";
 
 const MapMarker = (props) => {
+  const router = useRouter();
   const dispatch = useDispatch();
+  const map = useMap();
   const lang = useSelector((state) => state.lang);
   const currentPoint = useSelector((state) => state.currentPoint);
   const [openList, setOpenList] = useState(false);
   const resources = useSelector((state) => state.resources);
-
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const handleFlyTo = () => {
+    map.flyTo(
+      [props.point.properties.latitude, props.point.properties.longitude],
+      map.getZoom()
+    );
+  };
   const iconLink = () => {
-    if (currentPoint === props.point.id) {
+    if (currentPoint != -1 && currentPoint === props.point.id) {
       return "/imgs/marker.svg";
     }
     return "/imgs/marker_inactive.svg";
@@ -51,8 +62,16 @@ const MapMarker = (props) => {
     "°E";
   const listResources = props.point.properties.resources.map((element) => (
     <li key={element}>
-      {getResourceInformation(element).resource_name}(
-      {getResourceInformation(element).resource_status})
+      {getResourceInformation(element).resource_name} (
+      {getResourceInformation(element).resource_status ===
+      "AVAILABLE FOR DONATION"
+        ? lang === "eng"
+          ? "donation"
+          : "abzugeben"
+        : lang === "eng"
+        ? "to borrow"
+        : "zu verleihen"}
+      )
     </li>
   ));
   return (
@@ -111,21 +130,64 @@ const MapMarker = (props) => {
           </Collapse>
         </div>
         <Dropdown.Divider />
+
         <div className='markerPopupButton'>
           <CopyToClipboard text={locString}>
             <Button onClick={() => {}}>
               <FontAwesomeIcon icon={faCopy} />
             </Button>
           </CopyToClipboard>
-          <Button onClick={() => {}}>
+          <Button
+            className='infoButton'
+            onClick={() => {
+              router.push("/garden/" + props.point.id);
+            }}>
             <FontAwesomeIcon icon={faInfo} />
           </Button>
-          <Button className=' join' onClick={() => {}}>
-            Join
-          </Button>
+          {isAuth ? (
+            <>
+              {" "}
+              {!isEmpty(props.user) ? (
+                props.user.garden.includes(props.point.id) ? null : (
+                  <JoinButton
+                    userDetails={props.user}
+                    gardenId={props.point.id}
+                  />
+                )
+              ) : null}
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </Popup>
+      {currentPoint === props.point.id && currentPoint != -1 ? (
+        handleFlyTo()
+      ) : (
+        <></>
+      )}
     </Marker>
+  );
+};
+
+const JoinButton = (props) => {
+  const handleClick = async (userDetails, gardenId) => {
+    const success = await joinGarden(userDetails, gardenId);
+    if (success) {
+      router.reload();
+    } else {
+      console.log("not successful");
+    }
+  };
+
+  return (
+    <>
+      <Button
+        className='join'
+        onClick={handleClick(props.userDetails, props.gardenId)}>
+        Join
+      </Button>
+    </>
   );
 };
 export default MapMarker;

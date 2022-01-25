@@ -14,6 +14,7 @@
 
 .leaflet-control-layers {
   background-color: $color-base;
+  visibility: hidden;
   top: 60px;
 }
 /* Radio element, when checked */
