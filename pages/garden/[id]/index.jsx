@@ -372,7 +372,7 @@ function Events() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Upcoming Events</h2>
+      <h2>{`Upcoming Events (${upcomingEvents.length})`}</h2>
       <div className={styles.listing}>
         {upcomingEvents.map((evt) => (
           <Event key={evt.event_id} event={evt} />
@@ -381,7 +381,9 @@ function Events() {
 
       <AddButton ExecuteFunction={AddEvent} />
 
-      <h2 style={{ marginTop: "25px" }}>Past Events</h2>
+      <h2
+        style={{ marginTop: "25px" }}
+      >{`Past Events (${pastEvents.length})`}</h2>
       <div className={styles.listing}>
         {pastEvents.map((evt) => (
           <Event key={evt.event_id} event={evt} />
@@ -847,7 +849,7 @@ function Shareables() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Shareables</h2>
+      <h2>{`Shareables (${resources.length})`}</h2>
       <div className={styles.listing}>
         {resources.map((item) => (
           <ShareableItem key={item.resource_id} item={item} />
