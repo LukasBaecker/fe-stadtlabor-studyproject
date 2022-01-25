@@ -224,6 +224,7 @@ function garden() {
         members,
         isMember,
         crops,
+        setCrops,
         lang,
       }}
     >
@@ -830,22 +831,26 @@ function AddCrop({ setPopupVisible }) {
 }
 
 function RemoveCrop({ crop, setPopupVisible }) {
-  const { gardenId } = useContext(GardenContext);
+  const { gardenId, setCrops } = useContext(GardenContext);
 
   const handleClick = async () => {
-    const cropId = crop.crop_id;
-    delete crop.crop_id;
-    crop.gardens = crop.gardens.filter((id) => id !== parseInt(gardenId));
+    const gardensNew = crop.gardens.filter((id) => id !== parseInt(gardenId));
 
     try {
-      const request = await fetch(cropPutUrl(cropId), {
+      const request = await fetch(cropPutUrl(crop.crop_id), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(crop),
+        body: JSON.stringify({ gardens: gardensNew }),
       });
+      if (request.status === 200) {
+        setPopupVisible(false);
+        fetchCrops(crop.garden_id, setCrops);
+      } else {
+        throw new Error("Something went wrong");
+      }
     } catch (e) {
       console.log(e);
     }
