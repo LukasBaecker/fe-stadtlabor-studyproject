@@ -88,7 +88,7 @@ function user() {
         <Header
           caption={lang === "eng" ? "Welcome back" : "Wilkommen zurück"}
           name={username}
-          imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+          imgUrl="/imgs/person.png"
         />
         {/* Page Content */}
         <div className={styles.Content}>
