@@ -92,3 +92,12 @@ export function resourceDeleteUrl(resourceId) {
 
 //URL to GET list of crops
 export const cropsGetUrl = backendApiUrl + "/crops/";
+
+/**
+ * function to generate URL to PUT a crop
+ * @param {number} cropId ID of the crop that shall be PUT
+ * @returns URL of CROP PUT
+ */
+export function cropPutUrl(cropId) {
+  return backendApiUrl + `/crops/${cropId}`;
+}
