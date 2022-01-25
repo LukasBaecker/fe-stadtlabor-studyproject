@@ -670,7 +670,7 @@ function Member({ member }) {
   return (
     <div className={styles.listItem}>
       <img
-        src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+        src="/imgs/icons8-person-60.png"
         alt="user profile picture"
         className={
           // assign multiple classes to element
@@ -862,20 +862,20 @@ function ShareableItem({ item }) {
   const [popupVisible, setPopupVisible] = useState(false);
 
   const categoryLookup = {
-    1: "Tool",
-    2: "Seeds",
-    3: "Fertelizer",
-    4: "Compost",
-    5: "Construction Material",
-    6: "Gardens",
-    7: "Other",
+    1: { name: "Tool", url: "/imgs/icons8-hammer-90.png" },
+    2: { name: "Seeds", url: "/imgs/icons8-flax-seeds-96.png" },
+    3: { name: "Fertelizer", url: "/imgs/icons8-fertilizer-60.png" },
+    4: { name: "Compost", url: "/imgs/icons8-compost-heap-100.png" },
+    5: { name: "Construction Material", url: "/imgs/icons8-brick-wall-64.png" },
+    6: { name: "Gardens", url: "/imgs/icons8-apple-100.png" },
+    7: { name: "Other", url: "/imgs/icons8-question-mark-90.png" },
   };
 
   return (
     <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
       <img
-        src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
-        alt="user profile picture"
+        src={categoryLookup[item.category].url}
+        alt="resource icon"
         className={
           // assign multiple classes to element
           [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
@@ -883,7 +883,7 @@ function ShareableItem({ item }) {
       />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
-          {categoryLookup[item.category]}
+          {categoryLookup[item.category].name}
           <h3 style={{ marginBottom: "0" }}>{item.resource_name}</h3>
           {item.resource_status}
         </div>
