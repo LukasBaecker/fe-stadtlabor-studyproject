@@ -6,6 +6,7 @@ import { logoutUser } from "../store/actions/auth.js";
 import { setLanguage } from "../store/actions/index.js";
 import { userLogoutPostUrl } from "../helpers/urls";
 import Dropdown from "react-bootstrap/Dropdown";
+import LanguageSelector from "./LanguageSelector";
 function Navigation() {
   const router = useRouter();
 
@@ -33,20 +34,7 @@ function Navigation() {
 
   return (
     <>
-      <Dropdown id="languageDropdown">
-        <Dropdown.Toggle variant="primary" id="languageDropdownToggle">
-          {lang === "eng" ? "UK" : "DE"}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => dispatch(setLanguage("eng"))}>
-            English
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => dispatch(setLanguage("ger"))}>
-            Deutsch
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <LanguageSelector />
       <div className="navigation-wrap">
         <input type="checkbox" className="navigation-toggler" />
 
@@ -58,13 +46,17 @@ function Navigation() {
             <div>
               <ul>
                 <li key="home">
-                  <Link href="/">Home</Link>
+                  <Link href="/">{lang === "eng" ? "Home" : "Startseite"}</Link>
                 </li>
                 <li>
-                  <Link href="/map">Resources Map</Link>
+                  <Link href="/map">
+                    {lang === "eng" ? "Resources Map" : "Karte der Gärten"}
+                  </Link>
                 </li>
                 <li key="user">
-                  <Link href="/user">User Page</Link>
+                  <Link href="/user">
+                    {lang === "eng" ? "User Profile" : "Nutzerprofil"}
+                  </Link>
                 </li>
                 {isAuth ? (
                   <li key="logoutIn">
@@ -96,7 +88,7 @@ function Navigation() {
                         router.push("/register");
                       }}
                     >
-                      Sign Up!
+                      {lang === "eng" ? "Sign Up Now!" : "Jetzt registrieren!"}
                     </Button>
                   </li>
                 )}
