@@ -15,6 +15,7 @@ import {
   resourcePostUrl,
   userGetById,
   cropsGetUrl,
+  cropPutUrl,
 } from "../../../helpers/urls";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
@@ -750,10 +751,7 @@ function CropDetail({ crop, setPopupVisible }) {
           <hr />
           {crop.description}
           {isMember && (
-            <RemoveCrop
-              cropId={crop.crop_id}
-              setPopupVisible={setPopupVisible}
-            />
+            <RemoveCrop crop={crop} setPopupVisible={setPopupVisible} />
           )}
           <button
             className={styles.popupCloseButton}
@@ -802,16 +800,36 @@ function AddCrop({ setPopupVisible }) {
   );
 }
 
-function RemoveCrop({ cropId, setPopupVisible }) {
+function RemoveCrop({ crop, setPopupVisible }) {
+  const { gardenId } = useContext(GardenContext);
+
   const handleClick = async () => {
-    console.log("not implemented yet");
+    const cropId = crop.crop_id;
+    delete crop.crop_id;
+    crop.gardens = crop.gardens.filter((id) => id !== parseInt(gardenId));
+
+    try {
+      const request = await fetch(cropPutUrl(cropId), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(crop),
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
     <Button
       variant="danger"
       className={styles.removeButton}
-      onClick={() => handleClick()}
+      onClick={() => {
+        console.log("not implemented");
+        handleClick();
+      }}
     >
       <img src="/imgs/icons8-delete-64.png" alt="Delete" />
     </Button>
