@@ -24,6 +24,7 @@ import Alert from "react-bootstrap/Alert";
 
 import styles from "../../../styles/garden.module.scss";
 import { useState, useEffect, createContext, useContext } from "react";
+import { useSelector } from "react-redux";
 
 // Context that is used to wrap the page in
 const GardenContext = createContext();
@@ -124,6 +125,7 @@ async function fetchResources(id, setResources) {
 function garden() {
   const router = useRouter();
   const { id } = router.query;
+  const lang = useSelector((state) => state.lang);
 
   // determins, whether the loading circle is shown or the page
   const [loading, setLoading] = useState(true);
@@ -222,6 +224,7 @@ function garden() {
         members,
         isMember,
         crops,
+        lang,
       }}
     >
       {loading ? (
@@ -236,7 +239,7 @@ function garden() {
                 message={errorText}
               />
               <Button variant="primary" onClick={() => router.push("/user/")}>
-                Back
+                {lang === "eng" ? "Back" : "Zurück"}
               </Button>
             </>
           ) : (
@@ -358,7 +361,7 @@ Rendered, when the user clicks the Event Button in ButtonGroup.
 Shows the past and futere events that take place in the garden
 */
 function Events() {
-  const { events } = useContext(GardenContext);
+  const { events, lang } = useContext(GardenContext);
 
   // sort all events into upcoming and past
   const upcomingEvents = events.filter((evt) => {
@@ -372,7 +375,11 @@ function Events() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>{`Upcoming Events (${upcomingEvents.length})`}</h2>
+      <h2>
+        {lang === "eng"
+          ? `Upcoming Events (${upcomingEvents.length})`
+          : `Anstehende Events (${upcomingEvents.length})`}
+      </h2>
       <div className={styles.listing}>
         {upcomingEvents.map((evt) => (
           <Event key={evt.event_id} event={evt} />
@@ -381,9 +388,11 @@ function Events() {
 
       <AddButton ExecuteFunction={AddEvent} />
 
-      <h2
-        style={{ marginTop: "25px" }}
-      >{`Past Events (${pastEvents.length})`}</h2>
+      <h2 style={{ marginTop: "25px" }}>
+        {lang === "eng"
+          ? `Past Events (${pastEvents.length})`
+          : `Vergangene Events (${pastEvents.length})`}
+      </h2>
       <div className={styles.listing}>
         {pastEvents.map((evt) => (
           <Event key={evt.event_id} event={evt} />
@@ -465,14 +474,14 @@ function EventDetails({ event, setPopupVisible }) {
   Hence this strange construct here...
   */
   const [visible, setVisible] = useState(true);
-  const { isMember } = useContext(GardenContext);
+  const { isMember, lang } = useContext(GardenContext);
   if (visible) {
     return (
       <div className={styles.popup}>
         <div className={styles.popup_inner}>
           {new Date(event.date).toLocaleString()}
           <h3>{event.title}</h3>
-          Location: {event.venue}
+          {lang === "eng" ? `Location: ${event.venue}` : `Ort: ${event.venue}`}
           <hr />
           {event.description}
           <br />
@@ -507,7 +516,7 @@ function AddEvent({ setPopupVisible }) {
   const [description, setDescription] = useState("");
   const [showError, setShowError] = useState(false);
 
-  let { gardenId, setLoading, setEvents } = useContext(GardenContext);
+  const { gardenId, setLoading, setEvents, lang } = useContext(GardenContext);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -538,7 +547,11 @@ function AddEvent({ setPopupVisible }) {
             fetchEvents(gardenId, setEvents);
           });
         } else {
-          throw new Error("Something went wrong");
+          throw new Error(
+            lang === "eng"
+              ? "Something went wrong"
+              : "Etwas ist schief gegangen"
+          );
         }
       })
       .catch((err) => {
@@ -550,12 +563,16 @@ function AddEvent({ setPopupVisible }) {
   return (
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
-        <h3>New Event</h3>
+        {lang === "eng" ? <h3>New Event</h3> : <h3>Neues Event</h3>}
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
             heading={"Ups"}
-            message={"Something went wrong creating the event"}
+            message={
+              lang === "eng"
+                ? "Something went wrong creating the event"
+                : "Etwas ist schief gegangen"
+            }
           />
         ) : (
           <></>
@@ -564,7 +581,7 @@ function AddEvent({ setPopupVisible }) {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Event name"
+              placeholder={lang === "eng" ? "Event name" : "Name des Events"}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -572,7 +589,9 @@ function AddEvent({ setPopupVisible }) {
           <Form.Group className="mb-3">
             <Form.Control
               type="datetime-local"
-              placeholder="Date"
+              placeholder={
+                lang === "eng" ? "Date and Time" : "Datum und Uhrzeit"
+              }
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
@@ -580,7 +599,7 @@ function AddEvent({ setPopupVisible }) {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Location"
+              placeholder={lang === "eng" ? "Location" : "Ort"}
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
             />
@@ -588,14 +607,14 @@ function AddEvent({ setPopupVisible }) {
           <Form.Group className="mb-3">
             <Form.Control
               as="textarea"
-              placeholder="Description"
+              placeholder={lang === "eng" ? "Description" : "Beschreibung"}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
             />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            {lang === "eng" ? "Submit" : "Erstellen"}
           </Button>
         </Form>
         <button
@@ -653,11 +672,15 @@ Shows all members of the community and their role (admin or normal member).
 Admins can remove members or promote members to admins.
 */
 function Members() {
-  const { members } = useContext(GardenContext);
+  const { members, lang } = useContext(GardenContext);
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Members ({members.length})</h2>
+      <h2>
+        {lang === "eng"
+          ? `Members (${members.length})`
+          : `Mitglieder (${members.length})`}
+      </h2>
       <div className={styles.listing}>
         {/* first show all admin members */}
         {members.map((member) => (
@@ -693,11 +716,15 @@ Crops Page:
 Rendered, when the user clicks the Crops button in ButtonGroup.
 */
 function Crops() {
-  const { crops } = useContext(GardenContext);
+  const { crops, lang } = useContext(GardenContext);
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Crops ({crops.length})</h2>
+      <h2>
+        {lang === "eng"
+          ? `Crops (${crops.length})`
+          : `Pflanzen (${crops.length})`}
+      </h2>
       <div className={styles.listing}>
         {/* first show all admin members */}
         {crops.map((crop) => (
@@ -845,11 +872,15 @@ Shows all items that the garden community offers to share with other people.
 Items can be added, admin can remove items.
 */
 function Shareables() {
-  const { resources } = useContext(GardenContext);
+  const { resources, lang } = useContext(GardenContext);
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>{`Resources (${resources.length})`}</h2>
+      <h2>
+        {lang === "eng"
+          ? `Resources (${resources.length})`
+          : `Ressourcen (${resources.length})`}
+      </h2>
       <div className={styles.listing}>
         {resources.map((item) => (
           <ShareableItem key={item.resource_id} item={item} />
@@ -862,16 +893,53 @@ function Shareables() {
 
 function ShareableItem({ item }) {
   const [popupVisible, setPopupVisible] = useState(false);
+  const { lang } = useContext(GardenContext);
 
   const categoryLookup = {
-    1: { name: "Tool", url: "/imgs/icons8-hammer-90.png" },
-    2: { name: "Seeds", url: "/imgs/icons8-flax-seeds-96.png" },
-    3: { name: "Fertelizer", url: "/imgs/icons8-fertilizer-60.png" },
-    4: { name: "Compost", url: "/imgs/icons8-compost-heap-100.png" },
-    5: { name: "Construction Material", url: "/imgs/icons8-brick-wall-64.png" },
-    6: { name: "Gardens", url: "/imgs/icons8-apple-100.png" },
-    7: { name: "Other", url: "/imgs/icons8-question-mark-90.png" },
+    1: {
+      name: lang === "eng" ? "Tool" : "Werkzeug",
+      url: "/imgs/icons8-hammer-90.png",
+    },
+    2: {
+      name: lang === "eng" ? "Seeds" : "Saatgut",
+      url: "/imgs/icons8-flax-seeds-96.png",
+    },
+    3: {
+      name: lang === "eng" ? "Fertelizer" : "Dünger",
+      url: "/imgs/icons8-fertilizer-60.png",
+    },
+    4: {
+      name: lang === "eng" ? "Compost" : "Kompost",
+      url: "/imgs/icons8-compost-heap-100.png",
+    },
+    5: {
+      name: lang === "eng" ? "Construction Material" : "Baumaterial",
+      url: "/imgs/icons8-brick-wall-64.png",
+    },
+    6: {
+      name: lang === "eng" ? "Gardens" : "Garten",
+      url: "/imgs/icons8-apple-100.png",
+    },
+    7: {
+      name: lang === "eng" ? "Other" : "Anderes",
+      url: "/imgs/icons8-question-mark-90.png",
+    },
   };
+
+  let itemStatus = "";
+  if (lang === "eng") {
+    if (item.resource_status == "AVAILABLE FOR DONATION") {
+      itemStatus = itemStatus + "Available for giveaway";
+    } else {
+      itemStatus = itemStatus + "Available for borrowing";
+    }
+  } else {
+    if (item.resource_status == "AVAILABLE FOR DONATION") {
+      itemStatus = itemStatus + "Zu Verschenken";
+    } else {
+      itemStatus = itemStatus + "Zu Verleihen";
+    }
+  }
 
   return (
     <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
@@ -887,11 +955,15 @@ function ShareableItem({ item }) {
         <div className={styles.listItemDetail}>
           {categoryLookup[item.category].name}
           <h3 style={{ marginBottom: "0" }}>{item.resource_name}</h3>
-          {item.resource_status}
+          {itemStatus}
         </div>
       </div>
       {popupVisible && (
-        <ItemDetails item={item} setPopupVisible={setPopupVisible} />
+        <ItemDetails
+          item={item}
+          itemStatus={itemStatus}
+          setPopupVisible={setPopupVisible}
+        />
       )}
     </div>
   );
@@ -901,7 +973,7 @@ function ShareableItem({ item }) {
 Popup to display details of each sharable item,
 e.g. description, status, return date
 */
-function ItemDetails({ item, setPopupVisible }) {
+function ItemDetails({ item, itemStatus, setPopupVisible }) {
   /*
   I know this looks like really strange programming...
   For some  reason I was not able to manage to get x-button
@@ -916,12 +988,7 @@ function ItemDetails({ item, setPopupVisible }) {
       <div className={styles.popup}>
         <div className={styles.popup_inner}>
           <h3>{item.resource_name}</h3>
-          {item.resource_status}
-          <br />
-          {item.resource_status === "BORROWED"
-            ? "Available again: " +
-              new Date(item.return_date).toLocaleDateString()
-            : null}
+          {itemStatus}
           <hr />
           {item.description}
           {isMember && (
@@ -994,7 +1061,7 @@ function AddShareable({ setPopupVisible }) {
   const [description, setDescription] = useState("");
   const [showError, setShowError] = useState(false);
 
-  let { gardenId, setLoading, setResources } = useContext(GardenContext);
+  let { gardenId, setLoading, setResources, lang } = useContext(GardenContext);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -1025,7 +1092,11 @@ function AddShareable({ setPopupVisible }) {
             fetchResources(gardenId, setResources);
           });
         } else {
-          throw new Error("Something went wrong");
+          throw new Error(
+            lang === "eng"
+              ? "Something went wrong"
+              : "Etwas ist schief gelaufen"
+          );
         }
       })
       .catch((err) => {
@@ -1037,12 +1108,16 @@ function AddShareable({ setPopupVisible }) {
   return (
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
-        <h3>New Resource</h3>
+        {lang === "eng" ? <h3>New Resource</h3> : <h3>Neue Ressource</h3>}
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
             heading="Ups"
-            message="Something weng wrong creating the shareable resource"
+            message={
+              lang === "eng"
+                ? "Something weng wrong creating the shareable resource"
+                : "Etwas ist schief gelaufen beim Erstellen der Ressource"
+            }
           />
         ) : (
           <></>
@@ -1051,7 +1126,9 @@ function AddShareable({ setPopupVisible }) {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Shareable name"
+              placeholder={
+                lang === "eng" ? "Resource name" : "Name der Ressource"
+              }
               value={resource_name}
               onChange={(e) => setResourceName(e.target.value)}
             />
@@ -1061,13 +1138,27 @@ function AddShareable({ setPopupVisible }) {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="1">Tools</option>
-              <option value="2">Seeds</option>
-              <option value="3">Fertelizers</option>
-              <option value="4">Compost</option>
-              <option value="5">Cosntruction Material</option>
-              <option value="6">Gardens</option>
-              <option value="7">Other</option>
+              {lang === "eng" ? (
+                <>
+                  <option value="1">Tools</option>
+                  <option value="2">Seeds</option>
+                  <option value="3">Fertelizers</option>
+                  <option value="4">Compost</option>
+                  <option value="5">Construction Material</option>
+                  <option value="6">Gardens</option>
+                  <option value="7">Other</option>
+                </>
+              ) : (
+                <>
+                  <option value="1">Werkzeug</option>
+                  <option value="2">Saatgut</option>
+                  <option value="3">Dünger</option>
+                  <option value="4">Kompost</option>
+                  <option value="5">Baumaterial</option>
+                  <option value="6">Garten</option>
+                  <option value="7">Anderes</option>
+                </>
+              )}
             </Form.Select>
           </Form.Group>
           <Form.Group>
@@ -1075,21 +1166,30 @@ function AddShareable({ setPopupVisible }) {
               value={resource_status}
               onChange={(e) => setResourceStatus(e.target.value)}
             >
-              <option value="AVAILABLE FOR BORROWING">For borrowing</option>
-              <option value="AVAILABLE FOR DONATION">For giveaway</option>
+              {lang === "eng" ? (
+                <>
+                  <option value="AVAILABLE FOR BORROWING">For borrowing</option>
+                  <option value="AVAILABLE FOR DONATION">For giveaway</option>
+                </>
+              ) : (
+                <>
+                  <option value="AVAILABLE FOR BORROWING">Zu Verleihen</option>
+                  <option value="AVAILABLE FOR DONATION">Zu Verschenken</option>
+                </>
+              )}
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
               as="textarea"
-              placeholder="Description"
+              placeholder={lang === "eng" ? "Description" : "Beschreibung"}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
             />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            {lang === "eng" ? "Submit" : "Erstellen"}
           </Button>
         </Form>
         <button
@@ -1186,7 +1286,7 @@ function JoinButton() {
   }, []);
 
   // only show button if user is not logged in
-  const { loggedIn, gardenId, userDetails } = useContext(GardenContext);
+  const { loggedIn, gardenId, userDetails, lang } = useContext(GardenContext);
 
   const handleClick = async () => {
     const success = await joinGarden(userDetails, gardenId);
@@ -1206,7 +1306,7 @@ function JoinButton() {
             className={styles.joinButton}
             style={{ left: leftPosition }}
           >
-            Join!
+            {lang === "eng" ? "Join!" : "Beitreten!"}
           </Button>
         </>
       ) : null}
@@ -1243,7 +1343,7 @@ function LeaveButton() {
   }, []);
 
   // only show button if user is not logged in
-  const { loggedIn, gardenId, userDetails } = useContext(GardenContext);
+  const { loggedIn, gardenId, userDetails, lang } = useContext(GardenContext);
 
   const handleClick = async () => {
     const success = await leaveGarden(userDetails, gardenId);
@@ -1264,7 +1364,7 @@ function LeaveButton() {
             style={{ left: leftPosition }}
             variant="danger"
           >
-            Leave!
+            {lang === "eng" ? "Leave!" : "Verlassen!"}
           </Button>
         </>
       ) : null}
