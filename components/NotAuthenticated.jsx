@@ -2,11 +2,12 @@ import Head from "next/head";
 import React from "react";
 import dynamic from "next/dynamic";
 import Image from "react-bootstrap/Image";
+import { useSelector } from "react-redux";
 
 export default function noAuthentification() {
-  const language = "eng";
+  const language = useSelector((state) => state.lang);
   return (
-    <div className='errorWindow'>
+    <div className="errorWindow">
       {language === "eng" ? (
         <>
           <h1>You have no rights to see this page.</h1>
@@ -20,7 +21,7 @@ export default function noAuthentification() {
       ) : (
         <></>
       )}
-      <Image src={"/imgs/authentification.svg"} className='notFoundImage' />
+      <Image src={"/imgs/authentification.svg"} className="notFoundImage" />
     </div>
   );
 }

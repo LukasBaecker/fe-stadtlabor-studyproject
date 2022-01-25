@@ -15,13 +15,14 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { CenterSpinner } from "../components/Loader";
+import LanguageSelector from "../components/LanguageSelector";
 import { userRegisterPostUrl } from "../helpers/urls";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 //yup schema
-const validationSchema = Yup.object().shape({
+const validationSchemaEN = Yup.object().shape({
   first_name: Yup.string()
     .min(2, "*names must have at least 2 characters")
     .max(30, "*names can't be longer than 30 characters")
@@ -34,9 +35,6 @@ const validationSchema = Yup.object().shape({
     .email("*must be a valid email address")
     .max(100, "*email must be less than 100 characters long")
     .required("Email is required."),
-  contact: Yup.string()
-    .max(50, "*your phone number is to long")
-    .required("*Phone number is required."),
   password: Yup.string()
     .required("*Please enter a password.")
     .min(6, "*your password is too short - 6 charakters minimum"),
@@ -49,8 +47,31 @@ const validationSchema = Yup.object().shape({
     "Please accept the terms and conditions"
   ),
 });
+const validationSchemaDE = Yup.object().shape({
+  first_name: Yup.string()
+    .min(2, "*Name muss mindestens 2 Zeichan lang sein")
+    .max(30, "*Name darf nicht länger als 30 Zeichen sein")
+    .required("*Name ist erforderlich"),
+  last_name: Yup.string()
+    .min(2, "*Name muss mindestens 2 Zeichan lang sein")
+    .max(30, "*Name darf nicht länger als 30 Zeichen sein")
+    .required("*Name ist erforderlich"),
+  email: Yup.string()
+    .email("*muss eine gültige Email-Adressen sein")
+    .max(100, "*Email darf nicht länger als 100 Zeichen sein")
+    .required("Email ist erforderlich"),
+  password: Yup.string()
+    .required("*Bitte Passwort eingeben.")
+    .min(6, "*Passwort ist zu kurz - mindestens 6 Zeichen"),
+  repeatPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "*Passwort stimmt nicht überein")
+    .required("Bitte Passwort bestätigen")
+    .min(6, "*Passwort ist zu kurz - mindestens 6 Zeichen"),
+  acceptTerms: Yup.boolean().oneOf([true], "Bitte AGB akzeptieren"),
+});
 
 function signUp() {
+  const lang = useSelector((state) => state.lang);
   const [show, setShow] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [message, setMessage] = useState("An error has been occurred");
@@ -66,8 +87,9 @@ function signUp() {
   return (
     <>
       <Head>
-        <title>Sign Up!</title>
+        <title>{lang === "eng" ? "Sign Up!" : "Registrieren!"}</title>
       </Head>
+      <LanguageSelector />
       {show ? (
         <>
           <Alert
@@ -76,7 +98,7 @@ function signUp() {
             onClose={() => setShow(false)}
             dismissible
           >
-            <Alert.Heading>Error</Alert.Heading>
+            <Alert.Heading>{lang === "eng" ? "Error" : "Fehler"}</Alert.Heading>
             <p>{message}</p>
           </Alert>
         </>
@@ -88,10 +110,19 @@ function signUp() {
         <>
           <CenterSpinner />
           <Alert className="alertBox" variant="primary">
-            <Alert.Heading>Congratulation</Alert.Heading>
-            <p>
-              Your account has been created! You will be redirected shortly.
-            </p>
+            <Alert.Heading>
+              {lang === "eng" ? "Congratulations" : "Herzlichen Glückwunsch"}
+            </Alert.Heading>
+            {lang === "eng" ? (
+              <p>
+                Your account has been created! You will be redirected shortly.
+              </p>
+            ) : (
+              <p>
+                Dein Account wurde erfolgreich erstellt! Du wirst in Kürze
+                weitergeleitet.
+              </p>
+            )}
           </Alert>
         </>
       ) : (
@@ -103,19 +134,20 @@ function signUp() {
         <Container className={styles.signupDiv}>
           <Row className={styles.test}>
             <Col className="form-div" xs={12} md={6}>
-              <h2>Registration</h2>
+              <h2>{lang === "eng" ? "Registration" : "Registrieren"}</h2>
               <Formik
                 initialValues={{
                   last_name: "",
                   first_name: "",
                   email: "",
                   password: "",
-                  contact: "",
                   repeatPassword: "",
                   acceptTerms: false,
                 }}
                 // Hooks up our validationSchema to Formik
-                validationSchema={validationSchema}
+                validationSchema={
+                  lang === "eng" ? validationSchemaEN : validationSchemaDE
+                }
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                   setShow(false);
                   // When button submits form and form is in the process of submitting, submit button is disabled
@@ -130,7 +162,6 @@ function signUp() {
                       last_name: values.last_name,
                       email: values.email,
                       password: values.password,
-                      phone: values.contact,
                     }),
                   })
                     .then((res) => {
@@ -172,8 +203,41 @@ function signUp() {
                   isSubmitting,
                 }) => (
                   <Form onSubmit={handleSubmit} className="mx-auto">
+                    <Form.Group
+                      className="form-group"
+                      controlId="formFirstName"
+                    >
+                      <Form.Label>
+                        {lang === "eng" ? "First Name :" : "Vorname :"}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        /* This name property is used to access the value of the form element via values.nameOfElement */
+                        name="first_name"
+                        placeholder=""
+                        /* Set onChange to handleChange */
+                        onChange={handleChange}
+                        /* Set onBlur to handleBlur */
+                        onBlur={handleBlur}
+                        /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
+                        value={values.first_name}
+                        /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
+                        className={
+                          touched.first_name && errors.first_name
+                            ? "errorForm"
+                            : null
+                        }
+                      />
+                      {touched.first_name && errors.first_name ? (
+                        <div className="errorForm-message">
+                          {errors.first_name}
+                        </div>
+                      ) : null}
+                    </Form.Group>
                     <Form.Group className="form-group" controlId="formSurname">
-                      <Form.Label>Last Name :</Form.Label>
+                      <Form.Label>
+                        {lang === "eng" ? "Last Name :" : "Nachname :"}
+                      </Form.Label>
                       <Form.Control
                         type="text"
                         /* This name property is used to access the value of the form element via values.nameOfElement */
@@ -200,35 +264,6 @@ function signUp() {
                     </Form.Group>
                     <Form.Group
                       className="form-group"
-                      controlId="formFirstName"
-                    >
-                      <Form.Label>First Name :</Form.Label>
-                      <Form.Control
-                        type="text"
-                        /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name="first_name"
-                        placeholder=""
-                        /* Set onChange to handleChange */
-                        onChange={handleChange}
-                        /* Set onBlur to handleBlur */
-                        onBlur={handleBlur}
-                        /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
-                        value={values.first_name}
-                        /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
-                        className={
-                          touched.first_name && errors.first_name
-                            ? "errorForm"
-                            : null
-                        }
-                      />
-                      {touched.first_name && errors.first_name ? (
-                        <div className="errorForm-message">
-                          {errors.first_name}
-                        </div>
-                      ) : null}
-                    </Form.Group>
-                    <Form.Group
-                      className="form-group"
                       controlId="formEmail"
                       className="form-group"
                     >
@@ -248,32 +283,10 @@ function signUp() {
                         <div className="errorForm-message">{errors.email}</div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group className="form-group" controlId="formContact">
-                      <Form.Label>Phone Number:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name="contact"
-                        placeholder=""
-                        /* Set onChange to handleChange */
-                        onChange={handleChange}
-                        /* Set onBlur to handleBlur */
-                        onBlur={handleBlur}
-                        /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
-                        value={values.contact}
-                        /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
-                        className={
-                          touched.contact && errors.contact ? "errorForm" : null
-                        }
-                      />
-                      {touched.contact && errors.contact ? (
-                        <div className="errorForm-message">
-                          {errors.contact}
-                        </div>
-                      ) : null}
-                    </Form.Group>
                     <Form.Group controlId="formBasicPassword">
-                      <Form.Label>Password :</Form.Label>
+                      <Form.Label>
+                        {lang === "eng" ? "Password :" : "Passwort :"}
+                      </Form.Label>
                       <Form.Control
                         type="password"
                         placeholder=""
@@ -297,7 +310,11 @@ function signUp() {
                       className="form-group"
                       controlId="formRepeatPassword"
                     >
-                      <Form.Label>confirm Password :</Form.Label>
+                      <Form.Label>
+                        {lang === "eng"
+                          ? "confirm Password :"
+                          : "Passwort wiederholen :"}
+                      </Form.Label>
                       <Form.Control
                         type="password"
                         placeholder=""
@@ -329,13 +346,21 @@ function signUp() {
                             : null
                         }
                       />
-                      <Form.Label>
-                        Yes, I have read the{" "}
-                        <a onClick={() => setTermsShown(true)}>
-                          terms and conditions
-                        </a>
-                        .
-                      </Form.Label>
+                      {lang === "eng" ? (
+                        <Form.Label>
+                          Yes, I have read the{" "}
+                          <a onClick={() => setTermsShown(true)}>
+                            terms and conditions
+                          </a>
+                          .
+                        </Form.Label>
+                      ) : (
+                        <Form.Label>
+                          Ja, ich habe die{" "}
+                          <a onClick={() => setTermsShown(true)}>AGB</a> gelesen
+                          und verstanden.
+                        </Form.Label>
+                      )}
                     </Form.Group>
                     <Button
                       className="form-group"
@@ -343,7 +368,9 @@ function signUp() {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Register your account
+                      {lang === "eng"
+                        ? "Register your account"
+                        : "Registrieren"}
                     </Button>
                   </Form>
                 )}

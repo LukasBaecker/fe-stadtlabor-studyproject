@@ -1,21 +1,28 @@
 import Head from "next/head";
 import React from "react";
 import Image from "react-bootstrap/Image";
+import LanguageSelector from "../components/LanguageSelector";
+import { useSelector } from "react-redux";
 
 export default function pageNotFound() {
-  const language = "eng";
+  const lang = useSelector((state) => state.lang);
   return (
     <>
       <Head>
-        <title>Page not found</title>
+        {lang === "eng" ? (
+          <title>Page not found</title>
+        ) : (
+          <title>Seite nicht gefunden</title>
+        )}
       </Head>
-      <div className='errorWindow'>
-        {language === "eng" ? (
+      <LanguageSelector />
+      <div className="errorWindow">
+        {lang === "eng" ? (
           <>
             <h1>Ups! Seems, you digged to deep.</h1>
             <p>This page could not be found please return to our surface.</p>
           </>
-        ) : language === "ger" ? (
+        ) : lang === "ger" ? (
           <>
             <h1>Ups! Scheint, als hättest du zu tief gebuddelt.</h1>
             <p>
@@ -26,7 +33,7 @@ export default function pageNotFound() {
         ) : (
           <></>
         )}
-        <Image src={"/imgs/404.svg"} className='notFoundImage' />
+        <Image src={"/imgs/404.svg"} className="notFoundImage" />
       </div>
     </>
   );

@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../store/actions/auth.js";
 import { setLanguage } from "../store/actions/index.js";
 import { CenterSpinner } from "../components/Loader";
+import LanguageSelector from "../components/LanguageSelector";
 let Yup = require("yup");
 import Navigation from "../components/Navigation.jsx";
 import BootstrapButton from "react-bootstrap/Button";
@@ -50,10 +51,13 @@ export default function Home() {
         {isAuth ? (
           <Navigation />
         ) : (
-          <LoginButton
-            className={styles.loginButton}
-            toggleLoginPopup={setLoginShown}
-          />
+          <>
+            <LanguageSelector />
+            <LoginButton
+              className={styles.loginButton}
+              toggleLoginPopup={setLoginShown}
+            />
+          </>
         )}
 
         {/* Page Title */}
@@ -116,20 +120,6 @@ function LoginButton({ toggleLoginPopup }) {
 
   return (
     <>
-      <Dropdown id="languageDropdown">
-        <Dropdown.Toggle variant="secondary" id="languageDropdownToggle">
-          {lang === "eng" ? "US" : "DE"}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => dispatch(setLanguage("eng"))}>
-            English
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => dispatch(setLanguage("ger"))}>
-            Deutsch
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
       <div className={styles.login}>
         <Button
           variant="secondary"
