@@ -218,34 +218,6 @@ function signUp() {
                   isSubmitting,
                 }) => (
                   <Form onSubmit={handleSubmit} className="mx-auto">
-                    <Form.Group className="form-group" controlId="formSurname">
-                      <Form.Label>
-                        {lang === "eng" ? "Last Name :" : "Nachname :"}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name="last_name"
-                        placeholder=""
-                        /* Set onChange to handleChange */
-                        onChange={handleChange}
-                        /* Set onBlur to handleBlur */
-                        onBlur={handleBlur}
-                        /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
-                        value={values.last_name}
-                        /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
-                        className={
-                          touched.last_name && errors.last_name
-                            ? "errorForm"
-                            : null
-                        }
-                      />
-                      {touched.last_name && errors.last_name ? (
-                        <div className="errorForm-message">
-                          {errors.last_name}
-                        </div>
-                      ) : null}
-                    </Form.Group>
                     <Form.Group
                       className="form-group"
                       controlId="formFirstName"
@@ -274,6 +246,34 @@ function signUp() {
                       {touched.first_name && errors.first_name ? (
                         <div className="errorForm-message">
                           {errors.first_name}
+                        </div>
+                      ) : null}
+                    </Form.Group>
+                    <Form.Group className="form-group" controlId="formSurname">
+                      <Form.Label>
+                        {lang === "eng" ? "Last Name :" : "Nachname :"}
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        /* This name property is used to access the value of the form element via values.nameOfElement */
+                        name="last_name"
+                        placeholder=""
+                        /* Set onChange to handleChange */
+                        onChange={handleChange}
+                        /* Set onBlur to handleBlur */
+                        onBlur={handleBlur}
+                        /* Store the value of this input in values.name, make sure this is named the same as the name property on the form element */
+                        value={values.last_name}
+                        /* Check if the name field (this field) has been touched and if there is an error, if so add the .error class styles defined in the CSS (make the input box red) */
+                        className={
+                          touched.last_name && errors.last_name
+                            ? "errorForm"
+                            : null
+                        }
+                      />
+                      {touched.last_name && errors.last_name ? (
+                        <div className="errorForm-message">
+                          {errors.last_name}
                         </div>
                       ) : null}
                     </Form.Group>
