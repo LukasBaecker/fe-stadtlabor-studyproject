@@ -14,6 +14,7 @@ import { logoutUser } from "../store/actions/auth";
 import { getGardenUrl, userGetUrl } from "../helpers/urls";
 
 function user() {
+  const lang = useSelector((state) => state.lang);
   const dispatch = useDispatch();
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -85,7 +86,7 @@ function user() {
       <div className="bodyBox">
         {/* Set Header */}
         <Header
-          caption="Welcome back"
+          caption={lang === "eng" ? "Welcome back" : "Wilkommen zurück"}
           name={username}
           imgUrl="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
         />
@@ -111,7 +112,7 @@ function user() {
     <>
       {/* update page title */}
       <Head>
-        <title>Userpage</title>
+        <title>{lang === "eng" ? "User Profile" : "Benutzerprofil"}</title>
       </Head>
       {/* wait for fetching data from the server*/}
       {loading ? <CenterSpinner /> : content()}
@@ -153,6 +154,7 @@ function Garden({ gardenId, gardenName }) {
 }
 
 function GardenController() {
+  const lang = useSelector((state) => state.lang);
   return (
     <Container className={[styles.Item, styles.GardenController].join(" ")}>
       <button
@@ -160,7 +162,7 @@ function GardenController() {
         style={{ borderRight: "1px solid black" }}
         onClick={() => router.push("/creategarden")}
       >
-        Create new Garden
+        {lang === "eng" ? "Create new Garden" : "Neuen Garten erstellen"}
       </button>
       <button
         className={styles.GardenControllerPart}
@@ -168,7 +170,7 @@ function GardenController() {
           router.push({ pathname: "/map", query: { action: "join" } })
         }
       >
-        Join a Garden
+        {lang === "eng" ? "Join a Garden" : "Garten beitreten"}
       </button>
     </Container>
   );
@@ -176,24 +178,26 @@ function GardenController() {
 
 //Map Item
 function Map() {
+  const lang = useSelector((state) => state.lang);
   return (
     <button
       className={[styles.Item, styles.Map].join(" ")}
       onClick={(e) => router.push("/map/")}
     >
-      Garden Map
+      {lang === "eng" ? "Garden Map" : "Karte der Gärten"}
     </button>
   );
 }
 
 //Variety Item
 function Variety() {
+  const lang = useSelector((state) => state.lang);
   return (
     <button
       className={[styles.Item, styles.Variety].join(" ")}
       onClick={(e) => router.push("/cropvariaty/")}
     >
-      Variety
+      {lang === "eng" ? "Crop Variety" : "Artenvielfalt"}
     </button>
   );
 }
