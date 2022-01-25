@@ -51,10 +51,13 @@ export default function Home() {
         {isAuth ? (
           <Navigation />
         ) : (
-          <LoginButton
-            className={styles.loginButton}
-            toggleLoginPopup={setLoginShown}
-          />
+          <>
+            <LanguageSelector />
+            <LoginButton
+              className={styles.loginButton}
+              toggleLoginPopup={setLoginShown}
+            />
+          </>
         )}
 
         {/* Page Title */}
@@ -117,7 +120,6 @@ function LoginButton({ toggleLoginPopup }) {
 
   return (
     <>
-      <LanguageSelector />
       <div className={styles.login}>
         <Button
           variant="secondary"
