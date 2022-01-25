@@ -15,21 +15,26 @@ import Navigation from "../components/Navigation.jsx";
 import { userLoginPostUrl } from "../helpers/urls";
 
 // Schema for yup
-const validationSchema = Yup.object().shape({
+const validationSchemaEN = Yup.object().shape({
   email: Yup.string()
     .email("*enter a valid mail")
     .required("*please enter your email"),
   password: Yup.string().required("*please enter your password."),
 });
+const validationSchemaDE = Yup.object().shape({
+  email: Yup.string()
+    .email("*Valide Email-Adresse eingeben")
+    .required("*Bitte Email-Adresse eingeben"),
+  password: Yup.string().required("*Bitte Password eingeben"),
+});
 
 const SignIn = () => {
+  const lang = useSelector((state) => state.lang);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
   const currentUser = useSelector((state) => state.auth);
   const [showError, setShowError] = useState(false);
-
-  const redirectToUserpage = () => {};
 
   return (
     <>
@@ -53,7 +58,7 @@ const SignIn = () => {
                 marginTop: "80px",
               }}
             >
-              <h2>Sign in</h2>
+              <h2>{lang === "eng" ? "Sign in" : "Anmelden"}</h2>
               {showError ? (
                 <>
                   <Alert
@@ -63,7 +68,11 @@ const SignIn = () => {
                     dismissible
                   >
                     <Alert.Heading>Ups!</Alert.Heading>
-                    <p>Email or password is wrong.</p>
+                    {lang === "eng" ? (
+                      <p>Email or password is wrong.</p>
+                    ) : (
+                      <p>Email oder passwort ist falsch.</p>
+                    )}
                   </Alert>
                 </>
               ) : (
@@ -72,7 +81,9 @@ const SignIn = () => {
               <Formik
                 initialValues={{ email: "", password: "" }}
                 // Hooks up our validationSchema to Formik
-                validationSchema={validationSchema}
+                validationSchema={
+                  lang === "eng" ? validationSchemaEN : validationSchemaDE
+                }
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                   setLoading(true);
                   setShowError(false);
@@ -136,10 +147,12 @@ const SignIn = () => {
                       className="form-group"
                       controlId="formBasicPassword"
                     >
-                      <Form.Label>Password :</Form.Label>
+                      <Form.Label>
+                        {lang === "eng" ? "Password" : "Passwort"} :
+                      </Form.Label>
                       <Form.Control
                         type="password"
-                        placeholder="Password"
+                        placeholder={lang === "eng" ? "Password" : "Passwort"}
                         name="password"
                         onChange={handleChange}
                         onBlur={handleBlur}
