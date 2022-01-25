@@ -13,6 +13,9 @@ import {
   eventDeleteUrl,
   resourceDeleteUrl,
   resourcePostUrl,
+  userGetById,
+  cropsGetUrl,
+  cropPutUrl,
 } from "../../../helpers/urls";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
@@ -45,6 +48,59 @@ async function fetchEvents(id, setEvents) {
   }
 }
 
+async function fetchCrops(id, setCrops) {
+  try {
+    const request = await fetch(cropsGetUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    if (request.status === 200) {
+      const crops = await request.json();
+      const cropsFiltered = crops.filter((crop) =>
+        crop.gardens.includes(parseInt(id))
+      );
+      setCrops(cropsFiltered);
+    } else {
+      throw new Error("Something went wrong fetching crops");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+/**
+ * Function to fetch all members of a garden
+ * @param {Array.<number>} ids List of ids of users to fetch
+ * @param {function} setMembers function to set Members
+ */
+async function fetchMembers(ids, setMembers) {
+  const getMemberById = async (userId) => {
+    const userRequest = await fetch(userGetById(userId), {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    return new Promise(async (resolve, reject) => {
+      if (userRequest.status === 200) {
+        resolve(await userRequest.json());
+      } else {
+        reject({ id: userId, first_name: "unknown", last_name: "error" });
+      }
+    });
+  };
+
+  const memberList = [];
+  for (let i = 0; i < ids.length; i++) {
+    const user = await getMemberById(ids[i]);
+    delete user.email;
+    delete user.garden;
+    memberList.push(user);
+  }
+  setMembers(memberList);
+}
+
 /*
 Function to fetch all resources in database,
 then filters them by garden-id to only show the relevant ones
@@ -75,6 +131,8 @@ function garden() {
   const [gardenDetails, setGardenDetails] = useState("");
   const [events, setEvents] = useState([]);
   const [resources, setResources] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [crops, setCrops] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState({});
   const [isMember, setIsMember] = useState(false);
@@ -118,6 +176,7 @@ function garden() {
             throw new Error("Garden not found");
           } else {
             setGardenDetails(cont.properties);
+            fetchMembers(cont.properties.members, setMembers);
           }
         } catch (e) {
           if (e.message === "Garden not found") {
@@ -131,6 +190,7 @@ function garden() {
 
         fetchEvents(id, setEvents); // fetch events
         fetchResources(id, setResources); // fetch resources
+        fetchCrops(id, setCrops);
       })();
       setDataFetched(true);
       setLoading(false);
@@ -142,6 +202,7 @@ function garden() {
   // 2: Events
   // 3: Members
   // 4: Sharables
+  // 5: Crops
   const [pageState, setPageState] = useState(1);
 
   return (
@@ -158,7 +219,9 @@ function garden() {
         pageState,
         setPageState,
         userDetails,
+        members,
         isMember,
+        crops,
       }}
     >
       {loading ? (
@@ -217,13 +280,6 @@ function Content() {
             </Button>
             {gardenDetails.primary_purpose == "GARDEN" && (
               <>
-                <Button variant="primary" onClick={() => setPageState(2)}>
-                  <img
-                    src="/imgs/icons8-kalender-bearbeiten-100.png"
-                    alt="Events"
-                    className={styles.menuButtonIcon}
-                  />
-                </Button>
                 {
                   // Only show list of members, if user is part of the garden
                   isMember && (
@@ -236,6 +292,20 @@ function Content() {
                     </Button>
                   )
                 }
+                <Button variant="primary" onClick={() => setPageState(2)}>
+                  <img
+                    src="/imgs/icons8-kalender-bearbeiten-100.png"
+                    alt="Events"
+                    className={styles.menuButtonIcon}
+                  />
+                </Button>
+                <Button variant="primary" onClick={() => setPageState(5)}>
+                  <img
+                    src="/imgs/icons8-plant-60-white.png"
+                    alt="Crops"
+                    className={styles.menuButtonIcon}
+                  />
+                </Button>
               </>
             )}
 
@@ -255,6 +325,7 @@ function Content() {
         {pageState === 2 && <Events />}
         {pageState === 3 && <Members />}
         {pageState === 4 && <Shareables />}
+        {pageState === 5 && <Crops />}
       </div>
     </>
   );
@@ -301,7 +372,7 @@ function Events() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Upcoming Events</h2>
+      <h2>{`Upcoming Events (${upcomingEvents.length})`}</h2>
       <div className={styles.listing}>
         {upcomingEvents.map((evt) => (
           <Event key={evt.event_id} event={evt} />
@@ -310,7 +381,9 @@ function Events() {
 
       <AddButton ExecuteFunction={AddEvent} />
 
-      <h2 style={{ marginTop: "25px" }}>Past Events</h2>
+      <h2
+        style={{ marginTop: "25px" }}
+      >{`Past Events (${pastEvents.length})`}</h2>
       <div className={styles.listing}>
         {pastEvents.map((evt) => (
           <Event key={evt.event_id} event={evt} />
@@ -580,32 +653,14 @@ Shows all members of the community and their role (admin or normal member).
 Admins can remove members or promote members to admins.
 */
 function Members() {
-  const [members, setMembers] = useState([
-    { id: 1, name: "John Doe", role: "admin" },
-    { id: 3, name: "Garten Zwerg", role: "member" },
-    { id: 4, name: "Max Mustermann", role: "member" },
-    { id: 5, name: "Julia Julietta", role: "member" },
-    { id: 6, name: "Harry Potter", role: "member" },
-    { id: 7, name: "James Bond", role: "member" },
-    { id: 8, name: "Santa Claus", role: "admin" },
-  ]);
-
-  //sort all members into admins and normal members
-  // so we can list them systematically
-  const admins = members.filter((member) => member.role === "admin");
-  const normalMembers = members.filter((member) => member.role === "member");
+  const { members } = useContext(GardenContext);
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Members</h2>
+      <h2>Members ({members.length})</h2>
       <div className={styles.listing}>
         {/* first show all admin members */}
-        {admins.map((member) => (
-          <Member key={member.id} member={member} />
-        ))}
-
-        {/* now show all normal members */}
-        {normalMembers.map((member) => (
+        {members.map((member) => (
           <Member key={member.id} member={member} />
         ))}
       </div>
@@ -617,7 +672,7 @@ function Member({ member }) {
   return (
     <div className={styles.listItem}>
       <img
-        src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
+        src="/imgs/icons8-person-60.png"
         alt="user profile picture"
         className={
           // assign multiple classes to element
@@ -626,11 +681,160 @@ function Member({ member }) {
       />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
-          {member.role}
-          <h3>{member.name}</h3>
+          <h3>{`${member.first_name} ${member.last_name}`}</h3>
         </div>
       </div>
     </div>
+  );
+}
+
+/*
+Crops Page:
+Rendered, when the user clicks the Crops button in ButtonGroup.
+*/
+function Crops() {
+  const { crops } = useContext(GardenContext);
+
+  return (
+    <div className={styles.pagePartContent}>
+      <h2>Crops ({crops.length})</h2>
+      <div className={styles.listing}>
+        {/* first show all admin members */}
+        {crops.map((crop) => (
+          <Crop key={crop.crop_id} crop={crop} />
+        ))}
+      </div>
+      <AddButton ExecuteFunction={AddCrop} />
+    </div>
+  );
+}
+
+function Crop({ crop }) {
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  return (
+    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
+      <img
+        src="/imgs/icons8-plant-60.png"
+        alt="pictur of crop"
+        className={
+          // assign multiple classes to element
+          [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
+        }
+      />
+      <div className={styles.listItemContent}>
+        <div className={styles.listItemDetail}>
+          <h3>{crop.name}</h3>
+        </div>
+      </div>
+      {popupVisible && (
+        <CropDetail crop={crop} setPopupVisible={setPopupVisible} />
+      )}
+    </div>
+  );
+}
+
+function CropDetail({ crop, setPopupVisible }) {
+  /*
+  I know this looks like really strange programming...
+  For some  reason I was not able to manage to get x-button
+  to change state using setPopupVisible() directly.
+  But it does work when executing this function in the else{} clause...
+  Hence this strange construct here...
+  */
+
+  const [visible, setVisible] = useState(true);
+  const { isMember } = useContext(GardenContext);
+  if (visible) {
+    return (
+      <div className={styles.popup}>
+        <div className={styles.popup_inner}>
+          <h3>{crop.name}</h3>
+          <hr />
+          {crop.description}
+          {isMember && (
+            <RemoveCrop crop={crop} setPopupVisible={setPopupVisible} />
+          )}
+          <button
+            className={styles.popupCloseButton}
+            onClick={() => setVisible(false)}
+          >
+            X
+          </button>
+        </div>
+      </div>
+    );
+  } else {
+    setPopupVisible(false);
+    return null;
+  }
+}
+
+function AddCrop({ setPopupVisible }) {
+  const [showError, setShowError] = useState(false);
+
+  const handleSubmit = () => {
+    console.log("not implemented yet");
+  };
+
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popup_inner} onSubmit={handleSubmit}>
+        <h3>New Shareable</h3>
+        {showError ? (
+          <ErrorAlert
+            setShowError={setShowError}
+            heading="Ups"
+            message="Something weng wrong creating crop"
+          />
+        ) : (
+          <></>
+        )}
+
+        <button
+          className={styles.popupCloseButton}
+          onClick={() => setPopupVisible(false)}
+        >
+          X
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function RemoveCrop({ crop, setPopupVisible }) {
+  const { gardenId } = useContext(GardenContext);
+
+  const handleClick = async () => {
+    const cropId = crop.crop_id;
+    delete crop.crop_id;
+    crop.gardens = crop.gardens.filter((id) => id !== parseInt(gardenId));
+
+    try {
+      const request = await fetch(cropPutUrl(cropId), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(crop),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return (
+    <Button
+      variant="danger"
+      className={styles.removeButton}
+      onClick={() => {
+        console.log("not implemented");
+        handleClick();
+      }}
+    >
+      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+    </Button>
   );
 }
 
@@ -645,7 +849,7 @@ function Shareables() {
 
   return (
     <div className={styles.pagePartContent}>
-      <h2>Shareables</h2>
+      <h2>{`Resources (${resources.length})`}</h2>
       <div className={styles.listing}>
         {resources.map((item) => (
           <ShareableItem key={item.resource_id} item={item} />
@@ -660,20 +864,20 @@ function ShareableItem({ item }) {
   const [popupVisible, setPopupVisible] = useState(false);
 
   const categoryLookup = {
-    1: "Tool",
-    2: "Seeds",
-    3: "Fertelizer",
-    4: "Compost",
-    5: "Construction Material",
-    6: "Gardens",
-    7: "Other",
+    1: { name: "Tool", url: "/imgs/icons8-hammer-90.png" },
+    2: { name: "Seeds", url: "/imgs/icons8-flax-seeds-96.png" },
+    3: { name: "Fertelizer", url: "/imgs/icons8-fertilizer-60.png" },
+    4: { name: "Compost", url: "/imgs/icons8-compost-heap-100.png" },
+    5: { name: "Construction Material", url: "/imgs/icons8-brick-wall-64.png" },
+    6: { name: "Gardens", url: "/imgs/icons8-apple-100.png" },
+    7: { name: "Other", url: "/imgs/icons8-question-mark-90.png" },
   };
 
   return (
     <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
       <img
-        src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"
-        alt="user profile picture"
+        src={categoryLookup[item.category].url}
+        alt="resource icon"
         className={
           // assign multiple classes to element
           [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
@@ -681,7 +885,7 @@ function ShareableItem({ item }) {
       />
       <div className={styles.listItemContent}>
         <div className={styles.listItemDetail}>
-          {categoryLookup[item.category]}
+          {categoryLookup[item.category].name}
           <h3 style={{ marginBottom: "0" }}>{item.resource_name}</h3>
           {item.resource_status}
         </div>
@@ -833,7 +1037,7 @@ function AddShareable({ setPopupVisible }) {
   return (
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
-        <h3>New Shareable</h3>
+        <h3>New Resource</h3>
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
@@ -929,13 +1133,13 @@ function AddButton({ ExecuteFunction }) {
   }, []);
 
   // only show button if user is logged in
-  const { loggedIn } = useContext(GardenContext);
+  const { loggedIn, isMember } = useContext(GardenContext);
 
   const [popupVisible, setPopupVisible] = useState(false);
 
   return (
     <>
-      {loggedIn ? (
+      {loggedIn && isMember ? (
         <>
           <Button
             onClick={() => setPopupVisible(true)}

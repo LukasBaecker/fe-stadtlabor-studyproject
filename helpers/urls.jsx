@@ -8,6 +8,15 @@ const backendApiUrl = backendBaseUrl + "/api/v1";
 //URL to GET User details
 export const userGetUrl = backendApiUrl + "/users/user";
 
+/**
+ * function to generate URL to GET user details by ID
+ * @param {number} userId User-ID to generate URL for
+ * @returns {string} URL
+ */
+export function userGetById(userId) {
+  return backendApiUrl + `/users/users_in_garden/${userId}`;
+}
+
 //URL to PUT user Details
 export const userPutUrl = backendApiUrl + "/users/user";
 
@@ -79,4 +88,16 @@ export const resourcePostUrl = backendApiUrl + "/gardens/resources/";
  */
 export function resourceDeleteUrl(resourceId) {
   return backendApiUrl + `/gardens/resources/${resourceId}`;
+}
+
+//URL to GET list of crops
+export const cropsGetUrl = backendApiUrl + "/crops/";
+
+/**
+ * function to generate URL to PUT a crop
+ * @param {number} cropId ID of the crop that shall be PUT
+ * @returns URL of CROP PUT
+ */
+export function cropPutUrl(cropId) {
+  return backendApiUrl + `/crops/${cropId}`;
 }
