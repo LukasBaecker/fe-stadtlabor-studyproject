@@ -49,7 +49,7 @@ async function fetchEvents(id, setEvents) {
   }
 }
 
-async function fetchCrops(id, setCrops) {
+async function fetchCrops(id, setCrops, setCropsNOT) {
   try {
     const request = await fetch(cropsGetUrl, {
       method: "GET",
@@ -58,10 +58,8 @@ async function fetchCrops(id, setCrops) {
     });
     if (request.status === 200) {
       const crops = await request.json();
-      const cropsFiltered = crops.filter((crop) =>
-        crop.gardens.includes(parseInt(id))
-      );
-      setCrops(cropsFiltered);
+      setCrops(crops.filter((crop) => crop.gardens.includes(parseInt(id))));
+      setCropsNOT(crops.filter((crop) => !crop.gardens.includes(parseInt(id))));
     } else {
       throw new Error("Something went wrong fetching crops");
     }
@@ -85,7 +83,9 @@ async function fetchMembers(ids, setMembers) {
 
     return new Promise(async (resolve, reject) => {
       if (userRequest.status === 200) {
-        resolve(await userRequest.json());
+        const response = await userRequest.json();
+        response.id = userId;
+        resolve(response);
       } else {
         reject({ id: userId, first_name: "unknown", last_name: "error" });
       }
@@ -95,8 +95,6 @@ async function fetchMembers(ids, setMembers) {
   const memberList = [];
   for (let i = 0; i < ids.length; i++) {
     const user = await getMemberById(ids[i]);
-    delete user.email;
-    delete user.garden;
     memberList.push(user);
   }
   setMembers(memberList);
@@ -135,6 +133,7 @@ function garden() {
   const [resources, setResources] = useState([]);
   const [members, setMembers] = useState([]);
   const [crops, setCrops] = useState([]);
+  const [cropsNOT, setCropsNOT] = useState([]); //all crops that are NOT in the garden
   const [loggedIn, setLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState({});
   const [isMember, setIsMember] = useState(false);
@@ -192,7 +191,7 @@ function garden() {
 
         fetchEvents(id, setEvents); // fetch events
         fetchResources(id, setResources); // fetch resources
-        fetchCrops(id, setCrops);
+        fetchCrops(id, setCrops, setCropsNOT);
       })();
       setDataFetched(true);
       setLoading(false);
@@ -224,6 +223,9 @@ function garden() {
         members,
         isMember,
         crops,
+        setCrops,
+        cropsNOT,
+        setCropsNOT,
         lang,
       }}
     >
@@ -779,6 +781,8 @@ function CropDetail({ crop, setPopupVisible }) {
           <h3>{crop.name}</h3>
           <hr />
           {crop.description}
+          <hr />
+          {crop.characteristics}
           {isMember && (
             <RemoveCrop crop={crop} setPopupVisible={setPopupVisible} />
           )}
@@ -798,26 +802,75 @@ function CropDetail({ crop, setPopupVisible }) {
 }
 
 function AddCrop({ setPopupVisible }) {
+  const { lang, setLoading, setCrops, cropsNOT, setCropsNOT, gardenId } =
+    useContext(GardenContext);
   const [showError, setShowError] = useState(false);
+  const [newCropId, setNewCropId] = useState(cropsNOT[0].crop_id);
 
-  const handleSubmit = () => {
-    console.log("not implemented yet");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    const crop = cropsNOT.filter((crp) => crp.crop_id == newCropId)[0];
+    const gardensNew = [...crop.gardens, gardenId];
+
+    const request = fetch(cropPutUrl(newCropId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ gardens: gardensNew }),
+    })
+      .then((result) => {
+        if (result.status === 200) {
+          setPopupVisible(false);
+          fetchCrops(gardenId, setCrops, setCropsNOT);
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        setShowError(true);
+      });
+    setLoading(false);
   };
 
   return (
     <div className={styles.popup}>
       <div className={styles.popup_inner} onSubmit={handleSubmit}>
-        <h3>New Shareable</h3>
+        <h3>{lang === "eng" ? "Add Crop" : "Pflanze hinzufügen"}</h3>
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
             heading="Ups"
-            message="Something weng wrong creating crop"
+            message={
+              lang === "eng"
+                ? "Something weng wrong creating crop"
+                : "Etwas ist schief gegangen beim Hinzufügen der Pflanze"
+            }
           />
         ) : (
           <></>
         )}
-
+        <Form>
+          <Form.Group>
+            <Form.Select
+              value={newCropId}
+              onChange={(e) => setNewCropId(e.target.value)}
+            >
+              {cropsNOT.map((crop) => (
+                <option key={crop.crop_id} value={crop.crop_id}>
+                  {crop.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            {lang === "eng" ? "Submit" : "Hinzufügen"}
+          </Button>
+        </Form>
         <button
           className={styles.popupCloseButton}
           onClick={() => setPopupVisible(false)}
@@ -830,22 +883,26 @@ function AddCrop({ setPopupVisible }) {
 }
 
 function RemoveCrop({ crop, setPopupVisible }) {
-  const { gardenId } = useContext(GardenContext);
+  const { gardenId, setCrops, setCropsNOT } = useContext(GardenContext);
 
   const handleClick = async () => {
-    const cropId = crop.crop_id;
-    delete crop.crop_id;
-    crop.gardens = crop.gardens.filter((id) => id !== parseInt(gardenId));
+    const gardensNew = crop.gardens.filter((id) => id !== parseInt(gardenId));
 
     try {
-      const request = await fetch(cropPutUrl(cropId), {
+      const request = await fetch(cropPutUrl(crop.crop_id), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(crop),
+        body: JSON.stringify({ gardens: gardensNew }),
       });
+      if (request.status === 200) {
+        setPopupVisible(false);
+        fetchCrops(gardenId, setCrops, setCropsNOT);
+      } else {
+        throw new Error("Something went wrong");
+      }
     } catch (e) {
       console.log(e);
     }
