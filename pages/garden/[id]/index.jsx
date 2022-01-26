@@ -781,6 +781,8 @@ function CropDetail({ crop, setPopupVisible }) {
           <h3>{crop.name}</h3>
           <hr />
           {crop.description}
+          <hr />
+          {crop.characteristics}
           {isMember && (
             <RemoveCrop crop={crop} setPopupVisible={setPopupVisible} />
           )}
