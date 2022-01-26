@@ -1,0 +1,98 @@
+.jumbotron {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 100vw;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  min-height: 80px;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+  background-size: cover;
+  background-position: center center;
+  .jumbotronContent {
+    width: calc(100vw - 170px);
+    margin: auto;
+    color: white;
+    align-self: flex-end;
+    h1 {
+      width: 100%;
+      text-align: center;
+    }
+    p.hidden {
+    }
+    p.visible {
+    }
+  }
+}
+.jumbotron.start {
+  min-height: 250px;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+
+  .jumbotronContent {
+    h1 {
+      margin-top: 75px;
+      margin-bottom: 30px;
+    }
+    p {
+      margin-bottom: 75px;
+      max-height: 100vh;
+      opacity: 1;
+      transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      -moz-transition: all 0.5s;
+      -ms-transition: all 0.5s;
+      -o-transition: all 0.5s;
+      transition-delay: 0.3s;
+    }
+  }
+}
+.jumbotron.end {
+  min-height: 80px;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition-delay: 0.3s;
+  .jumbotronContent {
+    h1 {
+      margin: 0;
+    }
+    p {
+      margin: 0;
+      max-height: 0px;
+      opacity: 0;
+      transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      -moz-transition: all 0.5s;
+      -ms-transition: all 0.5s;
+      -o-transition: all 0.5s;
+    }
+  }
+}
+.jumbotron.background {
+  position: static;
+  opacity: 0;
+  visibility: hidden;
+}
+.jumbotron.user {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/imgs/markus-spiske-agBmkSQ2At0-unsplash.JPG");
+}
+.jumbotron.cropvariaty {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/imgs/markus-spiske-HldmC6MR970-unsplash.JPG");
+}
+.jumbotron.garden {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/imgs/markus-spiske-bk11wZwb9F4-unsplash.JPG");
+}
