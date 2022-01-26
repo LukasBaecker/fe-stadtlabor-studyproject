@@ -95,8 +95,6 @@ async function fetchMembers(ids, setMembers) {
   const memberList = [];
   for (let i = 0; i < ids.length; i++) {
     const user = await getMemberById(ids[i]);
-    delete user.email;
-    delete user.garden;
     memberList.push(user);
   }
   setMembers(memberList);
