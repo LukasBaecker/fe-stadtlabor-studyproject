@@ -83,7 +83,9 @@ async function fetchMembers(ids, setMembers) {
 
     return new Promise(async (resolve, reject) => {
       if (userRequest.status === 200) {
-        resolve(await userRequest.json());
+        const response = await userRequest.json();
+        response.id = userId;
+        resolve(response);
       } else {
         reject({ id: userId, first_name: "unknown", last_name: "error" });
       }
