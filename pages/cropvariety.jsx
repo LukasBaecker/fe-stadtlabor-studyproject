@@ -8,7 +8,7 @@ import CenterSpinner from "../components/Loader.jsx";
 import Navigation from "../components/Navigation.jsx";
 import { cropsGetUrl, backendBaseUrl, getAllGardens } from "../helpers/urls";
 import { useMediaQuery } from "react-responsive";
-
+import Dropdown from "react-bootstrap/Dropdown";
 function cropvariety() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [offsetY, setOffsetY] = useState(0);
@@ -79,7 +79,7 @@ const Jumbotron = (props) => {
         <p className={props.offsetY < 10 ? "visible" : "hidden"}>
           {lang === "eng"
             ? "Explore all the whole crop variety and find out how to deal with specific crops. Find out if there are gardens in your area that have got your favourite crops."
-            : "Erforsche die Vielfalt der Pflanzenwelt und erhalte alle wichtigen Informationen die du benötigst. Finde heraus ob ein Garten in deiner Nähe deine Lieblingspflanze beherbergt."}
+            : "Erforsche die Vielfalt der Pflanzenwelt und erhalte alle wichtigen Informationen die du benötigst. Finde heraus ob ein Garten in deiner Nähe deine Lieblingspflanze beherbergt. Aktuell sind die Daten auf dieser Seite leider nur auf Englisch verfügbar."}
         </p>
       </div>
     </div>
@@ -87,8 +87,8 @@ const Jumbotron = (props) => {
 };
 
 const SingleCrop = (props) => {
+  const lang = useSelector((state) => state.lang);
   const router = useRouter();
-  const getGardenName = (id) => {};
   return (
     <Row key={"rowOf" + props.crop.crop_id}>
       <Col xs={12} md={12}>
@@ -105,7 +105,12 @@ const SingleCrop = (props) => {
           <h3>{props.crop.name}</h3>
           <p>{props.crop.description}</p>
           <p>{props.crop.characteristics}</p>
-
+          <Dropdown.Divider className='divider' />
+          <h4>
+            {lang === "eng"
+              ? "Gardens with " + props.crop.name
+              : "Gärten mit  " + props.crop.name}
+          </h4>
           {props.crop.gardens.map((g) => {
             return (
               <Button
@@ -113,7 +118,8 @@ const SingleCrop = (props) => {
                   router.push("/garden/" + g);
                 }}
                 className='cropGardenButton'
-                key={g}>
+                key={g}
+                variant='secondary'>
                 {props.gardens.length != 0
                   ? props.gardens.find((el) => el.id === g).properties.name
                   : "..."}

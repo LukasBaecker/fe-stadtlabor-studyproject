@@ -105,6 +105,25 @@
   .cropContentDiv {
     margin: 10px;
   }
+  h4 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+  }
+  .divider {
+    border: none;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    margin-left: 3%;
+    margin-right: 3%;
+    color: $color-secondary;
+    height: 3px;
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
 }
 
 .post {
@@ -184,6 +203,8 @@
   }
 }
 .cropGardenButton {
+  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2),
+    -2px -2px 4px 0 rgba(255, 255, 255, 0.5);
   border-radius: 30em !important;
   margin: 3px;
   width: 100%;
