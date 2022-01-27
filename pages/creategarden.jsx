@@ -31,14 +31,6 @@ const Map = dynamic(() => import("../components/MapPicker.jsx"), {
 
 // Schema for yup
 const validationSchema = Yup.object().shape({
-  latitude: Yup.number("Must be a number")
-    .min(-90, "Number too small, must be larger than -90")
-    .max(90, "Number too high, must be smaller than 90")
-    .typeError("Must be a number"),
-  longitude: Yup.number()
-    .min(-180, "Number too small, must be larger than -180")
-    .max(180, "Number too high, must be smaller than 180")
-    .typeError("Must be a number"),
   name: Yup.string().required("Please enter the name of the garden"),
   description: Yup.string().required(
     "Please enter a description of the garden"
@@ -268,12 +260,20 @@ const CreateGarden = () => {
                         <Form.Control
                           type="text"
                           readOnly={true}
-                          value={"Latitude: " + position.lat}
+                          value={
+                            position.lat !== 0 && position.lng !== 0
+                              ? "Latitude: " + position.lat
+                              : "Locaiton optional"
+                          }
                         />
                         <Form.Control
                           type="text"
                           readOnly={true}
-                          value={"Longitude: " + position.lng}
+                          value={
+                            position.lat !== 0 && position.lng !== 0
+                              ? "Longitude: " + position.lng
+                              : "Locaiton optional"
+                          }
                         />
                       </Col>
                       <Col>
