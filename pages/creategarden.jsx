@@ -1,15 +1,19 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/actions/auth";
 import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { Formik } from "formik";
 import { useSelector } from "react-redux";
 import Navigation from "../components/Navigation";
 import { CenterSpinner } from "../components/Loader";
+import styles from "../styles/creategarden.module.scss";
 import {
   createGarden,
   joinGarden,
@@ -20,6 +24,10 @@ import { userGetUrl } from "../helpers/urls";
 let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
 import Alert from "react-bootstrap/Alert";
+
+const Map = dynamic(() => import("../components/MapPicker.jsx"), {
+  ssr: false,
+});
 
 // Schema for yup
 const validationSchema = Yup.object().shape({
@@ -70,11 +78,16 @@ const CreateGarden = () => {
         }
       } catch (e) {
         console.log("error: ", e);
+        setLoading(false);
       }
     })();
   }, []);
 
   const Content = () => {
+    //controls popup with map to set location
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [position, setPosition] = useState({ lat: 0, lng: 0 });
+
     return (
       <>
         <Head>
@@ -101,9 +114,6 @@ const CreateGarden = () => {
             )}
             <Formik
               initialValues={{
-                latitude: "",
-                longitude: "",
-                geom_point: "",
                 name: "",
                 description: "",
                 email: "",
@@ -120,8 +130,12 @@ const CreateGarden = () => {
                 setShowError(false);
                 setSubmitting(true);
 
-                values["geom_point"] =
-                  "POINT(" + values.longitude + " " + values.latitude + ")";
+                if (position.lat !== 0 && position.long !== 0) {
+                  values["geom_point"] =
+                    "POINT(" + position.lng + " " + position.lat + ")";
+                  values["latitude"] = position.lat;
+                  values["longitude"] = position.lng;
+                }
 
                 /*
                 Two-step process:
@@ -194,45 +208,31 @@ const CreateGarden = () => {
                       <div className="errorForm-message">{errors.name}</div>
                     ) : null}
                   </Form.Group>
-
-                  <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Latitude</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="latitude"
-                      placeholder="Latitude"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.latitude}
-                      className={
-                        touched.latitude && errors.latitude ? "errorForm" : null
-                      }
-                    />
-                    {touched.latitude && errors.latitude ? (
-                      <div className="errorForm-message">{errors.latitude}</div>
-                    ) : null}
-                  </Form.Group>
-
-                  <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Longitude</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="longitude"
-                      placeholder="Longitude"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.longitude}
-                      className={
-                        touched.longitude && errors.longitude
-                          ? "errorForm"
-                          : null
-                      }
-                    />
-                    {touched.longitude && errors.longitude ? (
-                      <div className="errorForm-message">
-                        {errors.longitude}
-                      </div>
-                    ) : null}
+                  <Form.Group>
+                    <Form.Label>Location</Form.Label>
+                    <Row>
+                      <Col xs={8}>
+                        <Form.Control
+                          type="text"
+                          readOnly={true}
+                          value={"Latitude: " + position.lat}
+                        />
+                        <Form.Control
+                          type="text"
+                          readOnly={true}
+                          value={"Longitude: " + position.lng}
+                        />
+                      </Col>
+                      <Col>
+                        <Button
+                          className={styles.mapButton}
+                          variant="secondary"
+                          onClick={() => setPopupVisible(true)}
+                        >
+                          <img src="/imgs/icons8-map-96.png" alt="Map" />
+                        </Button>
+                      </Col>
+                    </Row>
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
@@ -347,11 +347,68 @@ const CreateGarden = () => {
             </Formik>
           </div>
         </div>
+        {popupVisible && (
+          <MapPopup
+            position={position}
+            setPosition={setPosition}
+            setPopupVisible={setPopupVisible}
+          />
+        )}
       </>
     );
   };
   return <>{loading ? <CenterSpinner /> : <Content />}</>;
 };
+
+function MapPopup({ position, setPosition, setPopupVisible }) {
+  const [localPosition, setLocalPosition] = useState(position);
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popup_inner}>
+        <Map
+          localPosition={localPosition}
+          setLocalPosition={setLocalPosition}
+        />
+        <Row>
+          <Col>
+            <Button
+              variant="primary"
+              className={styles.submit}
+              onClick={() => {
+                setPosition(localPosition);
+                setPopupVisible(false);
+              }}
+            >
+              Submit
+            </Button>
+          </Col>
+          <Col>
+            <div className={styles.delete}>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  setPosition({ lat: 0, lng: 0 });
+                  setPopupVisible(false);
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </Col>
+          <Col>
+            <Button
+              variant="warning"
+              className={styles.cancel}
+              onClick={() => setPopupVisible(false)}
+            >
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
+}
 
 function ErrorMessage({ message, setShowError }) {
   return (
