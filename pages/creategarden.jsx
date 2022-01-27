@@ -208,33 +208,6 @@ const CreateGarden = () => {
                       <div className="errorForm-message">{errors.name}</div>
                     ) : null}
                   </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Location</Form.Label>
-                    <Row>
-                      <Col xs={8}>
-                        <Form.Control
-                          type="text"
-                          readOnly={true}
-                          value={"Latitude: " + position.lat}
-                        />
-                        <Form.Control
-                          type="text"
-                          readOnly={true}
-                          value={"Longitude: " + position.lng}
-                        />
-                      </Col>
-                      <Col>
-                        <Button
-                          className={styles.mapButton}
-                          variant="secondary"
-                          onClick={() => setPopupVisible(true)}
-                        >
-                          <img src="/imgs/icons8-map-96.png" alt="Map" />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form.Group>
-
                   <Form.Group className="form-group" controlId="formEmail">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -288,7 +261,32 @@ const CreateGarden = () => {
                       <div className="errorForm-message">{errors.address}</div>
                     ) : null}
                   </Form.Group>
-
+                  <Form.Group>
+                    <Form.Label>Location</Form.Label>
+                    <Row>
+                      <Col xs={8}>
+                        <Form.Control
+                          type="text"
+                          readOnly={true}
+                          value={"Latitude: " + position.lat}
+                        />
+                        <Form.Control
+                          type="text"
+                          readOnly={true}
+                          value={"Longitude: " + position.lng}
+                        />
+                      </Col>
+                      <Col>
+                        <Button
+                          className={styles.mapButton}
+                          variant="secondary"
+                          onClick={() => setPopupVisible(true)}
+                        >
+                          <img src="/imgs/icons8-map-96.png" alt="Map" />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Group>
                   <Form.Group className="form-group" controlId="formEmail">
                     <Form.Label>Primary Purpose</Form.Label>
                     <Form.Select
