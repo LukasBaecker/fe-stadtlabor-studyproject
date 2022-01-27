@@ -13,6 +13,7 @@ import {
   setFilterCategories,
 } from "../store/actions/gardenAndResources.js";
 import { setCurrentPoint } from "../store/actions/index.js";
+import logoutUser from "../store/actions/auth.js";
 import { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
@@ -60,7 +61,9 @@ export default function mapPage() {
         });
         const userInformation = await userRequest.json();
         if (userInformation.detail === "Unauthenticated!") {
-          dispatch(logoutUser());
+          if (isAuth) {
+            dispatch(logoutUser());
+          }
         } else {
           setUser(userInformation);
         }

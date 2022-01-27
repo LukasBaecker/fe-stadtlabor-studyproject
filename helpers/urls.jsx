@@ -2,7 +2,7 @@
  * File contains URLs to all backend endpoints used throughout this project
  */
 
-const backendBaseUrl = "http://giv-project15.uni-muenster.de:8000";
+export const backendBaseUrl = "http://giv-project15.uni-muenster.de:8000";
 const backendApiUrl = backendBaseUrl + "/api/v1";
 
 //URL to GET User details

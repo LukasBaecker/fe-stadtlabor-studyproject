@@ -5,7 +5,6 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Formik } from "formik";
-//import { message } from "antd";
 let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,24 +48,22 @@ const SignIn = () => {
       ) : (
         <>
           <Navigation />
-          <div className="bodyBox">
+          <div className='bodyBox'>
             <div
               style={{
                 width: "80%",
                 marginLeft: "auto",
                 marginRight: "auto",
                 marginTop: "80px",
-              }}
-            >
+              }}>
               <h2>{lang === "eng" ? "Sign in" : "Anmelden"}</h2>
               {showError ? (
                 <>
                   <Alert
-                    className="alertInPopup"
-                    variant="danger"
+                    className='alertInPopup'
+                    variant='danger'
                     onClose={() => setShowError(false)}
-                    dismissible
-                  >
+                    dismissible>
                     <Alert.Heading>Ups!</Alert.Heading>
                     {lang === "eng" ? (
                       <p>Email or password is wrong.</p>
@@ -113,8 +110,7 @@ const SignIn = () => {
                       console.log("Login: Denied");
                       console.log(err.message);
                     });
-                }}
-              >
+                }}>
                 {/* Callback function containing Formik state and helpers that handle common form actions */}
                 {({
                   values,
@@ -125,13 +121,13 @@ const SignIn = () => {
                   handleSubmit,
                   isSubmitting,
                 }) => (
-                  <Form onSubmit={handleSubmit} className="mx-auto">
-                    <Form.Group className="form-group" controlId="formEmail">
+                  <Form onSubmit={handleSubmit} className='mx-auto'>
+                    <Form.Group className='form-group' controlId='formEmail'>
                       <Form.Label>Email :</Form.Label>
                       <Form.Control
-                        type="text"
-                        name="email"
-                        placeholder="Email"
+                        type='text'
+                        name='email'
+                        placeholder='Email'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.email}
@@ -140,20 +136,19 @@ const SignIn = () => {
                         }
                       />
                       {touched.email && errors.email ? (
-                        <div className="errorForm-message">{errors.email}</div>
+                        <div className='errorForm-message'>{errors.email}</div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className="form-group"
-                      controlId="formBasicPassword"
-                    >
+                      className='form-group'
+                      controlId='formBasicPassword'>
                       <Form.Label>
                         {lang === "eng" ? "Password" : "Passwort"} :
                       </Form.Label>
                       <Form.Control
-                        type="password"
+                        type='password'
                         placeholder={lang === "eng" ? "Password" : "Passwort"}
-                        name="password"
+                        name='password'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
@@ -164,18 +159,17 @@ const SignIn = () => {
                         }
                       />
                       {touched.password && errors.password ? (
-                        <div className="errorForm-message">
+                        <div className='errorForm-message'>
                           {errors.password}
                         </div>
                       ) : null}
                     </Form.Group>
 
                     <Button
-                      className="form-group"
-                      variant="secondary"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
+                      className='form-group'
+                      variant='secondary'
+                      type='submit'
+                      disabled={isSubmitting}>
                       Login
                     </Button>
                   </Form>
