@@ -19,6 +19,16 @@
       border: none;
       background-color: rgb(0, 0, 0, 0);
     }
+    button {
+      border-radius: 30em;
+      -webkit-border-radius: 30em;
+      -moz-border-radius: 30em;
+      -ms-border-radius: 30em;
+      -o-border-radius: 30em;
+    }
+    select {
+      margin-bottom: 1rem;
+    }
     position: absolute;
     left: 10px;
     right: 10px;

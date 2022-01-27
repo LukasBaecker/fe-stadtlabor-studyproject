@@ -3,24 +3,78 @@
 $card-radius: 50px;
 @import "./popup";
 
+.gardenBox {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 .Content {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 80vh;
-}
+  padding-top: 100px;
+  width: 100vw;
+  height: calc(100vh - 80px);
+  overflow: scroll;
 
+  hr {
+    border: none;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 3%;
+    margin-right: 3%;
+    color: $color-secondary;
+    height: 6px;
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
+  h5 {
+    margin-bottom: 15px;
+  }
+}
+.gardenInfoIcon {
+  margin-right: 10px;
+}
+.headingGardens {
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  top: 0;
+}
 .buttonGroupWrapper {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 60px;
+  z-index: 3;
+  width: 100vw;
+  margin-top: 10px;
+  position: fixed;
   text-align: center;
+  border-radius: 30em;
+  -webkit-border-radius: 30em;
+  -moz-border-radius: 30em;
+  -ms-border-radius: 30em;
+  -o-border-radius: 30em;
 }
 
 .buttonGroup {
-  width: 100%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  width: 100vw;
   max-width: 600px;
-  padding: 10px;
+  padding: 0;
+  border-radius: 30em !important;
+  -webkit-border-radius: 30em !important;
+  -moz-border-radius: 30em !important;
+  -ms-border-radius: 30em !important;
+  -o-border-radius: 30em !important;
+
+  button {
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
 }
 
 .menuButtonIcon {
@@ -40,13 +94,13 @@ $card-radius: 50px;
 .listItem {
   display: grid;
   grid-template-columns: 70px calc(100% - 70px);
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-
 $dateBorderRadius: 15px;
 .listItemGraphic {
-  border: 1px solid black;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   height: 70px;
 }
 
@@ -81,31 +135,44 @@ $dateBorderRadius: 15px;
 }
 
 .listItemContent {
-  padding-left: 15px;
+  padding-left: 55px;
   display: flex;
   align-items: center;
 }
-
+.listItemResources {
+  :hover {
+    cursor: pointer;
+    background-color: $color-secondary;
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
+}
 /* 
 .listItemDetail {
 }
 */
 
 @mixin floatingButton {
-  // left is set dynamically in javascript code
   position: fixed;
+  right: 30px;
+  bottom: 30px;
   z-index: 3;
-  bottom: 20px;
-  transform: translateX(-100%);
 }
 
 .addButtonNew {
   @include floatingButton();
   width: 70px;
   height: 70px;
-  border-radius: 50%;
   padding: 0;
   font-size: 300%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
 }
 
 .removeButton {
@@ -117,7 +184,11 @@ $dateBorderRadius: 15px;
   @include floatingButton();
   height: 70px;
   font-size: 200%;
-  border-radius: 35px;
   padding-left: 20px;
   padding-right: 20px;
+  border-radius: 35px;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
 }
