@@ -1,8 +1,11 @@
 import Head from "next/head";
 import router, { useRouter } from "next/router";
-
+import Navigation from "../../../components/Navigation";
 import Header from "../../../components/Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAt, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { CenterSpinner } from "../../../components/Loader";
+import CloseButton from "react-bootstrap/CloseButton";
 import { joinGarden, leaveGarden } from "../../../helpers/manageGarden";
 import {
   eventsGetUrl,
@@ -23,7 +26,7 @@ import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 
 import styles from "../../../styles/garden.module.scss";
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, createContext, useContext, useRef } from "react";
 import { useSelector } from "react-redux";
 
 // Context that is used to wrap the page in
@@ -227,12 +230,11 @@ function garden() {
         cropsNOT,
         setCropsNOT,
         lang,
-      }}
-    >
+      }}>
       {loading ? (
         <CenterSpinner />
       ) : (
-        <div className="bodyBox">
+        <div className={styles.gardenBox}>
           {showError ? (
             <>
               <ErrorAlert
@@ -240,7 +242,7 @@ function garden() {
                 heading={"Ups"}
                 message={errorText}
               />
-              <Button variant="primary" onClick={() => router.push("/user/")}>
+              <Button variant='primary' onClick={() => router.push("/user/")}>
                 {lang === "eng" ? "Back" : "Zurück"}
               </Button>
             </>
@@ -258,72 +260,106 @@ Entire page content:
 Everything that is shown, when the page is not loading
 */
 function Content() {
+  const jumboRef = useRef(null);
   const { pageState, setPageState, gardenDetails, isMember } =
     useContext(GardenContext);
+  const [offsetY, setOffsetY] = useState(0);
+  const [jumboHeight, setJumboHeight] = useState();
+  // Parallax Scroll Effect on Page Top
+  const handleScroll = () => setOffsetY(window.scrollY);
+  const getJumboHeight = () => {
+    const newHeight = jumboRef.current?.clientHeight;
+    setJumboHeight(newHeight);
+  };
+  useEffect(() => {
+    getJumboHeight();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <>
       <Head>
         <title>{gardenDetails.name}</title>
       </Head>
-
+      <Navigation />
       {/* Set Header */}
-      <Header
-        caption=""
-        name={gardenDetails.name}
-        imgUrl="/imgs/markus-spiske-bk11wZwb9F4-unsplash-square.jpg"
+
+      <Jumbotron
+        offsetY={offsetY}
+        front={true}
+        gardenname={gardenDetails.name}
+        ref={jumboRef}
       />
+      <Jumbotron
+        offsetY={offsetY}
+        front={false}
+        page
+        gardenname={gardenDetails.name}
+      />
+      <div
+        className={styles.buttonGroupWrapper}
+        style={{ top: jumboHeight + "px" }}>
+        <ButtonGroup className={styles.buttonGroup}>
+          <Button
+            variant={pageState === 1 ? "primary" : "secondary"}
+            onClick={() => setPageState(1)}>
+            <img
+              src='/imgs/icons8-info-100.png'
+              alt='Info'
+              className={styles.menuButtonIcon}
+            />
+          </Button>
+          {gardenDetails.primary_purpose == "GARDEN" && (
+            <>
+              {
+                // Only show list of members, if user is part of the garden
+                isMember && (
+                  <Button
+                    variant={pageState === 3 ? "primary" : "secondary"}
+                    onClick={() => setPageState(3)}>
+                    <img
+                      src='/imgs/icons8-benutzergruppen-100.png'
+                      alt='Members'
+                      className={styles.menuButtonIcon}
+                    />
+                  </Button>
+                )
+              }
+              <Button
+                variant={pageState === 2 ? "primary" : "secondary"}
+                onClick={() => setPageState(2)}>
+                <img
+                  src='/imgs/icons8-kalender-bearbeiten-100.png'
+                  alt='Events'
+                  className={styles.menuButtonIcon}
+                />
+              </Button>
+              <Button
+                variant={pageState === 5 ? "primary" : "secondary"}
+                onClick={() => setPageState(5)}>
+                <img
+                  src='/imgs/icons8-plant-60-white.png'
+                  alt='Crops'
+                  className={styles.menuButtonIcon}
+                />
+              </Button>
+            </>
+          )}
+
+          <Button
+            variant={pageState === 4 ? "primary" : "secondary"}
+            onClick={() => setPageState(4)}>
+            <img
+              src='/imgs/icons8-bohrmaschine-100.png'
+              alt='Tools'
+              className={styles.menuButtonIcon}
+            />
+          </Button>
+        </ButtonGroup>
+      </div>
+
       {/* Page Content */}
       <div className={styles.Content}>
-        <div className={styles.buttonGroupWrapper}>
-          <ButtonGroup className={styles.buttonGroup}>
-            <Button variant="primary" onClick={() => setPageState(1)}>
-              <img
-                src="/imgs/icons8-info-100.png"
-                alt="Info"
-                className={styles.menuButtonIcon}
-              />
-            </Button>
-            {gardenDetails.primary_purpose == "GARDEN" && (
-              <>
-                {
-                  // Only show list of members, if user is part of the garden
-                  isMember && (
-                    <Button variant="primary" onClick={() => setPageState(3)}>
-                      <img
-                        src="/imgs/icons8-benutzergruppen-100.png"
-                        alt="Members"
-                        className={styles.menuButtonIcon}
-                      />
-                    </Button>
-                  )
-                }
-                <Button variant="primary" onClick={() => setPageState(2)}>
-                  <img
-                    src="/imgs/icons8-kalender-bearbeiten-100.png"
-                    alt="Events"
-                    className={styles.menuButtonIcon}
-                  />
-                </Button>
-                <Button variant="primary" onClick={() => setPageState(5)}>
-                  <img
-                    src="/imgs/icons8-plant-60-white.png"
-                    alt="Crops"
-                    className={styles.menuButtonIcon}
-                  />
-                </Button>
-              </>
-            )}
-
-            <Button variant="primary" onClick={() => setPageState(4)}>
-              <img
-                src="/imgs/icons8-bohrmaschine-100.png"
-                alt="Tools"
-                className={styles.menuButtonIcon}
-              />
-            </Button>
-          </ButtonGroup>
-        </div>
-
         {/* Decide what page part shoud be rendered,
         depending on what the pageState is (set in Buttongroup) */}
         {pageState === 1 && <Info />}
@@ -342,14 +378,22 @@ Rendered, when the user clicks the Info Button in ButtonGroup.
 Shows general informatino about the garden community, e.g. description.
 */
 function Info() {
+  const lang = useSelector((state) => state.lang);
   const { gardenDetails, isMember } = useContext(GardenContext);
 
   return (
     <>
       <div className={styles.pagePartContent}>
-        <h5>{gardenDetails.email}</h5>
-        <h5>{gardenDetails.phone}</h5>
+        <h5>
+          <FontAwesomeIcon className={styles.gardenInfoIcon} icon={faAt} />
+          {gardenDetails.email}
+        </h5>
+        <h5>
+          <FontAwesomeIcon className={styles.gardenInfoIcon} icon={faPhone} />
+          {gardenDetails.phone}
+        </h5>
         <hr />
+        <h5>{lang === "eng" ? "Description" : "Beschreibung"}</h5>
         {gardenDetails.description}
       </div>
       {isMember ? <LeaveButton /> : <JoinButton />}
@@ -376,31 +420,32 @@ function Events() {
   });
 
   return (
-    <div className={styles.pagePartContent}>
-      <h2>
-        {lang === "eng"
-          ? `Upcoming Events (${upcomingEvents.length})`
-          : `Anstehende Events (${upcomingEvents.length})`}
-      </h2>
-      <div className={styles.listing}>
-        {upcomingEvents.map((evt) => (
-          <Event key={evt.event_id} event={evt} />
-        ))}
-      </div>
+    <>
+      <div className={styles.pagePartContent}>
+        <h2>
+          {lang === "eng"
+            ? `Upcoming Events (${upcomingEvents.length})`
+            : `Anstehende Events (${upcomingEvents.length})`}
+        </h2>
+        <div className={styles.listing}>
+          {upcomingEvents.map((evt) => (
+            <Event key={evt.event_id} event={evt} />
+          ))}
+        </div>
 
+        <h2 style={{ marginTop: "25px" }}>
+          {lang === "eng"
+            ? `Past Events (${pastEvents.length})`
+            : `Vergangene Events (${pastEvents.length})`}
+        </h2>
+        <div className={styles.listing}>
+          {pastEvents.map((evt) => (
+            <Event key={evt.event_id} event={evt} />
+          ))}
+        </div>
+      </div>
       <AddButton ExecuteFunction={AddEvent} />
-
-      <h2 style={{ marginTop: "25px" }}>
-        {lang === "eng"
-          ? `Past Events (${pastEvents.length})`
-          : `Vergangene Events (${pastEvents.length})`}
-      </h2>
-      <div className={styles.listing}>
-        {pastEvents.map((evt) => (
-          <Event key={evt.event_id} event={evt} />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -434,32 +479,35 @@ function Event({ event }) {
   }
 
   return (
-    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
+    <>
       <div
-        className={
-          // assign multiple classes to div
-          [styles.listItemGraphic, styles.listItemGraphicCalendar].join(" ")
-        }
-      >
-        <div className={styles.eventDateMonth}>
-          {monthNames[eventDate.getMonth()]}
+        className={[styles.listItem, styles.listItemResources].join(" ")}
+        onClick={() => setPopupVisible(true)}>
+        <div
+          className={
+            // assign multiple classes to div
+            [styles.listItemGraphic, styles.listItemGraphicCalendar].join(" ")
+          }>
+          <div className={styles.eventDateMonth}>
+            {monthNames[eventDate.getMonth()]}
+          </div>
+          <div className={styles.eventDateDay}>{eventDate.getDate()}</div>
         </div>
-        <div className={styles.eventDateDay}>{eventDate.getDate()}</div>
-      </div>
-      <div className={styles.listItemContent}>
-        <div className={styles.listItemDetail}>
-          {eventDate.getFullYear() +
-            ", " +
-            timeNumber2String(eventDate.getHours()) +
-            ":" +
-            timeNumber2String(eventDate.getMinutes())}
-          <h3>{eventName}</h3>
+        <div className={styles.listItemContent}>
+          <div className={styles.listItemDetail}>
+            {eventDate.getFullYear() +
+              ", " +
+              timeNumber2String(eventDate.getHours()) +
+              ":" +
+              timeNumber2String(eventDate.getMinutes())}
+            <h3>{eventName}</h3>
+          </div>
         </div>
       </div>
       {popupVisible && (
         <EventDetails event={event} setPopupVisible={setPopupVisible} />
       )}
-    </div>
+    </>
   );
 }
 
@@ -493,12 +541,11 @@ function EventDetails({ event, setPopupVisible }) {
               setPopupVisible={setPopupVisible}
             />
           )}
-          <button
+
+          <CloseButton
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
-          >
-            X
-          </button>
+          />
         </div>
       </div>
     );
@@ -580,17 +627,17 @@ function AddEvent({ setPopupVisible }) {
           <></>
         )}
         <Form>
-          <Form.Group className="mb-3">
+          <Form.Group className='mb-3'>
             <Form.Control
-              type="text"
+              type='text'
               placeholder={lang === "eng" ? "Event name" : "Name des Events"}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className='mb-3'>
             <Form.Control
-              type="datetime-local"
+              type='datetime-local'
               placeholder={
                 lang === "eng" ? "Date and Time" : "Datum und Uhrzeit"
               }
@@ -598,33 +645,31 @@ function AddEvent({ setPopupVisible }) {
               onChange={(e) => setDate(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className='mb-3'>
             <Form.Control
-              type="text"
+              type='text'
               placeholder={lang === "eng" ? "Location" : "Ort"}
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className='mb-3'>
             <Form.Control
-              as="textarea"
+              as='textarea'
               placeholder={lang === "eng" ? "Description" : "Beschreibung"}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant='primary' type='submit'>
             {lang === "eng" ? "Submit" : "Erstellen"}
           </Button>
         </Form>
-        <button
+        <CloseButton
           className={styles.popupCloseButton}
           onClick={() => setPopupVisible(false)}
-        >
-          X
-        </button>
+        />
       </div>
     </div>
   );
@@ -658,11 +703,10 @@ function RemoveEvent({ eventId, setPopupVisible }) {
 
   return (
     <Button
-      variant="danger"
+      variant='danger'
       className={styles.removeButton}
-      onClick={() => handleClick()}
-    >
-      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+      onClick={() => handleClick()}>
+      <img src='/imgs/icons8-delete-64.png' alt='Delete' />
     </Button>
   );
 }
@@ -697,8 +741,8 @@ function Member({ member }) {
   return (
     <div className={styles.listItem}>
       <img
-        src="/imgs/icons8-person-60.png"
-        alt="user profile picture"
+        src='/imgs/icons8-person-60.png'
+        alt='user profile picture'
         className={
           // assign multiple classes to element
           [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
@@ -721,20 +765,22 @@ function Crops() {
   const { crops, lang } = useContext(GardenContext);
 
   return (
-    <div className={styles.pagePartContent}>
-      <h2>
-        {lang === "eng"
-          ? `Crops (${crops.length})`
-          : `Pflanzen (${crops.length})`}
-      </h2>
-      <div className={styles.listing}>
-        {/* first show all admin members */}
-        {crops.map((crop) => (
-          <Crop key={crop.crop_id} crop={crop} />
-        ))}
+    <>
+      <div className={styles.pagePartContent}>
+        <h2>
+          {lang === "eng"
+            ? `Crops (${crops.length})`
+            : `Pflanzen (${crops.length})`}
+        </h2>
+        <div className={styles.listing}>
+          {/* first show all admin members */}
+          {crops.map((crop) => (
+            <Crop key={crop.crop_id} crop={crop} />
+          ))}
+        </div>
       </div>
       <AddButton ExecuteFunction={AddCrop} />
-    </div>
+    </>
   );
 }
 
@@ -742,24 +788,28 @@ function Crop({ crop }) {
   const [popupVisible, setPopupVisible] = useState(false);
 
   return (
-    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
-      <img
-        src="/imgs/icons8-plant-60.png"
-        alt="pictur of crop"
-        className={
-          // assign multiple classes to element
-          [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
-        }
-      />
-      <div className={styles.listItemContent}>
-        <div className={styles.listItemDetail}>
-          <h3>{crop.name}</h3>
+    <>
+      <div
+        className={[styles.listItem, styles.listItemResources].join(" ")}
+        onClick={() => setPopupVisible(true)}>
+        <img
+          src='/imgs/icons8-plant-60.png'
+          alt='pictur of crop'
+          className={
+            // assign multiple classes to element
+            [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
+          }
+        />
+        <div className={styles.listItemContent}>
+          <div className={styles.listItemDetail}>
+            <h3>{crop.name}</h3>
+          </div>
         </div>
       </div>
       {popupVisible && (
         <CropDetail crop={crop} setPopupVisible={setPopupVisible} />
       )}
-    </div>
+    </>
   );
 }
 
@@ -786,12 +836,10 @@ function CropDetail({ crop, setPopupVisible }) {
           {isMember && (
             <RemoveCrop crop={crop} setPopupVisible={setPopupVisible} />
           )}
-          <button
+          <CloseButton
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
-          >
-            X
-          </button>
+          />
         </div>
       </div>
     );
@@ -844,7 +892,7 @@ function AddCrop({ setPopupVisible }) {
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
-            heading="Ups"
+            heading='Ups'
             message={
               lang === "eng"
                 ? "Something weng wrong creating crop"
@@ -858,8 +906,7 @@ function AddCrop({ setPopupVisible }) {
           <Form.Group>
             <Form.Select
               value={newCropId}
-              onChange={(e) => setNewCropId(e.target.value)}
-            >
+              onChange={(e) => setNewCropId(e.target.value)}>
               {cropsNOT.map((crop) => (
                 <option key={crop.crop_id} value={crop.crop_id}>
                   {crop.name}
@@ -867,16 +914,14 @@ function AddCrop({ setPopupVisible }) {
               ))}
             </Form.Select>
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant='primary' type='submit'>
             {lang === "eng" ? "Submit" : "Hinzufügen"}
           </Button>
         </Form>
-        <button
+        <CloseButton
           className={styles.popupCloseButton}
           onClick={() => setPopupVisible(false)}
-        >
-          X
-        </button>
+        />
       </div>
     </div>
   );
@@ -910,14 +955,13 @@ function RemoveCrop({ crop, setPopupVisible }) {
 
   return (
     <Button
-      variant="danger"
+      variant='danger'
       className={styles.removeButton}
       onClick={() => {
         console.log("not implemented");
         handleClick();
-      }}
-    >
-      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+      }}>
+      <img src='/imgs/icons8-delete-64.png' alt='Delete' />
     </Button>
   );
 }
@@ -932,19 +976,21 @@ function Shareables() {
   const { resources, lang } = useContext(GardenContext);
 
   return (
-    <div className={styles.pagePartContent}>
-      <h2>
-        {lang === "eng"
-          ? `Resources (${resources.length})`
-          : `Ressourcen (${resources.length})`}
-      </h2>
-      <div className={styles.listing}>
-        {resources.map((item) => (
-          <ShareableItem key={item.resource_id} item={item} />
-        ))}
+    <>
+      <div className={styles.pagePartContent}>
+        <h2>
+          {lang === "eng"
+            ? `Resources (${resources.length})`
+            : `Ressourcen (${resources.length})`}
+        </h2>
+        <div className={styles.listing}>
+          {resources.map((item) => (
+            <ShareableItem key={item.resource_id} item={item} />
+          ))}
+        </div>
       </div>
       <AddButton ExecuteFunction={AddShareable} />
-    </div>
+    </>
   );
 }
 
@@ -999,20 +1045,24 @@ function ShareableItem({ item }) {
   }
 
   return (
-    <div className={styles.listItem} onClick={() => setPopupVisible(true)}>
-      <img
-        src={categoryLookup[item.category].url}
-        alt="resource icon"
-        className={
-          // assign multiple classes to element
-          [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
-        }
-      />
-      <div className={styles.listItemContent}>
-        <div className={styles.listItemDetail}>
-          {categoryLookup[item.category].name}
-          <h3 style={{ marginBottom: "0" }}>{item.resource_name}</h3>
-          {itemStatus}
+    <>
+      <div
+        className={[styles.listItem, styles.listItemResources].join(" ")}
+        onClick={() => setPopupVisible(true)}>
+        <img
+          src={categoryLookup[item.category].url}
+          alt='resource icon'
+          className={
+            // assign multiple classes to element
+            [styles.listItemGraphic, styles.listItemGraphicImage].join(" ")
+          }
+        />
+        <div className={styles.listItemContent}>
+          <div className={styles.listItemDetail}>
+            {categoryLookup[item.category].name}
+            <h3 style={{ marginBottom: "0" }}>{item.resource_name}</h3>
+            {itemStatus}
+          </div>
         </div>
       </div>
       {popupVisible && (
@@ -1022,7 +1072,7 @@ function ShareableItem({ item }) {
           setPopupVisible={setPopupVisible}
         />
       )}
-    </div>
+    </>
   );
 }
 
@@ -1054,12 +1104,10 @@ function ItemDetails({ item, itemStatus, setPopupVisible }) {
               setPopupVisible={setPopupVisible}
             />
           )}
-          <button
+          <CloseButton
             className={styles.popupCloseButton}
             onClick={() => setVisible(false)}
-          >
-            X
-          </button>
+          />
         </div>
       </div>
     );
@@ -1099,11 +1147,10 @@ function RemoveShareable({ shareableId, setPopupVisible }) {
 
   return (
     <Button
-      variant="danger"
+      variant='danger'
       className={styles.removeButton}
-      onClick={() => handleClick()}
-    >
-      <img src="/imgs/icons8-delete-64.png" alt="Delete" />
+      onClick={() => handleClick()}>
+      <img src='/imgs/icons8-delete-64.png' alt='Delete' />
     </Button>
   );
 }
@@ -1169,7 +1216,7 @@ function AddShareable({ setPopupVisible }) {
         {showError ? (
           <ErrorAlert
             setShowError={setShowError}
-            heading="Ups"
+            heading='Ups'
             message={
               lang === "eng"
                 ? "Something weng wrong creating the shareable resource"
@@ -1180,9 +1227,9 @@ function AddShareable({ setPopupVisible }) {
           <></>
         )}
         <Form>
-          <Form.Group className="mb-3">
+          <Form.Group className='mb-3'>
             <Form.Control
-              type="text"
+              type='text'
               placeholder={
                 lang === "eng" ? "Resource name" : "Name der Ressource"
               }
@@ -1193,27 +1240,26 @@ function AddShareable({ setPopupVisible }) {
           <Form.Group>
             <Form.Select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
+              onChange={(e) => setCategory(e.target.value)}>
               {lang === "eng" ? (
                 <>
-                  <option value="1">Tools</option>
-                  <option value="2">Seeds</option>
-                  <option value="3">Fertelizers</option>
-                  <option value="4">Compost</option>
-                  <option value="5">Construction Material</option>
-                  <option value="6">Gardens</option>
-                  <option value="7">Other</option>
+                  <option value='1'>Tools</option>
+                  <option value='2'>Seeds</option>
+                  <option value='3'>Fertelizers</option>
+                  <option value='4'>Compost</option>
+                  <option value='5'>Construction Material</option>
+                  <option value='6'>Gardens</option>
+                  <option value='7'>Other</option>
                 </>
               ) : (
                 <>
-                  <option value="1">Werkzeug</option>
-                  <option value="2">Saatgut</option>
-                  <option value="3">Dünger</option>
-                  <option value="4">Kompost</option>
-                  <option value="5">Baumaterial</option>
-                  <option value="6">Garten</option>
-                  <option value="7">Anderes</option>
+                  <option value='1'>Werkzeug</option>
+                  <option value='2'>Saatgut</option>
+                  <option value='3'>Dünger</option>
+                  <option value='4'>Kompost</option>
+                  <option value='5'>Baumaterial</option>
+                  <option value='6'>Garten</option>
+                  <option value='7'>Anderes</option>
                 </>
               )}
             </Form.Select>
@@ -1221,40 +1267,37 @@ function AddShareable({ setPopupVisible }) {
           <Form.Group>
             <Form.Select
               value={resource_status}
-              onChange={(e) => setResourceStatus(e.target.value)}
-            >
+              onChange={(e) => setResourceStatus(e.target.value)}>
               {lang === "eng" ? (
                 <>
-                  <option value="AVAILABLE FOR BORROWING">For borrowing</option>
-                  <option value="AVAILABLE FOR DONATION">For giveaway</option>
+                  <option value='AVAILABLE FOR BORROWING'>For borrowing</option>
+                  <option value='AVAILABLE FOR DONATION'>For giveaway</option>
                 </>
               ) : (
                 <>
-                  <option value="AVAILABLE FOR BORROWING">Zu Verleihen</option>
-                  <option value="AVAILABLE FOR DONATION">Zu Verschenken</option>
+                  <option value='AVAILABLE FOR BORROWING'>Zu Verleihen</option>
+                  <option value='AVAILABLE FOR DONATION'>Zu Verschenken</option>
                 </>
               )}
             </Form.Select>
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className='mb-3'>
             <Form.Control
-              as="textarea"
+              as='textarea'
               placeholder={lang === "eng" ? "Description" : "Beschreibung"}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant='primary' type='submit'>
             {lang === "eng" ? "Submit" : "Erstellen"}
           </Button>
         </Form>
-        <button
+        <CloseButton
           className={styles.popupCloseButton}
           onClick={() => setPopupVisible(false)}
-        >
-          X
-        </button>
+        />
       </div>
     </div>
   );
@@ -1266,29 +1309,6 @@ Used to add something (Event or Shareable)
 Opens an overlay popup with the form to add something
 */
 function AddButton({ ExecuteFunction }) {
-  // function to calculate left position in px of element
-  const getPosition = () => {
-    const pxBody = document.body.clientWidth;
-    const pxHtml = window.innerWidth;
-    const pos = pxHtml / 2 + pxBody / 2 - 20;
-    return pos;
-  };
-
-  //state-variable to store left position in px
-  const [leftPosition, setLeftPosition] = useState(getPosition());
-
-  // function to execute on window resizing
-  // keeps the element where it is supposed to be
-  const onResize = () => {
-    const pos = getPosition();
-    setLeftPosition(pos);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
   // only show button if user is logged in
   const { loggedIn, isMember } = useContext(GardenContext);
 
@@ -1300,9 +1320,7 @@ function AddButton({ ExecuteFunction }) {
         <>
           <Button
             onClick={() => setPopupVisible(true)}
-            className={styles.addButtonNew}
-            style={{ left: leftPosition }}
-          >
+            className={styles.addButtonNew}>
             +
           </Button>
           {popupVisible && (
@@ -1319,29 +1337,6 @@ Button to join the garden.
 Only shows up when 
 */
 function JoinButton() {
-  // function to calculate left position in px of element
-  const getPosition = () => {
-    const pxBody = document.body.clientWidth;
-    const pxHtml = window.innerWidth;
-    const pos = pxHtml / 2 + pxBody / 2 - 20;
-    return pos;
-  };
-
-  //state-variable to store left position in px
-  const [leftPosition, setLeftPosition] = useState(getPosition());
-
-  // function to execute on window resizing
-  // keeps the element where it is supposed to be
-  const onResize = () => {
-    const pos = getPosition();
-    setLeftPosition(pos);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
   // only show button if user is not logged in
   const { loggedIn, gardenId, userDetails, lang } = useContext(GardenContext);
 
@@ -1358,11 +1353,7 @@ function JoinButton() {
     <>
       {loggedIn ? (
         <>
-          <Button
-            onClick={handleClick}
-            className={styles.joinButton}
-            style={{ left: leftPosition }}
-          >
+          <Button onClick={handleClick} className={styles.joinButton}>
             {lang === "eng" ? "Join!" : "Beitreten!"}
           </Button>
         </>
@@ -1376,29 +1367,6 @@ Button to join the garden.
 Only shows up when 
 */
 function LeaveButton() {
-  // function to calculate left position in px of element
-  const getPosition = () => {
-    const pxBody = document.body.clientWidth;
-    const pxHtml = window.innerWidth;
-    const pos = pxHtml / 2 + pxBody / 2 - 20;
-    return pos;
-  };
-
-  //state-variable to store left position in px
-  const [leftPosition, setLeftPosition] = useState(getPosition());
-
-  // function to execute on window resizing
-  // keeps the element where it is supposed to be
-  const onResize = () => {
-    const pos = getPosition();
-    setLeftPosition(pos);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
   // only show button if user is not logged in
   const { loggedIn, gardenId, userDetails, lang } = useContext(GardenContext);
 
@@ -1418,9 +1386,7 @@ function LeaveButton() {
           <Button
             onClick={handleClick}
             className={styles.joinButton}
-            style={{ left: leftPosition }}
-            variant="danger"
-          >
+            variant='danger'>
             {lang === "eng" ? "Leave!" : "Verlassen!"}
           </Button>
         </>
@@ -1436,16 +1402,39 @@ function ErrorAlert({ setShowError, heading, message }) {
   return (
     <>
       <Alert
-        className="alertInPopup"
-        variant="danger"
+        className='alertInPopup'
+        variant='danger'
         onClose={() => setShowError(false)}
-        dismissible
-      >
+        dismissible>
         <Alert.Heading>{heading}</Alert.Heading>
         <p>{message}</p>
       </Alert>
     </>
   );
 }
-
+const Jumbotron = (props) => {
+  const lang = useSelector((state) => state.lang);
+  return (
+    <div
+      className={
+        props.front
+          ? props.offsetY < 1
+            ? "jumbotron garden end"
+            : "jumbotron garden end"
+          : props.offsetY < 1
+          ? "jumbotron end garden background"
+          : "jumbotron end garden background"
+      }>
+      <div className='jumbotronContent'>
+        {" "}
+        <h1>{props.gardenname}</h1>{" "}
+        <p className={props.offsetY < 1 ? "visible" : "hidden"}>
+          {lang === "eng"
+            ? "There might a garden description some day"
+            : "Hier könnte in Zukunft eine Gartenbeschreibung stehen."}
+        </p>
+      </div>
+    </div>
+  );
+};
 export default garden;
