@@ -120,11 +120,11 @@ function user() {
               {" "}
               <div
                 className={styles.parent}
-                onClick={() => router.push("/cropvariaty")}>
+                onClick={() => router.push("/cropvariety")}>
                 <div className={`${styles.child} ${styles.bgCrops}`}>
                   <a
                     className={styles.aButton}
-                    onClick={() => router.push("/cropvariaty")}>
+                    onClick={() => router.push("/cropvariety")}>
                     <span>Crop Variaty </span>
                   </a>
                 </div>

@@ -5,6 +5,13 @@
   z-index: 4;
   top: 0;
   right: 0;
+  button {
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
 
   .navigation-toggler {
     position: absolute;
