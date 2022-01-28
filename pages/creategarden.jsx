@@ -30,7 +30,7 @@ const Map = dynamic(() => import("../components/MapPicker.jsx"), {
 });
 
 // Schema for yup
-const validationSchema = Yup.object().shape({
+const validationSchemaEN = Yup.object().shape({
   name: Yup.string().required("Please enter the name of the garden"),
   description: Yup.string().required(
     "Please enter a description of the garden"
@@ -40,6 +40,18 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("*enter a valid mail")
     .required("*please enter a garden contact email"),
+});
+
+const validationSchemaDE = Yup.object().shape({
+  name: Yup.string().required("Bitte Name des Gartens eingeben"),
+  description: Yup.string().required(
+    "Bitte eine Beschreibung des Gartens eingeben"
+  ),
+  phone: Yup.number().typeError("Bitte eine Kontakt-Telefonnummer eingeben"),
+  address: Yup.string().typeError("Bitte Adresse des Gartens eingeben"),
+  email: Yup.string()
+    .email("*bitte eine valide Email-Adresse eingeben")
+    .required("*bitte eine valide Email-Adresse eingeben"),
 });
 
 const CreateGarden = () => {
@@ -80,10 +92,16 @@ const CreateGarden = () => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [position, setPosition] = useState({ lat: 0, lng: 0 });
 
+    const lang = useSelector((state) => state.lang);
+
     return (
       <>
         <Head>
-          <title>New Garden</title>
+          {lang === "eng" ? (
+            <title>New Garden</title>
+          ) : (
+            <title>Neuer Garten</title>
+          )}
         </Head>
         <div className="bodyBox">
           <Navigation />
@@ -95,7 +113,7 @@ const CreateGarden = () => {
               marginTop: "80px",
             }}
           >
-            <h2>New Garden</h2>
+            <h2>{lang === "eng" ? "New Garden" : "Neuer Garten"}</h2>
             {showError ? (
               <ErrorMessage
                 setShowError={setShowError}
@@ -116,7 +134,9 @@ const CreateGarden = () => {
                 primary_purpose: "RESOURCES",
               }}
               // Hooks up our validationSchema to Formik
-              validationSchema={validationSchema}
+              validationSchema={
+                lang === "eng" ? validationSchemaEN : validationSchemaDE
+              }
               onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setLoading(true);
                 setShowError(false);
@@ -151,19 +171,30 @@ const CreateGarden = () => {
 
                       if (gardenDeleted) {
                         throw new Error(
-                          "Something went wrong registering the user in the garden. So garden was deleted."
+                          lang === "eng"
+                            ? "Something went wrong creating the garden"
+                            : "Etwas ist schief gegangen beim Erstellen des Gartens."
                         );
                       } else {
                         throw new Error(
-                          "Something went wrong registering the user in the garden.\
+                          lang === "eng"
+                            ? "Something went wrong registering the user in the garden.\
                                   The Garden was tried to be deleted, but failed.\
                                   The Garden has the ID " +
-                            gardenId
+                              gardenId
+                            : "Etwas ist schief gegangen beim Registrieren des Nutzers im Garten.\
+                            Es wurde versucht den Garten zu löschen, aber auch das ging schief.\
+                            Der Garten hat die ID " +
+                              gardenId
                         );
                       }
                     }
                   } else {
-                    throw new Error("Something went wrong creating the garden");
+                    throw new Error(
+                      lang === "eng"
+                        ? "Something went wrong creating the garden"
+                        : "Etwas ist schief gegangen beim Erstellen des Gartens"
+                    );
                   }
                 } catch (err) {
                   setLoading(false);
@@ -219,11 +250,13 @@ const CreateGarden = () => {
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Phone</Form.Label>
+                    <Form.Label>
+                      {lang === "eng" ? "Phone" : "Telefon"}
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       name="phone"
-                      placeholder="Phone"
+                      placeholder={lang === "eng" ? "Phone" : "Telefon"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.phone}
@@ -237,11 +270,13 @@ const CreateGarden = () => {
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Address</Form.Label>
+                    <Form.Label>
+                      {lang === "eng" ? "Address" : "Adresse"}
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       name="address"
-                      placeholder="Address"
+                      placeholder={lang === "eng" ? "Address" : "Adresse"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.address}
@@ -254,25 +289,35 @@ const CreateGarden = () => {
                     ) : null}
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Location</Form.Label>
+                    <Form.Label>
+                      {lang == "eng" ? "Location" : "Ort des Gartens"}
+                    </Form.Label>
                     <Row>
                       <Col xs={8}>
                         <Form.Control
                           type="text"
                           readOnly={true}
                           value={
-                            position.lat !== 0 && position.lng !== 0
-                              ? "Latitude: " + position.lat
-                              : "Locaiton optional"
+                            lang === "eng"
+                              ? position.lat !== 0 && position.lng !== 0
+                                ? "Latitude: " + position.lat
+                                : "Locaiton optional"
+                              : position.lat !== 0 && position.lng !== 0
+                              ? "Breite: " + position.lat
+                              : "Ort optional"
                           }
                         />
                         <Form.Control
                           type="text"
                           readOnly={true}
                           value={
-                            position.lat !== 0 && position.lng !== 0
-                              ? "Longitude: " + position.lng
-                              : "Locaiton optional"
+                            lang === "eng"
+                              ? position.lat !== 0 && position.lng !== 0
+                                ? "Longitude: " + position.lng
+                                : "Locaiton optional"
+                              : position.lat !== 0 && position.lng !== 0
+                              ? "Länge: " + position.lng
+                              : "Ort optional"
                           }
                         />
                       </Col>
@@ -288,7 +333,11 @@ const CreateGarden = () => {
                     </Row>
                   </Form.Group>
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Primary Purpose</Form.Label>
+                    <Form.Label>
+                      {lang === "eng"
+                        ? "Purpose of the garden"
+                        : "Zweck des Gartens"}
+                    </Form.Label>
                     <Form.Select
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -299,8 +348,19 @@ const CreateGarden = () => {
                           : null
                       }
                     >
-                      <option value="RESOURCES">Ressource Sharing</option>
-                      <option value="GARDEN">Community Garden</option>
+                      {lang === "eng" ? (
+                        <>
+                          <option value="RESOURCES">Ressource Sharing</option>
+                          <option value="GARDEN">Community Garden</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="RESOURCES">
+                            Teilen von Resourcen
+                          </option>
+                          <option value="GARDEN">Gemeinschaftsgarten</option>
+                        </>
+                      )}
                     </Form.Select>
                     {touched.primary_purpose && errors.primary_purpose ? (
                       <div className="errorForm-message">
@@ -310,12 +370,16 @@ const CreateGarden = () => {
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Description</Form.Label>
+                    <Form.Label>
+                      {lang === "eng" ? "Description" : "Beschreibung"}
+                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={3}
                       name="description"
-                      placeholder="Description"
+                      placeholder={
+                        lang === "eng" ? "Description" : "Beschreibung"
+                      }
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.description}
@@ -338,7 +402,7 @@ const CreateGarden = () => {
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    Create Garden
+                    {lang === "eng" ? "Create Garden" : "Garten erstellen"}
                   </Button>
                 </Form>
               )}
@@ -359,6 +423,7 @@ const CreateGarden = () => {
 };
 
 function MapPopup({ position, setPosition, setPopupVisible }) {
+  const lang = useSelector((state) => state.lang);
   const [localPosition, setLocalPosition] = useState(position);
   return (
     <div className={styles.popup}>
@@ -377,7 +442,7 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
                 setPopupVisible(false);
               }}
             >
-              Submit
+              {lang === "eng" ? "Submit location" : "Eintragen"}
             </Button>
           </Col>
           <Col>
@@ -389,7 +454,7 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
                   setPopupVisible(false);
                 }}
               >
-                Delete
+                {lang === "eng" ? "Delete" : "Löschen"}
               </Button>
             </div>
           </Col>
@@ -399,7 +464,7 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
               className={styles.cancel}
               onClick={() => setPopupVisible(false)}
             >
-              Cancel
+              {lang === "eng" ? "Cancel" : "Abbrechen"}
             </Button>
           </Col>
         </Row>
