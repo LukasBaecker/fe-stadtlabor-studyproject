@@ -82,6 +82,18 @@ export default function Home() {
         <LoginPopup isVisible={loginShown} toggleLoginPopup={setLoginShown} />
 
         <Container className={styles.siteElement}>
+          <div
+            className={
+              isTabletOrMobile
+                ? styles.quote
+                : `${styles.quote} ${styles.desktop}`
+            }>
+            {lang === "eng" ? (
+              <p>"GardenUp the world!"</p>
+            ) : (
+              <p>"GardenUp the world!"</p>
+            )}
+          </div>
           <Image
             src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
             className={
@@ -136,6 +148,18 @@ export default function Home() {
           </Row>
         </Container>
         <div className={styles.frontFooter}>
+          <div
+            className={
+              isTabletOrMobile
+                ? styles.quoteSecond
+                : `${styles.quoteSecond} ${styles.desktop}`
+            }>
+            {lang === "eng" ? (
+              <p>"We all need green. The more diverse the more beautiful."</p>
+            ) : (
+              <p>"Wir alle brauchen Grün. Je vielfältiger desto schöner."</p>
+            )}
+          </div>
           <Image
             src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
             className={
