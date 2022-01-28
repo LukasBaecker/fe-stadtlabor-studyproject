@@ -167,7 +167,7 @@ $card-radius: 50px;
 .advantages {
   h2 {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 50px;
   }
 
   img {
@@ -178,9 +178,11 @@ $card-radius: 50px;
   }
 
   .advantageText {
+    font-size: 1.2rem;
     padding: 18px;
     margin: auto;
   }
+
   z-index: 1;
   position: relative;
   margin-top: -35px;
@@ -222,18 +224,23 @@ $card-radius: 50px;
   height: 100%;
 }
 .whyJoin {
+  h2 {
+    margin-top: 0px;
+    margin-bottom: 50px;
+    text-align: center;
+  }
   position: relative;
   width: 100%;
   background-color: $color-base;
   padding: 10%;
-  border-radius: $card-radius;
+  padding-top: 75px;
+  padding-bottom: 75px;
   z-index: 1;
-
-  h2 {
-    margin-top: 0px;
-    margin-bottom: 15px;
-    text-align: center;
-  }
+  border-radius: $card-radius;
+  -webkit-border-radius: $card-radius;
+  -moz-border-radius: $card-radius;
+  -ms-border-radius: $card-radius;
+  -o-border-radius: $card-radius;
 }
 
 .decoImage {
@@ -250,7 +257,7 @@ $card-radius: 50px;
   -o-transform: translateX(-50%);
 }
 .decoImageSecond {
-  margin-top: 50px;
+  margin-top: 0px;
   max-width: unset;
   position: relative;
   z-index: 1;
@@ -262,15 +269,21 @@ $card-radius: 50px;
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -o-transform: translateX(-50%);
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+}
+.decoImageSecond.desktop {
+  margin-top: 50px;
+  width: 70%;
+  height: auto;
   border-radius: $card-radius;
   -webkit-border-radius: $card-radius;
   -moz-border-radius: $card-radius;
   -ms-border-radius: $card-radius;
   -o-border-radius: $card-radius;
-}
-.decoImageSecond.desktop {
-  width: 70%;
-  height: auto;
 }
 .signup {
   margin: auto;
@@ -419,8 +432,9 @@ $card-radius: 50px;
 /* Image zoom on hover + Overlay colour */
 .parent {
   margin: auto;
+  margin-bottom: 30px;
   margin-left: 50%;
-  width: 70%;
+  width: 90%;
   height: 300px;
   overflow: hidden;
   position: relative;
@@ -444,6 +458,7 @@ $card-radius: 50px;
   height: 100%;
   width: 100%;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
@@ -455,29 +470,50 @@ $card-radius: 50px;
 .bgMap {
   background-image: url("/imgs/map.PNG");
 }
-
+.bgCrop {
+  background-image: url("/imgs/markus-spiske-bk11wZwb9F4-unsplash.JPG");
+}
+.linkButtonRow {
+  padding-bottom: 75px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+.linkButtonContainer {
+  padding-top: 75px;
+  background-color: #fff;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset,
+    rgba(50, 50, 93, 0.25) 0px -30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px -18px 36px -18px inset;
+}
+.textCol {
+  text-align: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  h2 {
+    margin-bottom: 30px;
+  }
+  p {
+    text-align: left;
+  }
+}
 .buttonText {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(15px);
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
-  border-radius: 20px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
+  border-radius: 30em;
+  -webkit-border-radius: 30em;
+  -moz-border-radius: 30em;
+  -ms-border-radius: 30em;
+  -o-border-radius: 30em;
   font-size: 1.5rem;
   color: #000 !important;
-  left: 50%;
-  top: 50%;
+  right: 20px;
+  bottom: 20px;
   text-align: center;
   cursor: pointer;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
 }
 
 .parent:hover .child,
@@ -507,11 +543,11 @@ $card-radius: 50px;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: $color-primary-more-opaque;
+  background-color: $color-secondary-opaque;
 }
 .cursorIcon {
   margin: 0 !important;
-  margin-right: 10px !important;
+  margin-right: 5px !important;
   height: 1.5rem;
   width: auto;
   opacity: 1;

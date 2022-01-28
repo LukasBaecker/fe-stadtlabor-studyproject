@@ -30,6 +30,7 @@ export default function Home() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const [offsetY, setOffsetY] = useState(0);
   const router = useRouter();
+  const lang = useSelector((state) => state.lang);
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   // Parallax Scroll Effect on Page Top
@@ -90,11 +91,51 @@ export default function Home() {
             }
           />
         </Container>
-
-        <WhyJoin />
-
+        <Container className={styles.siteElement}>
+          <WhyJoin />
+        </Container>
+        <Container
+          className={`${styles.siteElement} ${styles.linkButtonContainer}`}>
+          <Row xs={1} md={2} className={styles.linkButtonRow}>
+            <Col>
+              <div className={styles.textCol}>
+                <h2>
+                  {lang === "eng"
+                    ? "Explore the world of urban gardens"
+                    : "Erkunde die Welt der urbanen Gärten"}
+                </h2>
+                <p>
+                  {lang === "eng"
+                    ? "The easiest and fastest way to find Urban Gardening projects in your area is to use our interactive map! Here you can not only see which projects are in your neighborhood, but also get an overview of their individual offer."
+                    : "Die einfachste und schnellste Möglichkeit Urban Gardening Projekte in deiner Nähe zu finden, ist unsere interaktive Karte! Hier kannst du nicht nur sehen, welche Projekte es in deiner Nachbarschaft gibt, sondern erhältst auch einen Überblick über das jeweilige Angebot."}
+                </p>
+              </div>
+            </Col>
+            <Col>
+              <LinkButton target={"map"} />
+            </Col>
+          </Row>
+          <Row xs={1} md={2} className={styles.linkButtonRow}>
+            <Col xs={{ order: 2 }} md={{ order: 1 }}>
+              <LinkButton target={"cropvariety"} />
+            </Col>
+            <Col xs={{ order: 1 }} md={{ order: 2 }}>
+              <div className={styles.textCol}>
+                <h2>
+                  {lang === "eng"
+                    ? "Celebrate Crop Variety"
+                    : "Pflanzenvielfalt neu erleben"}
+                </h2>
+                <p>
+                  {lang === "eng"
+                    ? "Scrolling through the most common crops might be inspiring. It also might simplify the choice of your favourite Urban Gardening project here at GardenUp. Get information about the crops and which garden is planting them"
+                    : "Sich einen Überblick über häufige Pflanzen zu machen mag nicht nur inspirierend sein sondern auch die Wahl deines liebsten Urban Gardening Projects vereinfacht. Verschaffe dir einen Überblick und finde heraus in welchen Urban Gardens die jeweilige Pflanze angebaut wird."}
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
         <div className={styles.frontFooter}>
-          <MapButton />
           <Image
             src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
             className={
@@ -164,24 +205,37 @@ function SignupButton(props) {
     </div>
   );
 }
-function MapButton() {
+function LinkButton(props) {
   const lang = useSelector((state) => state.lang);
   const router = useRouter();
 
   return (
     <>
-      <div className={styles.parent} onClick={() => router.push("/map")}>
-        <div className={`${styles.child} ${styles.bgMap}`}>
-          <div
-            className={styles.buttonText}
-            onClick={() => router.push("/map")}>
-            <Image
-              src={"/icons/arrow-pointer-solid.svg"}
-              className={styles.cursorIcon}
-            />
-            {lang === "eng" ? "Go to our map" : "Schau dir unsere Karte an"}
-          </div>
+      <div
+        className={styles.parent}
+        onClick={() => router.push("/" + props.target)}>
+        <div
+          className={styles.buttonText}
+          onClick={() => router.push("/" + props.target)}>
+          <Image
+            src={"/icons/arrow-pointer-solid.svg"}
+            className={styles.cursorIcon}
+          />
+          click
+          {/*props.target === "map"
+              ? lang === "eng"
+                ? "go to our map"
+                : "schau dir unsere Karte an"
+              : lang === "eng"
+              ? "our crop variety"
+        : "unsere Pflanzenvielfalt"*/}
         </div>
+        <div
+          className={
+            props.target === "map"
+              ? `${styles.child} ${styles.bgMap}`
+              : `${styles.child} ${styles.bgCrop}`
+          }></div>
       </div>
     </>
   );
@@ -204,12 +258,14 @@ function WhyJoin() {
           </p>
         ) : (
           <p>
-            Garden Up is the first plattform giving you the unique chance to get
-            in contact with your local urban gardening projects or to share your
-            own and become part of a greener world. Be a member of a social
-            community of garden and plant lovers and experience mutual support.
-            Share tools you like to lend, borrow things you do not have, share
-            seeds others may need and even more.
+            Garden Up ist die erste Plattform, die dir die einzigartige
+            Möglichkeit bietet, mit lokalen Urban Gardening Projekten in Kontakt
+            zu treten und Teil einer grüneren Welt zu werden. Werde Mitglied
+            einer sozialen Gemeinschaft von Garten- und Pflanzenliebhaber*innen
+            und erfahre gegenseitige Unterstützung. Teile Werkzeuge, die du
+            verleihen möchtest, leihen Dinge von anderen, biete überschüssiges
+            Saatgut an, bleib auf dem neusten Stand deiner Garten-Community und
+            vieles mehr.
           </p>
         )}
       </div>
@@ -378,17 +434,17 @@ function Advantages() {
     {
       id: 1,
       url: "/imgs/icons8-hands.svg",
-      text: "Connect with your local urban gardening community",
+      text: "Connect with your local urban gardening community.",
     },
     {
       id: 2,
       url: "/imgs/icons8-shovel.svg",
-      text: "Find useful tools in your local neighborhood and share yours",
+      text: "Find useful tools in your local neighborhood and share yours.",
     },
     {
       id: 3,
       url: "/imgs/icons8-plant.svg",
-      text: "Grow the urban garden together",
+      text: "Grow the urban garden together!",
     },
   ];
   const itemsGerman = [
@@ -405,7 +461,7 @@ function Advantages() {
     {
       id: 3,
       url: "/imgs/icons8-plant.svg",
-      text: "Lasst uns gemeinsam die Stadt grüner machen!",
+      text: "Lasst uns gemeinsam die Welt grüner machen!",
     },
   ];
   return (

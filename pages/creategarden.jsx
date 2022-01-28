@@ -22,7 +22,6 @@ import {
   deleteGarden,
 } from "../helpers/manageGarden";
 import { userGetUrl } from "../helpers/urls";
-//import { message } from "antd";
 let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
 import Alert from "react-bootstrap/Alert";
@@ -105,16 +104,16 @@ const CreateGarden = () => {
             <title>Neuer Garten</title>
           )}
         </Head>
-        <div className="bodyBox">
+        <div className='bodyBox'>
           <Navigation />
           <div
+            className={styles.createGardenForm}
             style={{
               width: "80%",
               marginLeft: "auto",
               marginRight: "auto",
               marginTop: "80px",
-            }}
-          >
+            }}>
             <h2>{lang === "eng" ? "New Garden" : "Neuer Garten"}</h2>
             {showError ? (
               <ErrorMessage
@@ -203,8 +202,7 @@ const CreateGarden = () => {
                   setErorrMessage(err.message);
                   setShowError(true);
                 }
-              }}
-            >
+              }}>
               {/* Callback function containing Formik state and helpers that handle common form actions */}
               {({
                 values,
@@ -215,13 +213,13 @@ const CreateGarden = () => {
                 handleSubmit,
                 isSubmitting,
               }) => (
-                <Form onSubmit={handleSubmit} className="mx-auto">
-                  <Form.Group className="form-group" controlId="formEmail">
+                <Form onSubmit={handleSubmit} className='mx-auto'>
+                  <Form.Group className='form-group' controlId='formEmail'>
                     <Form.Label>Name</Form.Label>
                     <Form.Control
-                      type="text"
-                      name="name"
-                      placeholder="Name"
+                      type='text'
+                      name='name'
+                      placeholder='Name'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.name}
@@ -230,15 +228,15 @@ const CreateGarden = () => {
                       }
                     />
                     {touched.name && errors.name ? (
-                      <div className="errorForm-message">{errors.name}</div>
+                      <div className='errorForm-message'>{errors.name}</div>
                     ) : null}
                   </Form.Group>
-                  <Form.Group className="form-group" controlId="formEmail">
+                  <Form.Group className='form-group' controlId='formEmail'>
                     <Form.Label>Email</Form.Label>
                     <Form.Control
-                      type="text"
-                      name="email"
-                      placeholder="Email"
+                      type='text'
+                      name='email'
+                      placeholder='Email'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.email}
@@ -247,17 +245,17 @@ const CreateGarden = () => {
                       }
                     />
                     {touched.email && errors.email ? (
-                      <div className="errorForm-message">{errors.email}</div>
+                      <div className='errorForm-message'>{errors.email}</div>
                     ) : null}
                   </Form.Group>
 
-                  <Form.Group className="form-group" controlId="formEmail">
+                  <Form.Group className='form-group' controlId='formEmail'>
                     <Form.Label>
                       {lang === "eng" ? "Phone" : "Telefon"}
                     </Form.Label>
                     <Form.Control
-                      type="text"
-                      name="phone"
+                      type='text'
+                      name='phone'
                       placeholder={lang === "eng" ? "Phone" : "Telefon"}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -267,17 +265,17 @@ const CreateGarden = () => {
                       }
                     />
                     {touched.phone && errors.phone ? (
-                      <div className="errorForm-message">{errors.phone}</div>
+                      <div className='errorForm-message'>{errors.phone}</div>
                     ) : null}
                   </Form.Group>
 
-                  <Form.Group className="form-group" controlId="formEmail">
+                  <Form.Group className='form-group' controlId='formEmail'>
                     <Form.Label>
                       {lang === "eng" ? "Address" : "Adresse"}
                     </Form.Label>
                     <Form.Control
-                      type="text"
-                      name="address"
+                      type='text'
+                      name='address'
                       placeholder={lang === "eng" ? "Address" : "Adresse"}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -287,7 +285,7 @@ const CreateGarden = () => {
                       }
                     />
                     {touched.address && errors.address ? (
-                      <div className="errorForm-message">{errors.address}</div>
+                      <div className='errorForm-message'>{errors.address}</div>
                     ) : null}
                   </Form.Group>
                   <Form.Group>
@@ -297,7 +295,7 @@ const CreateGarden = () => {
                     <Row>
                       <Col xs={8}>
                         <Form.Control
-                          type="text"
+                          type='text'
                           readOnly={true}
                           value={
                             lang === "eng"
@@ -310,7 +308,7 @@ const CreateGarden = () => {
                           }
                         />
                         <Form.Control
-                          type="text"
+                          type='text'
                           readOnly={true}
                           value={
                             lang === "eng"
@@ -326,15 +324,14 @@ const CreateGarden = () => {
                       <Col>
                         <Button
                           className={styles.mapButton}
-                          variant="secondary"
-                          onClick={() => setPopupVisible(true)}
-                        >
-                          <img src="/imgs/icons8-map-96.png" alt="Map" />
+                          variant='secondary'
+                          onClick={() => setPopupVisible(true)}>
+                          <img src='/imgs/icons8-map-96.png' alt='Map' />
                         </Button>
                       </Col>
                     </Row>
                   </Form.Group>
-                  <Form.Group className="form-group" controlId="formEmail">
+                  <Form.Group className='form-group' controlId='formEmail'>
                     <Form.Label>
                       {lang === "eng"
                         ? "Purpose of the garden"
@@ -348,37 +345,36 @@ const CreateGarden = () => {
                         touched.primary_purpose && errors.primary_purpose
                           ? "errorForm"
                           : null
-                      }
-                    >
+                      }>
                       {lang === "eng" ? (
                         <>
-                          <option value="RESOURCES">Ressource Sharing</option>
-                          <option value="GARDEN">Community Garden</option>
+                          <option value='RESOURCES'>Ressource Sharing</option>
+                          <option value='GARDEN'>Community Garden</option>
                         </>
                       ) : (
                         <>
-                          <option value="RESOURCES">
+                          <option value='RESOURCES'>
                             Teilen von Resourcen
                           </option>
-                          <option value="GARDEN">Gemeinschaftsgarten</option>
+                          <option value='GARDEN'>Gemeinschaftsgarten</option>
                         </>
                       )}
                     </Form.Select>
                     {touched.primary_purpose && errors.primary_purpose ? (
-                      <div className="errorForm-message">
+                      <div className='errorForm-message'>
                         {errors.primary_purpose}
                       </div>
                     ) : null}
                   </Form.Group>
 
-                  <Form.Group className="form-group" controlId="formEmail">
+                  <Form.Group className='form-group' controlId='formEmail'>
                     <Form.Label>
                       {lang === "eng" ? "Description" : "Beschreibung"}
                     </Form.Label>
                     <Form.Control
-                      as="textarea"
+                      as='textarea'
                       rows={3}
-                      name="description"
+                      name='description'
                       placeholder={
                         lang === "eng" ? "Description" : "Beschreibung"
                       }
@@ -392,18 +388,17 @@ const CreateGarden = () => {
                       }
                     />
                     {touched.description && errors.description ? (
-                      <div className="errorForm-message">
+                      <div className='errorForm-message'>
                         {errors.description}
                       </div>
                     ) : null}
                   </Form.Group>
 
                   <Button
-                    className="form-group"
-                    variant="secondary"
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
+                    className='form-group'
+                    variant='primary'
+                    type='submit'
+                    disabled={isSubmitting}>
                     {lang === "eng" ? "Create Garden" : "Garten erstellen"}
                   </Button>
                 </Form>
@@ -437,26 +432,24 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
           localPosition={localPosition}
           setLocalPosition={setLocalPosition}
         />
-        <Row>
+        <Row className={styles.createGardenPopupRow}>
           <Col>
             <OverlayTrigger
-              placement="top"
+              placement='top'
               overlay={
                 <Tooltip id={"tooltip-top"}>
                   {lang === "eng"
                     ? "Click to submit this location to the form"
                     : "Hier klicken, um diesen Ort in das Formular zu übernehmen"}
                 </Tooltip>
-              }
-            >
+              }>
               <Button
-                variant="primary"
+                variant='primary'
                 className={styles.submit}
                 onClick={() => {
                   setPosition(localPosition);
                   setPopupVisible(false);
-                }}
-              >
+                }}>
                 {lang === "eng" ? "Submit location" : "Eintragen"}
               </Button>
             </OverlayTrigger>
@@ -464,22 +457,20 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
           <Col>
             <div className={styles.delete}>
               <OverlayTrigger
-                placement="top"
+                placement='top'
                 overlay={
                   <Tooltip id={"tooltip-top"}>
                     {lang === "eng"
                       ? "Click to delete this location from the form"
                       : "Hier klicken, um den Ort aus dem Formular zu löschen"}
                   </Tooltip>
-                }
-              >
+                }>
                 <Button
-                  variant="danger"
+                  variant='danger'
                   onClick={() => {
                     setPosition({ lat: 0, lng: 0 });
                     setPopupVisible(false);
-                  }}
-                >
+                  }}>
                   {lang === "eng" ? "Delete" : "Löschen"}
                 </Button>
               </OverlayTrigger>
@@ -487,20 +478,18 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
           </Col>
           <Col>
             <OverlayTrigger
-              placement="top"
+              placement='top'
               overlay={
                 <Tooltip id={"tooltip-top"}>
                   {lang === "eng"
                     ? "Click to close form"
                     : "Hier klicken, um abzubrechen"}
                 </Tooltip>
-              }
-            >
+              }>
               <Button
-                variant="warning"
+                variant='secondary'
                 className={styles.cancel}
-                onClick={() => setPopupVisible(false)}
-              >
+                onClick={() => setPopupVisible(false)}>
                 {lang === "eng" ? "Cancel" : "Abbrechen"}
               </Button>
             </OverlayTrigger>
@@ -514,11 +503,10 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
 function ErrorMessage({ message, setShowError }) {
   return (
     <Alert
-      className="alertInPopup"
-      variant="danger"
+      className='alertInPopup'
+      variant='danger'
       onClose={() => setShowError(false)}
-      dismissible
-    >
+      dismissible>
       <Alert.Heading>Ups!</Alert.Heading>
       <p>{message}</p>
     </Alert>

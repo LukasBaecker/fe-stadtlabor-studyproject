@@ -23,3 +23,15 @@
 .cancel {
   float: right;
 }
+.createGardenPopupRow {
+  margin-top: 20px;
+}
+.createGardenForm {
+  button {
+    border-radius: 30em;
+    -webkit-border-radius: 30em;
+    -moz-border-radius: 30em;
+    -ms-border-radius: 30em;
+    -o-border-radius: 30em;
+  }
+}
