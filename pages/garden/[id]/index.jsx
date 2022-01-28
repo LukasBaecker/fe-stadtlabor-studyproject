@@ -1321,7 +1321,7 @@ function AddButton({ ExecuteFunction }) {
           <Button
             onClick={() => setPopupVisible(true)}
             className={styles.addButtonNew}>
-            +
+            <span className={styles.addPlus}></span>
           </Button>
           {popupVisible && (
             <ExecuteFunction setPopupVisible={setPopupVisible} />

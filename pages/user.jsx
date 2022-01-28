@@ -147,7 +147,7 @@ function user() {
                     className={[styles.Item, styles.Garden].join(" ")}
                     onClick={() => router.push(`/garden/${garden.id}/`)}
                     style={{ fontSize: "1.5rem" }}>
-                    {garden.name}
+                    <span>{garden.name}</span>
                   </button>
                 </Col>
               ))

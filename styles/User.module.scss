@@ -8,6 +8,7 @@
   h2 {
     margin: auto;
     font-size: 2rem;
+    margin-left: 10px;
   }
   .userRow {
     width: 100% !important;
@@ -52,6 +53,7 @@
 
 .Garden {
   margin-top: 25px;
+  max-width: 90vw;
   border: none;
   width: 600px;
   height: 100px;
@@ -77,6 +79,10 @@
   -ms-transform: translate(-50%);
   -o-transform: translate(-50%);
   //font-size set additionally in inline style in component
+}
+.Garden > span {
+  max-width: 100%;
+  word-wrap: break-word;
 }
 .Garden:hover {
   background-color: $color-secondary;

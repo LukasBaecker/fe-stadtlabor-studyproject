@@ -421,7 +421,7 @@ function Advantages() {
           <Row xs={1} sm={3}>
             {lang === "eng"
               ? itemsEnglish.map((item) => (
-                  <Col key={item.id} className={styles.advantagesCol}>
+                  <Col key={item.id}>
                     <AdvantagesItem url={item.url} text={item.text} />
                   </Col>
                 ))

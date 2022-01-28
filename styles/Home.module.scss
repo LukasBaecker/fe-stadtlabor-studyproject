@@ -203,7 +203,7 @@ $card-radius: 50px;
     -ms-transform: translateX(-50%);
     -o-transform: translateX(-50%);
   }
-  padding: 10%;
+  padding: 15%;
   padding-left: 5%;
   padding-right: 5%;
 }
@@ -256,13 +256,17 @@ $card-radius: 50px;
   z-index: 1;
   margin-left: 50%;
   transform: translateX(-50%);
-  width: 150vw;
+  width: 120vw;
   height: auto;
-  border-radius: $card-radius;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -o-transform: translateX(-50%);
+  border-radius: $card-radius;
+  -webkit-border-radius: $card-radius;
+  -moz-border-radius: $card-radius;
+  -ms-border-radius: $card-radius;
+  -o-border-radius: $card-radius;
 }
 .decoImageSecond.desktop {
   width: 70%;
@@ -321,7 +325,6 @@ $card-radius: 50px;
   }
 }
 .signupButton.smallerText {
-  left: 50%;
   width: 90%;
   font-size: 1.5rem !important;
 }

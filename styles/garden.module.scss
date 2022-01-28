@@ -12,6 +12,7 @@ $card-radius: 50px;
   margin: 0;
   padding: 0;
   padding-top: 100px;
+  padding-bottom: 100px;
   width: 100vw;
   height: calc(100vh - 80px);
   overflow: scroll;
@@ -46,6 +47,7 @@ $card-radius: 50px;
 .buttonGroupWrapper {
   z-index: 3;
   width: 100vw;
+  max-width: 600px;
   margin-top: 10px;
   position: fixed;
   text-align: center;
@@ -78,12 +80,13 @@ $card-radius: 50px;
 }
 
 .menuButtonIcon {
-  height: 45px;
+  max-height: 45px;
 }
 
 .pagePartContent {
   margin: 10px;
   padding: 10px;
+  padding-bottom: 10px;
 }
 
 /*
@@ -157,22 +160,45 @@ $dateBorderRadius: 15px;
 
 @mixin floatingButton {
   position: fixed;
-  right: 30px;
-  bottom: 30px;
+  right: 20px;
+  bottom: 20px;
   z-index: 3;
 }
 
+@keyframes rotateButton {
+  0% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+  }
+}
 .addButtonNew {
   @include floatingButton();
+  :hover {
+    cursor: pointer;
+  }
   width: 70px;
   height: 70px;
-  padding: 0;
-  font-size: 300%;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
+  border-radius: 30em;
+  background-color: $color-primary;
+  transition: background-color 1s;
+  -webkit-border-radius: 30em;
+  -moz-border-radius: 30em;
+  -ms-border-radius: 30em;
+  -o-border-radius: 30em;
+  animation-duration: 0.3s;
+  animation-name: rotateButton;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
 }
 
 .removeButton {
@@ -191,4 +217,35 @@ $dateBorderRadius: 15px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
   -o-border-radius: 35px;
+}
+
+.addPlus {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  top: 4px;
+  left: 0px;
+  overflow: hidden;
+  transition: transform 1s;
+}
+
+.addPlus::before,
+.addPlus::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  margin-top: -1px;
+  background: #fff;
+}
+
+.addPlus::before {
+  transform: rotate(0deg);
+}
+
+.addPlus::after {
+  transform: rotate(90deg);
 }
