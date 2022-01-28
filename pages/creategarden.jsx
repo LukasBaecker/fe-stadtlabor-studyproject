@@ -9,6 +9,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { Formik } from "formik";
 import { useSelector } from "react-redux";
 import Navigation from "../components/Navigation";
@@ -424,6 +426,9 @@ const CreateGarden = () => {
 
 function MapPopup({ position, setPosition, setPopupVisible }) {
   const lang = useSelector((state) => state.lang);
+
+  // Location is first only stored in this variable (when clicking the map)
+  // Only when user hits Submit button, the location is transferred to the "position" variable
   const [localPosition, setLocalPosition] = useState(position);
   return (
     <div className={styles.popup}>
@@ -434,38 +439,71 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
         />
         <Row>
           <Col>
-            <Button
-              variant="primary"
-              className={styles.submit}
-              onClick={() => {
-                setPosition(localPosition);
-                setPopupVisible(false);
-              }}
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={"tooltip-top"}>
+                  {lang === "eng"
+                    ? "Click to submit this location to the form"
+                    : "Hier klicken, um diesen Ort in das Formular zu übernehmen"}
+                </Tooltip>
+              }
             >
-              {lang === "eng" ? "Submit location" : "Eintragen"}
-            </Button>
-          </Col>
-          <Col>
-            <div className={styles.delete}>
               <Button
-                variant="danger"
+                variant="primary"
+                className={styles.submit}
                 onClick={() => {
-                  setPosition({ lat: 0, lng: 0 });
+                  setPosition(localPosition);
                   setPopupVisible(false);
                 }}
               >
-                {lang === "eng" ? "Delete" : "Löschen"}
+                {lang === "eng" ? "Submit location" : "Eintragen"}
               </Button>
+            </OverlayTrigger>
+          </Col>
+          <Col>
+            <div className={styles.delete}>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={"tooltip-top"}>
+                    {lang === "eng"
+                      ? "Click to delete this location from the form"
+                      : "Hier klicken, um den Ort aus dem Formular zu löschen"}
+                  </Tooltip>
+                }
+              >
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    setPosition({ lat: 0, lng: 0 });
+                    setPopupVisible(false);
+                  }}
+                >
+                  {lang === "eng" ? "Delete" : "Löschen"}
+                </Button>
+              </OverlayTrigger>
             </div>
           </Col>
           <Col>
-            <Button
-              variant="warning"
-              className={styles.cancel}
-              onClick={() => setPopupVisible(false)}
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={"tooltip-top"}>
+                  {lang === "eng"
+                    ? "Click to close form"
+                    : "Hier klicken, um abzubrechen"}
+                </Tooltip>
+              }
             >
-              {lang === "eng" ? "Cancel" : "Abbrechen"}
-            </Button>
+              <Button
+                variant="warning"
+                className={styles.cancel}
+                onClick={() => setPopupVisible(false)}
+              >
+                {lang === "eng" ? "Cancel" : "Abbrechen"}
+              </Button>
+            </OverlayTrigger>
           </Col>
         </Row>
       </div>
