@@ -64,13 +64,13 @@ export default function Home() {
 
         <Image
           id={styles.mainLogo}
-          src="/garden.svg"
+          src='/garden.svg'
           style={{ transform: "translate(-50%, " + offsetY * 0.7 + "px)" }}
         />
         {/* Image of greenhouse in background */}
         <Image
           id={styles.mainBackground}
-          src="/imgs/greenhouse.png"
+          src='/imgs/greenhouse.png'
           style={{ transform: "translateY(" + offsetY * -0.5 + "px)" }}
         />
 
@@ -82,7 +82,7 @@ export default function Home() {
 
         <Container className={styles.siteElement}>
           <Image
-            src="/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg"
+            src='/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg'
             className={
               isTabletOrMobile
                 ? styles.decoImage
@@ -96,7 +96,7 @@ export default function Home() {
         <div className={styles.frontFooter}>
           <MapButton />
           <Image
-            src="/imgs/anna-earl-Odhlx3-X0pI-unsplash.jpg"
+            src='/imgs/dmitry-dreyer-gHho4FE4Ga0-unsplash.jpg'
             className={
               isTabletOrMobile
                 ? styles.decoImageSecond
@@ -122,10 +122,9 @@ function LoginButton({ toggleLoginPopup }) {
     <>
       <div className={styles.login}>
         <Button
-          variant="secondary"
+          variant='secondary'
           className={styles.loginButton}
-          onClick={() => onLoginButtonClick()}
-        >
+          onClick={() => onLoginButtonClick()}>
           Login
         </Button>
       </div>
@@ -144,7 +143,7 @@ function SignupButton(props) {
   return (
     <div className={styles.signup}>
       <Button
-        variant="primary"
+        variant='primary'
         onClick={() => onSignupButtonClick()}
         className={
           isTabletOrMobile
@@ -154,10 +153,13 @@ function SignupButton(props) {
             : props.offsetY < window.innerHeight * 0.6
             ? styles.signupButton
             : `${styles.signupButton} ${styles.fixedTop}`
-        }
-      >
-        {lang === "eng" ? "Sign up now!" : "Jetzt registrieren!"}
-        <Image src="/imgs/marker_white.svg" className={styles.signUpIcon} />
+        }>
+        {props.offsetY < window.innerHeight * 0.6
+          ? lang === "eng"
+            ? "Sign up now!"
+            : "Jetzt registrieren!"
+          : ""}
+        <Image src='/imgs/marker_white.svg' className={styles.signUpIcon} />
       </Button>
     </div>
   );
@@ -172,8 +174,7 @@ function MapButton() {
         <div className={`${styles.child} ${styles.bgMap}`}>
           <div
             className={styles.buttonText}
-            onClick={() => router.push("/map")}
-          >
+            onClick={() => router.push("/map")}>
             <Image
               src={"/icons/arrow-pointer-solid.svg"}
               className={styles.cursorIcon}
@@ -249,11 +250,10 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
           {showError ? (
             <>
               <Alert
-                className="alertInPopup"
-                variant="danger"
+                className='alertInPopup'
+                variant='danger'
                 onClose={() => setShowError(false)}
-                dismissible
-              >
+                dismissible>
                 <Alert.Heading>Ups!</Alert.Heading>
                 {lang === "eng" ? (
                   <p>Email or password is wrong.</p>
@@ -298,8 +298,7 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                   console.log("Login: Denied");
                   console.log(err.message);
                 });
-            }}
-          >
+            }}>
             {/* Callback function containing Formik state and helpers that handle common form actions */}
             {({
               values,
@@ -310,13 +309,13 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
               handleSubmit,
               isSubmitting,
             }) => (
-              <Form onSubmit={handleSubmit} className="mx-auto">
-                <Form.Group className="form-group" controlId="formEmail">
+              <Form onSubmit={handleSubmit} className='mx-auto'>
+                <Form.Group className='form-group' controlId='formEmail'>
                   <Form.Label>Email:</Form.Label>
                   <Form.Control
-                    type="text"
-                    name="email"
-                    placeholder=""
+                    type='text'
+                    name='email'
+                    placeholder=''
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.email}
@@ -325,20 +324,19 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                     }
                   />
                   {touched.email && errors.email ? (
-                    <div className="errorForm-message">{errors.email}</div>
+                    <div className='errorForm-message'>{errors.email}</div>
                   ) : null}
                 </Form.Group>
                 <Form.Group
-                  className="form-group"
-                  controlId="formBasicPassword"
-                >
+                  className='form-group'
+                  controlId='formBasicPassword'>
                   <Form.Label>
                     {lang === "eng" ? "Password:" : "Passwort:"}
                   </Form.Label>
                   <Form.Control
-                    type="password"
-                    placeholder=""
-                    name="password"
+                    type='password'
+                    placeholder=''
+                    name='password'
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.password}
@@ -347,16 +345,15 @@ function LoginPopup({ isVisible, toggleLoginPopup }) {
                     }
                   />
                   {touched.password && errors.password ? (
-                    <div className="errorForm-message">{errors.password}</div>
+                    <div className='errorForm-message'>{errors.password}</div>
                   ) : null}
                 </Form.Group>
 
                 <BootstrapButton
-                  className="form-group"
-                  variant="secondary"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
+                  className='form-group'
+                  variant='secondary'
+                  type='submit'
+                  disabled={isSubmitting}>
                   Login
                 </BootstrapButton>
               </Form>
@@ -418,8 +415,7 @@ function Advantages() {
           isTabletOrMobile
             ? styles.advantages
             : `${styles.advantages} ${styles.desktop}`
-        }
-      >
+        }>
         <h2>{lang === "eng" ? "WHAT IS GARDEN UP?" : "WAS IST GARDEN UP?"}</h2>
         <Container className={styles.advantagesContainer}>
           <Row xs={1} sm={3}>
@@ -430,7 +426,7 @@ function Advantages() {
                   </Col>
                 ))
               : itemsGerman.map((item) => (
-                  <Col key={item.id} className={styles.advantagesCol}>
+                  <Col key={item.id}>
                     <AdvantagesItem url={item.url} text={item.text} />
                   </Col>
                 ))}
@@ -443,10 +439,16 @@ function Advantages() {
 
 // Component that shows one advantage: one image plus text
 function AdvantagesItem({ url, text }) {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   return (
-    <Container>
+    <Container
+      className={
+        isTabletOrMobile
+          ? styles.advantagesCol
+          : `${styles.advantagesCol} ${styles.desktop}`
+      }>
       <Row xs={2} sm={1}>
-        <Col xs={4} sm={12}>
+        <Col xs={4} sm={12} className={styles.advantageText}>
           <Image src={url} />
         </Col>
         <Col className={styles.advantageText} xs={8} sm={12}>
@@ -459,6 +461,7 @@ function AdvantagesItem({ url, text }) {
 
 // Page Footer with About and Privacy Policy Links
 function Footer() {
+  const lang = useSelector((state) => state.lang);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
   return (
     <div id={styles.Footer}>
@@ -470,8 +473,7 @@ function Footer() {
               ? styles.footerLink
               : `${styles.footerLink} ${styles.desktop}`
           }
-          href="/about"
-        >
+          href='/about'>
           About
         </a>
         <a
@@ -480,8 +482,12 @@ function Footer() {
               ? styles.footerLink
               : `${styles.footerLink} ${styles.desktop}`
           }
-          href="/privacy"
-        >
+          target='_blank'
+          href={
+            lang === "eng"
+              ? "https://www.uni-muenster.de/de/en/datenschutzerklaerung.html"
+              : "https://www.uni-muenster.de/de/datenschutzerklaerung.html"
+          }>
           Privacy Policy
         </a>
       </div>

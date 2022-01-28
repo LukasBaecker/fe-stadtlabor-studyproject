@@ -35,59 +35,61 @@ function Navigation() {
   return (
     <>
       <LanguageSelector />
-      <div className="navigation-wrap">
-        <input type="checkbox" className="navigation-toggler" />
+      <div className='navigation-wrap'>
+        <input type='checkbox' className='navigation-toggler' />
 
-        <div className="hamburger">
+        <div className='hamburger'>
           <div></div>
         </div>
-        <div className="menu">
+        <div className='menu'>
           <div>
             <div>
               <ul>
-                <li key="home">
-                  <Link href="/">{lang === "eng" ? "Home" : "Startseite"}</Link>
+                <li key='home'>
+                  <Link href='/'>{lang === "eng" ? "Home" : "Startseite"}</Link>
                 </li>
-                <li>
-                  <Link href="/map">
+                <li key='map'>
+                  <Link href='/map'>
                     {lang === "eng" ? "Resources Map" : "Karte der Gärten"}
                   </Link>
                 </li>
-                <li key="user">
-                  <Link href="/user">
+                <li key='user'>
+                  <Link href='/user'>
                     {lang === "eng" ? "User Profile" : "Nutzerprofil"}
                   </Link>
                 </li>
+                <li key='variety'>
+                  <Link href='/cropvariety'>
+                    {lang === "eng" ? "Crop Variety" : "Pflanzenvielfalt"}
+                  </Link>
+                </li>
                 {isAuth ? (
-                  <li key="logoutIn">
+                  <li key='logoutIn'>
                     <Button
-                      variant="danger"
+                      variant='danger'
                       onClick={() => {
                         logout();
-                      }}
-                    >
+                      }}>
                       Logout
                     </Button>
                   </li>
                 ) : (
-                  <li key="loginOut">
+                  <li key='loginOut'>
                     <Button
-                      variant="secondary"
+                      variant='secondary'
                       onClick={() => {
                         router.push("/login");
-                      }}
-                    >
+                      }}>
                       Login
                     </Button>
                     {"  "}
                     {lang === "eng" ? "or" : "oder"}
                     {"  "}
                     <Button
-                      variant="secondary"
+                      variant='secondary'
                       onClick={() => {
                         router.push("/register");
-                      }}
-                    >
+                      }}>
                       {lang === "eng" ? "Sign Up Now!" : "Jetzt registrieren!"}
                     </Button>
                   </li>
