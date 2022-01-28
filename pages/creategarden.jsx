@@ -1,15 +1,21 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../store/actions/auth";
 import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { Formik } from "formik";
 import { useSelector } from "react-redux";
 import Navigation from "../components/Navigation";
 import { CenterSpinner } from "../components/Loader";
+import styles from "../styles/creategarden.module.scss";
 import {
   createGarden,
   joinGarden,
@@ -21,16 +27,12 @@ let Yup = require("yup");
 import { loginUser } from "../store/actions/auth.js";
 import Alert from "react-bootstrap/Alert";
 
+const Map = dynamic(() => import("../components/MapPicker.jsx"), {
+  ssr: false,
+});
+
 // Schema for yup
-const validationSchema = Yup.object().shape({
-  latitude: Yup.number("Must be a number")
-    .min(-90, "Number too small, must be larger than -90")
-    .max(90, "Number too high, must be smaller than 90")
-    .typeError("Must be a number"),
-  longitude: Yup.number()
-    .min(-180, "Number too small, must be larger than -180")
-    .max(180, "Number too high, must be smaller than 180")
-    .typeError("Must be a number"),
+const validationSchemaEN = Yup.object().shape({
   name: Yup.string().required("Please enter the name of the garden"),
   description: Yup.string().required(
     "Please enter a description of the garden"
@@ -40,6 +42,18 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("*enter a valid mail")
     .required("*please enter a garden contact email"),
+});
+
+const validationSchemaDE = Yup.object().shape({
+  name: Yup.string().required("Bitte Name des Gartens eingeben"),
+  description: Yup.string().required(
+    "Bitte eine Beschreibung des Gartens eingeben"
+  ),
+  phone: Yup.number().typeError("Bitte eine Kontakt-Telefonnummer eingeben"),
+  address: Yup.string().typeError("Bitte Adresse des Gartens eingeben"),
+  email: Yup.string()
+    .email("*bitte eine valide Email-Adresse eingeben")
+    .required("*bitte eine valide Email-Adresse eingeben"),
 });
 
 const CreateGarden = () => {
@@ -70,15 +84,26 @@ const CreateGarden = () => {
         }
       } catch (e) {
         console.log("error: ", e);
+        setLoading(false);
       }
     })();
   }, []);
 
   const Content = () => {
+    //controls popup with map to set location
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [position, setPosition] = useState({ lat: 0, lng: 0 });
+
+    const lang = useSelector((state) => state.lang);
+
     return (
       <>
         <Head>
-          <title>New Garden</title>
+          {lang === "eng" ? (
+            <title>New Garden</title>
+          ) : (
+            <title>Neuer Garten</title>
+          )}
         </Head>
         <div className="bodyBox">
           <Navigation />
@@ -90,7 +115,7 @@ const CreateGarden = () => {
               marginTop: "80px",
             }}
           >
-            <h2>New Garden</h2>
+            <h2>{lang === "eng" ? "New Garden" : "Neuer Garten"}</h2>
             {showError ? (
               <ErrorMessage
                 setShowError={setShowError}
@@ -101,9 +126,6 @@ const CreateGarden = () => {
             )}
             <Formik
               initialValues={{
-                latitude: "",
-                longitude: "",
-                geom_point: "",
                 name: "",
                 description: "",
                 email: "",
@@ -114,14 +136,20 @@ const CreateGarden = () => {
                 primary_purpose: "RESOURCES",
               }}
               // Hooks up our validationSchema to Formik
-              validationSchema={validationSchema}
+              validationSchema={
+                lang === "eng" ? validationSchemaEN : validationSchemaDE
+              }
               onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setLoading(true);
                 setShowError(false);
                 setSubmitting(true);
 
-                values["geom_point"] =
-                  "POINT(" + values.longitude + " " + values.latitude + ")";
+                if (position.lat !== 0 && position.long !== 0) {
+                  values["geom_point"] =
+                    "POINT(" + position.lng + " " + position.lat + ")";
+                  values["latitude"] = position.lat;
+                  values["longitude"] = position.lng;
+                }
 
                 /*
                 Two-step process:
@@ -145,19 +173,30 @@ const CreateGarden = () => {
 
                       if (gardenDeleted) {
                         throw new Error(
-                          "Something went wrong registering the user in the garden. So garden was deleted."
+                          lang === "eng"
+                            ? "Something went wrong creating the garden"
+                            : "Etwas ist schief gegangen beim Erstellen des Gartens."
                         );
                       } else {
                         throw new Error(
-                          "Something went wrong registering the user in the garden.\
+                          lang === "eng"
+                            ? "Something went wrong registering the user in the garden.\
                                   The Garden was tried to be deleted, but failed.\
                                   The Garden has the ID " +
-                            gardenId
+                              gardenId
+                            : "Etwas ist schief gegangen beim Registrieren des Nutzers im Garten.\
+                            Es wurde versucht den Garten zu löschen, aber auch das ging schief.\
+                            Der Garten hat die ID " +
+                              gardenId
                         );
                       }
                     }
                   } else {
-                    throw new Error("Something went wrong creating the garden");
+                    throw new Error(
+                      lang === "eng"
+                        ? "Something went wrong creating the garden"
+                        : "Etwas ist schief gegangen beim Erstellen des Gartens"
+                    );
                   }
                 } catch (err) {
                   setLoading(false);
@@ -194,47 +233,6 @@ const CreateGarden = () => {
                       <div className="errorForm-message">{errors.name}</div>
                     ) : null}
                   </Form.Group>
-
-                  <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Latitude</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="latitude"
-                      placeholder="Latitude"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.latitude}
-                      className={
-                        touched.latitude && errors.latitude ? "errorForm" : null
-                      }
-                    />
-                    {touched.latitude && errors.latitude ? (
-                      <div className="errorForm-message">{errors.latitude}</div>
-                    ) : null}
-                  </Form.Group>
-
-                  <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Longitude</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="longitude"
-                      placeholder="Longitude"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.longitude}
-                      className={
-                        touched.longitude && errors.longitude
-                          ? "errorForm"
-                          : null
-                      }
-                    />
-                    {touched.longitude && errors.longitude ? (
-                      <div className="errorForm-message">
-                        {errors.longitude}
-                      </div>
-                    ) : null}
-                  </Form.Group>
-
                   <Form.Group className="form-group" controlId="formEmail">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -254,11 +252,13 @@ const CreateGarden = () => {
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Phone</Form.Label>
+                    <Form.Label>
+                      {lang === "eng" ? "Phone" : "Telefon"}
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       name="phone"
-                      placeholder="Phone"
+                      placeholder={lang === "eng" ? "Phone" : "Telefon"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.phone}
@@ -272,11 +272,13 @@ const CreateGarden = () => {
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Address</Form.Label>
+                    <Form.Label>
+                      {lang === "eng" ? "Address" : "Adresse"}
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       name="address"
-                      placeholder="Address"
+                      placeholder={lang === "eng" ? "Address" : "Adresse"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.address}
@@ -288,9 +290,56 @@ const CreateGarden = () => {
                       <div className="errorForm-message">{errors.address}</div>
                     ) : null}
                   </Form.Group>
-
+                  <Form.Group>
+                    <Form.Label>
+                      {lang == "eng" ? "Location" : "Ort des Gartens"}
+                    </Form.Label>
+                    <Row>
+                      <Col xs={8}>
+                        <Form.Control
+                          type="text"
+                          readOnly={true}
+                          value={
+                            lang === "eng"
+                              ? position.lat !== 0 && position.lng !== 0
+                                ? "Latitude: " + position.lat
+                                : "Locaiton optional"
+                              : position.lat !== 0 && position.lng !== 0
+                              ? "Breite: " + position.lat
+                              : "Ort optional"
+                          }
+                        />
+                        <Form.Control
+                          type="text"
+                          readOnly={true}
+                          value={
+                            lang === "eng"
+                              ? position.lat !== 0 && position.lng !== 0
+                                ? "Longitude: " + position.lng
+                                : "Locaiton optional"
+                              : position.lat !== 0 && position.lng !== 0
+                              ? "Länge: " + position.lng
+                              : "Ort optional"
+                          }
+                        />
+                      </Col>
+                      <Col>
+                        <Button
+                          className={styles.mapButton}
+                          variant="secondary"
+                          onClick={() => setPopupVisible(true)}
+                        >
+                          <img src="/imgs/icons8-map-96.png" alt="Map" />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Group>
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Primary Purpose</Form.Label>
+                    <Form.Label>
+                      {lang === "eng"
+                        ? "Purpose of the garden"
+                        : "Zweck des Gartens"}
+                    </Form.Label>
                     <Form.Select
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -301,8 +350,19 @@ const CreateGarden = () => {
                           : null
                       }
                     >
-                      <option value="RESOURCES">Ressource Sharing</option>
-                      <option value="GARDEN">Community Garden</option>
+                      {lang === "eng" ? (
+                        <>
+                          <option value="RESOURCES">Ressource Sharing</option>
+                          <option value="GARDEN">Community Garden</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="RESOURCES">
+                            Teilen von Resourcen
+                          </option>
+                          <option value="GARDEN">Gemeinschaftsgarten</option>
+                        </>
+                      )}
                     </Form.Select>
                     {touched.primary_purpose && errors.primary_purpose ? (
                       <div className="errorForm-message">
@@ -312,12 +372,16 @@ const CreateGarden = () => {
                   </Form.Group>
 
                   <Form.Group className="form-group" controlId="formEmail">
-                    <Form.Label>Description</Form.Label>
+                    <Form.Label>
+                      {lang === "eng" ? "Description" : "Beschreibung"}
+                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={3}
                       name="description"
-                      placeholder="Description"
+                      placeholder={
+                        lang === "eng" ? "Description" : "Beschreibung"
+                      }
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.description}
@@ -340,18 +404,112 @@ const CreateGarden = () => {
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    Create Garden
+                    {lang === "eng" ? "Create Garden" : "Garten erstellen"}
                   </Button>
                 </Form>
               )}
             </Formik>
           </div>
         </div>
+        {popupVisible && (
+          <MapPopup
+            position={position}
+            setPosition={setPosition}
+            setPopupVisible={setPopupVisible}
+          />
+        )}
       </>
     );
   };
   return <>{loading ? <CenterSpinner /> : <Content />}</>;
 };
+
+function MapPopup({ position, setPosition, setPopupVisible }) {
+  const lang = useSelector((state) => state.lang);
+
+  // Location is first only stored in this variable (when clicking the map)
+  // Only when user hits Submit button, the location is transferred to the "position" variable
+  const [localPosition, setLocalPosition] = useState(position);
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popup_inner}>
+        <Map
+          localPosition={localPosition}
+          setLocalPosition={setLocalPosition}
+        />
+        <Row>
+          <Col>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={"tooltip-top"}>
+                  {lang === "eng"
+                    ? "Click to submit this location to the form"
+                    : "Hier klicken, um diesen Ort in das Formular zu übernehmen"}
+                </Tooltip>
+              }
+            >
+              <Button
+                variant="primary"
+                className={styles.submit}
+                onClick={() => {
+                  setPosition(localPosition);
+                  setPopupVisible(false);
+                }}
+              >
+                {lang === "eng" ? "Submit location" : "Eintragen"}
+              </Button>
+            </OverlayTrigger>
+          </Col>
+          <Col>
+            <div className={styles.delete}>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={"tooltip-top"}>
+                    {lang === "eng"
+                      ? "Click to delete this location from the form"
+                      : "Hier klicken, um den Ort aus dem Formular zu löschen"}
+                  </Tooltip>
+                }
+              >
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    setPosition({ lat: 0, lng: 0 });
+                    setPopupVisible(false);
+                  }}
+                >
+                  {lang === "eng" ? "Delete" : "Löschen"}
+                </Button>
+              </OverlayTrigger>
+            </div>
+          </Col>
+          <Col>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={"tooltip-top"}>
+                  {lang === "eng"
+                    ? "Click to close form"
+                    : "Hier klicken, um abzubrechen"}
+                </Tooltip>
+              }
+            >
+              <Button
+                variant="warning"
+                className={styles.cancel}
+                onClick={() => setPopupVisible(false)}
+              >
+                {lang === "eng" ? "Cancel" : "Abbrechen"}
+              </Button>
+            </OverlayTrigger>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
+}
 
 function ErrorMessage({ message, setShowError }) {
   return (

@@ -1,0 +1,25 @@
+@import "./colors";
+@import "./popup";
+
+.mapButton {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+
+  img {
+    height: 60px;
+    width: 60px;
+  }
+}
+
+.submit {
+  float: left;
+}
+
+.delete {
+  text-align: center;
+}
+
+.cancel {
+  float: right;
+}
