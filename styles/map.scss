@@ -70,7 +70,43 @@ input[type="radio"]:checked {
     }
   }
 }
+
+.clipboardSuccess {
+  visibility: visible;
+  opacity: 1;
+  position: fixed;
+  bottom: 80px;
+  left: 5px;
+  width: 50%;
+  z-index: 2;
+  padding: 10px;
+  text-align: center;
+  background-color: $color-secondary;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  transition: visibility 1s, opacity 0.5s linear;
+  -webkit-transition: visibility 1s, opacity 0.5s linear;
+  -moz-transition: visibility 1s, opacity 0.5s linear;
+  -ms-transition: visibility 1s, opacity 0.5s linear;
+  -o-transition: visibility 1s, opacity 0.5s linear;
+}
+.clipboardSuccess.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 1s, opacity 0.5s linear;
+  -webkit-transition: visibility 1s, opacity 0.5s linear;
+  -moz-transition: visibility 1s, opacity 0.5s linear;
+  -ms-transition: visibility 1s, opacity 0.5s linear;
+  -o-transition: visibility 1s, opacity 0.5s linear;
+}
 .popupInfos {
+  max-height: 160px;
   overflow-y: scroll;
 }
 .leaflet-container {

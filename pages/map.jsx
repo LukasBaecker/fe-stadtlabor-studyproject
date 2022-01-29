@@ -6,6 +6,7 @@ import Navigation from "../components/Navigation.jsx";
 import MapNavigation from "../components/MapNav.jsx";
 import { CenterSpinner } from "../components/Loader.jsx";
 import { useSelector, useDispatch } from "react-redux";
+import Modal from "react-bootstrap/Modal";
 import {
   setGardenLocations,
   setFilteredLocations,
@@ -33,6 +34,9 @@ export default function mapPage() {
   const dispatch = useDispatch();
   const lang = useSelector((state) => state.lang);
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const [showPopup, setShowPopup] = useState(true);
+  const handleClose = () => setShowPopup(false);
+  const handleShow = () => setShowPopup(true);
   const [resourceFilter, setResourceFilter] = useState([]);
   const [user, setUser] = useState({});
   const [gardensWithResources, setGardensWithResources] = useState([]);
@@ -112,8 +116,6 @@ export default function mapPage() {
         console.log("error: ", e);
       } finally {
         dispatch(setFilterCategories(resourceFilter));
-
-        console.log("test");
         setLoading(false);
       }
     })();
@@ -123,6 +125,21 @@ export default function mapPage() {
       <Head>
         <title>{lang === "eng" ? "Resource Map" : "Karte"}</title>
       </Head>
+
+      {window.location.href.slice(-11) === "action=join" && showPopup ? (
+        <Modal show={showPopup} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {lang === "eng" ? "Join a Garden" : "Einem Garten beitreten"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {lang === "eng"
+              ? "Select a garden on the map or in the list and click the JOIN button to join the garden. Or go to the garden page first by using the info-icon in the popups or the list."
+              : "Wähle einen Garten auf der Karte oder in der Liste aus und klicke dann auf den BEITRETEN Knopf um dem Garten beizutreten. Alternativ kannst du auf die Garten-Seite wechseln. Klicke dazu auf das Informations-Symbol in den Popups oder in der List"}
+          </Modal.Body>
+        </Modal>
+      ) : null}
       <Navigation />
       {isAuth ? <></> : <SignupButton />}
       {loading ? <CenterSpinner /> : <></>}

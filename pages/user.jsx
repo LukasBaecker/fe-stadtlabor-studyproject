@@ -26,9 +26,7 @@ function user() {
   const [offsetY, setOffsetY] = useState(0);
   // Parallax Scroll Effect on Page Top
   const handleScroll = () => setOffsetY(window.scrollY);
-  const calcJumboHeight = (offset) => {
-    return 250 - offset;
-  };
+
   async function getGardenName(gardenId) {
     try {
       const request = await fetch(getGardenUrl(gardenId), {
@@ -108,11 +106,11 @@ function user() {
                 className={styles.parent}
                 onClick={() => router.push("/map")}>
                 <div className={`${styles.child} ${styles.bgMap}`}>
-                  <a
-                    className={styles.aButton}
+                  <div
+                    className={styles.buttonText}
                     onClick={() => router.push("/map")}>
-                    <span>Map View </span>
-                  </a>
+                    {lang === "eng" ? "Resources Map" : "Karte der Gärten"}
+                  </div>
                 </div>
               </div>
             </Col>
@@ -122,11 +120,11 @@ function user() {
                 className={styles.parent}
                 onClick={() => router.push("/cropvariety")}>
                 <div className={`${styles.child} ${styles.bgCrops}`}>
-                  <a
-                    className={styles.aButton}
+                  <div
+                    className={styles.buttonText}
                     onClick={() => router.push("/cropvariety")}>
-                    <span>Crop Variaty </span>
-                  </a>
+                    {lang === "eng" ? "Crop Variety" : "Pflanzenvielfalt"}{" "}
+                  </div>
                 </div>
               </div>
             </Col>
@@ -207,12 +205,14 @@ const AddGardenButton = () => {
         <Button variat='primary' onClick={() => router.push("/creategarden")}>
           {lang === "eng" ? "create new Garden" : "Garten erstellen"}
         </Button>
+        <br />
         <Button
+          className={styles.lowerButtonAddGarden}
           variat='primary'
           onClick={() =>
             router.push({ pathname: "/map", query: { action: "join" } })
           }>
-          {lang === "eng" ? "join garden" : "Garten beitrete"}
+          {lang === "eng" ? "join garden" : "Garten beitreten"}
         </Button>
       </div>
     </>

@@ -27,6 +27,7 @@ function Map(props) {
     color: "#d8c3a5",
     fillOpacity: 0.5,
   };
+
   const clusterGroup = () => {
     if (filtered_locations.features != undefined) {
       return (

@@ -14,20 +14,18 @@ import { createWrapper } from "next-redux-wrapper";
 import store from "../store/configurateStore.js";
 import { PersistGate } from "redux-persist/integration/react";
 import CenterSpinner from "../components/Loader.jsx";
+import { userGetUrl } from "../helpers/urls";
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
-        const request = await fetch(
-          "http://giv-project15.uni-muenster.de:8000/api/v1/users/user",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+        const request = await fetch(userGetUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
         const content = await request.json();
         if (content.detail === "Unauthenticated!") {
           dispatch(logoutUser());
@@ -40,7 +38,7 @@ function MyApp({ Component, pageProps }) {
       }
     })();
   }, []);
-
+  //TODO: general Error handler might be added here to catch every error happening while rendering the app to redirect to /error and inform the user with beauty about errors
   return (
     <React.Fragment>
       <title>GardenUp!</title>

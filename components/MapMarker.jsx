@@ -8,6 +8,7 @@ import { setCurrentPoint } from "../store/actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import isEmpty from "../helpers/isEmpty";
 import { joinGarden } from "../helpers/manageGarden";
+import Tooltip from "react-bootstrap/Tooltip";
 import { useRouter } from "next/router";
 import {
   faChevronDown,
@@ -24,6 +25,7 @@ const MapMarker = (props) => {
   const lang = useSelector((state) => state.lang);
   const currentPoint = useSelector((state) => state.currentPoint);
   const [openList, setOpenList] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
   const resources = useSelector((state) => state.resources);
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const handleFlyTo = () => {
@@ -132,8 +134,24 @@ const MapMarker = (props) => {
         <Dropdown.Divider />
 
         <div className='markerPopupButton'>
+          <div
+            id={"tooltip-top"}
+            className={
+              copySuccess ? "clipboardSuccess" : "clipboardSuccess hidden"
+            }>
+            {lang === "eng"
+              ? "Coordinates copied to clipboard"
+              : "Koordinaten in Zwischenablage kopiert"}
+          </div>
+
           <CopyToClipboard text={locString}>
-            <Button onClick={() => {}}>
+            <Button
+              onClick={() => {
+                setCopySuccess(true);
+                setTimeout(() => {
+                  setCopySuccess(false);
+                }, 3000);
+              }}>
               <FontAwesomeIcon icon={faCopy} />
             </Button>
           </CopyToClipboard>
@@ -178,6 +196,7 @@ const MapMarker = (props) => {
 };
 
 const JoinButton = (props) => {
+  const lang = useSelector((state) => state.lang);
   const router = useRouter();
   const handleTheClick = async (userDetails, gardenId) => {
     const success = await joinGarden(userDetails, gardenId);
@@ -195,7 +214,7 @@ const JoinButton = (props) => {
         onClick={() => {
           handleTheClick(props.userDetails, props.gardenId);
         }}>
-        Join
+        {lang === "eng" ? "Join" : "Beitreten"}
       </Button>
     </>
   );
