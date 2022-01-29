@@ -283,23 +283,26 @@ function WhyJoin() {
         <h2>{lang === "eng" ? "WHY JOIN?" : "WIESO BEITRETEN?"}</h2>
         {lang === "eng" ? (
           <p>
-            Garden Up is the first plattform giving you the unique chance to get
+            GardenUp is the first plattform giving you the unique chance to get
             in contact with your local urban gardening projects or to share your
             own and become part of a greener world. Be a member of a social
             community of garden and plant lovers and experience mutual support.
             Share tools you like to lend, borrow things you do not have, share
-            seeds others may need and even more.
+            seeds others may need and even more. Because jointly, it is a lot
+            more fun to garden up the city!
           </p>
         ) : (
           <p>
-            Garden Up ist die erste Plattform, die dir die einzigartige
-            Möglichkeit bietet, mit lokalen Urban Gardening Projekten in Kontakt
-            zu treten und Teil einer grüneren Welt zu werden. Werde Mitglied
-            einer sozialen Gemeinschaft von Garten- und Pflanzenliebhaber*innen
-            und erfahre gegenseitige Unterstützung. Teile Werkzeuge, die du
-            verleihen möchtest, leihen Dinge von anderen, biete überschüssiges
-            Saatgut an, bleib auf dem neusten Stand deiner Garten-Community und
-            vieles mehr.
+            GardenUp ist die erste Plattform, die dir die einzigartige
+            Mölgichkeit gibt, dich mit lokalen Initiativen aus dem Bereich Urban
+            Gardening zu vernetzen, deine eigene Initiative bekannter zu machen
+            und somit Teil einer grüneren und nachhaltigeren Gesellschaft zu
+            werden. Werde Mitglied einer sozialen Gemeinschaft von
+            Gartenfreunden und Pflanzenliebhabern und unterstützt euch
+            gegenseitig. Stelle anderen Gärtnern deine Werkzeuge zur Verfügung,
+            leihe dir diejenigen aus, die du selbst nicht besitzt oder teile
+            Saatgut oder Dünger. Denn gemeinsam macht es doch deutlich mehr
+            Spaß, die Stadt aufzugärtnern!
           </p>
         )}
       </div>
