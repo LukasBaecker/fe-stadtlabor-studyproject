@@ -161,6 +161,7 @@ const MapNav = (props) => {
  *Component for the Popup showing all filtering options to filter garden locations on the map
  */
 const FiltercategorieList = (props) => {
+  const lang = useSelector((state) => state.lang);
   const dispatch = useDispatch();
   //all possible categories
   const categories = [
@@ -172,6 +173,30 @@ const FiltercategorieList = (props) => {
     "Gardens",
     "Other",
   ];
+  const translateCat = (cat) => {
+    if (cat === "Tools") {
+      return "Werkzeuge";
+    }
+    if (cat === "Seeds") {
+      return "Saatgut";
+    }
+    if (cat === "Fertilizers") {
+      return "Dünger";
+    }
+    if (cat === "Compost") {
+      return "Kompost";
+    }
+    if (cat === "ConstructionMaterial") {
+      return "Baumaterial";
+    }
+    if (cat === "Gardens") {
+      return "Gärten";
+    }
+    if (cat === "Other") {
+      return "Andere";
+    }
+    return cat;
+  };
   //load all gardenlocations to filter from
   const locations = useSelector((state) => state.locations);
   //TODO: in future work the resources can be filtered or even searched for
@@ -256,7 +281,7 @@ const FiltercategorieList = (props) => {
         filterlist[element] ? "filterElement checked" : "filterElement "
       }>
       <FontAwesomeIcon className='filterCheck' icon={faCheck} />
-      {element}
+      {lang === "eng" ? element : translateCat(element)}
     </div>
   ));
 
@@ -272,7 +297,7 @@ const FiltercategorieList = (props) => {
             filterlist.all ? "filterElement checked" : "filterElement"
           }>
           <FontAwesomeIcon className='filterCheck' icon={faCheck} />
-          all
+          {lang === "eng" ? "all" : "alles"}
         </div>
         <Dropdown.Divider />
         {listItems}
@@ -287,7 +312,9 @@ const FiltercategorieList = (props) => {
           filterlist.noResources ? "filterElement checked" : "filterElement"
         }>
         <FontAwesomeIcon className='filterCheck' icon={faCheck} />
-        show gardens with no resources
+        {lang === "eng"
+          ? "show also gardens with no resources"
+          : "zeige Gärten ohne Ressourcen an"}
       </div>
       <Button
         onClick={() => {
@@ -423,6 +450,7 @@ const ScrollWheel = (props) => {
   );
 };
 const JoinButton = (props) => {
+  const lang = useSelector((state) => state.lang);
   const router = useRouter();
   const handleTheClick = async (userDetails, gardenId) => {
     const success = await joinGarden(userDetails, gardenId);
@@ -440,7 +468,7 @@ const JoinButton = (props) => {
         onClick={() => {
           handleTheClick(props.userDetails, props.gardenId);
         }}>
-        Join
+        {lang === "eng" ? "Join" : "Beitreten"}
       </Button>
     </>
   );

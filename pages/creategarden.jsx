@@ -36,8 +36,12 @@ const validationSchemaEN = Yup.object().shape({
   description: Yup.string().required(
     "Please enter a description of the garden"
   ),
-  phone: Yup.number().typeError("Please enter a phone number"),
-  address: Yup.string().typeError("Please enter an address"),
+  phone: Yup.number()
+    .typeError("Please enter a phone number")
+    .required("*please enter a phone-number"),
+  address: Yup.string()
+    .typeError("Please enter an address")
+    .required("*please enter an address"),
   email: Yup.string()
     .email("*enter a valid mail")
     .required("*please enter a garden contact email"),
@@ -48,8 +52,12 @@ const validationSchemaDE = Yup.object().shape({
   description: Yup.string().required(
     "Bitte eine Beschreibung des Gartens eingeben"
   ),
-  phone: Yup.number().typeError("Bitte eine Kontakt-Telefonnummer eingeben"),
-  address: Yup.string().typeError("Bitte Adresse des Gartens eingeben"),
+  phone: Yup.number()
+    .typeError("Bitte eine Kontakt-Telefonnummer eingeben")
+    .required("*bitte eine valide Telefonnummer eingeben"),
+  address: Yup.string()
+    .typeError("Bitte Adresse des Gartens eingeben")
+    .required("*bitte eine valide Adresse eingeben"),
   email: Yup.string()
     .email("*bitte eine valide Email-Adresse eingeben")
     .required("*bitte eine valide Email-Adresse eingeben"),
@@ -219,7 +227,6 @@ const CreateGarden = () => {
                     <Form.Control
                       type='text'
                       name='name'
-                      placeholder='Name'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.name}
@@ -236,7 +243,6 @@ const CreateGarden = () => {
                     <Form.Control
                       type='text'
                       name='email'
-                      placeholder='Email'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.email}
@@ -256,7 +262,6 @@ const CreateGarden = () => {
                     <Form.Control
                       type='text'
                       name='phone'
-                      placeholder={lang === "eng" ? "Phone" : "Telefon"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.phone}
@@ -276,7 +281,11 @@ const CreateGarden = () => {
                     <Form.Control
                       type='text'
                       name='address'
-                      placeholder={lang === "eng" ? "Address" : "Adresse"}
+                      placeholder={
+                        lang === "eng"
+                          ? "Bakerstreet 1, 48149 Munster"
+                          : "Bahnhofstraße 1, 48149 Münster"
+                      }
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.address}
@@ -301,10 +310,10 @@ const CreateGarden = () => {
                             lang === "eng"
                               ? position.lat !== 0 && position.lng !== 0
                                 ? "Latitude: " + position.lat
-                                : "Locaiton optional"
+                                : "choose with button"
                               : position.lat !== 0 && position.lng !== 0
                               ? "Breite: " + position.lat
-                              : "Ort optional"
+                              : "über Knopf festlegen"
                           }
                         />
                         <Form.Control
@@ -314,10 +323,10 @@ const CreateGarden = () => {
                             lang === "eng"
                               ? position.lat !== 0 && position.lng !== 0
                                 ? "Longitude: " + position.lng
-                                : "Locaiton optional"
+                                : "choose with button"
                               : position.lat !== 0 && position.lng !== 0
                               ? "Länge: " + position.lng
-                              : "Ort optional"
+                              : "Ort über Knopf festlegen"
                           }
                         />
                       </Col>
@@ -354,7 +363,7 @@ const CreateGarden = () => {
                       ) : (
                         <>
                           <option value='RESOURCES'>
-                            Teilen von Resourcen
+                            Teilen von Ressourcen
                           </option>
                           <option value='GARDEN'>Gemeinschaftsgarten</option>
                         </>
@@ -376,7 +385,9 @@ const CreateGarden = () => {
                       rows={3}
                       name='description'
                       placeholder={
-                        lang === "eng" ? "Description" : "Beschreibung"
+                        lang === "eng"
+                          ? "Kindly describe your garden, what you are doing and who the people at your garden are."
+                          : "Beschreibe deinen Garten, was dort zu tun ist und wer die Menschen dort sind."
                       }
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -501,6 +512,7 @@ function MapPopup({ position, setPosition, setPopupVisible }) {
 }
 
 function ErrorMessage({ message, setShowError }) {
+  const lang = useSelector((state) => state.lang);
   return (
     <Alert
       className='alertInPopup'
@@ -508,7 +520,11 @@ function ErrorMessage({ message, setShowError }) {
       onClose={() => setShowError(false)}
       dismissible>
       <Alert.Heading>Ups!</Alert.Heading>
-      <p>{message}</p>
+      <p>
+        {lang === "eng"
+          ? "Something went wrong! Make sure to fill in all of the fields before confirming the registration."
+          : "Da ist etwas schief gelaufen! Stelle sicher, dass du alle Angaben richtig ausgefüllt hast, bevor du die Registrierung abschließt."}
+      </p>
     </Alert>
   );
 }

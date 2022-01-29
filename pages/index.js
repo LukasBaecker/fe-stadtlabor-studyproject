@@ -199,11 +199,17 @@ function LoginButton({ toggleLoginPopup }) {
 
 function SignupButton(props) {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 767px)" });
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const lang = useSelector((state) => state.lang);
   const router = useRouter();
 
   function onSignupButtonClick() {
-    router.push("/register");
+    if (isAuth) {
+      router.push("/user");
+    } else {
+      router.push("/register");
+    }
+    return null;
   }
   return (
     <div className={styles.signup}>
@@ -220,7 +226,11 @@ function SignupButton(props) {
             : `${styles.signupButton} ${styles.fixedTop}`
         }>
         {props.offsetY < window.innerHeight * 0.6
-          ? lang === "eng"
+          ? isAuth
+            ? lang === "eng"
+              ? "Go to your page!"
+              : "Zu deiner Seite!"
+            : lang === "eng"
             ? "Sign up now!"
             : "Jetzt registrieren!"
           : ""}
