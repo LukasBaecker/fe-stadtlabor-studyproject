@@ -93,11 +93,10 @@ function signUp() {
       {show ? (
         <>
           <Alert
-            className="alertBox"
-            variant="danger"
+            className='alertBox'
+            variant='danger'
             onClose={() => setShow(false)}
-            dismissible
-          >
+            dismissible>
             <Alert.Heading>{lang === "eng" ? "Error" : "Fehler"}</Alert.Heading>
             <p>{message}</p>
           </Alert>
@@ -109,7 +108,7 @@ function signUp() {
       {showSuccess ? (
         <>
           <CenterSpinner />
-          <Alert className="alertBox" variant="primary">
+          <Alert className='alertBox' variant='primary'>
             <Alert.Heading>
               {lang === "eng" ? "Congratulations" : "Herzlichen Glückwunsch"}
             </Alert.Heading>
@@ -133,7 +132,7 @@ function signUp() {
       ) : (
         <Container className={styles.signupDiv}>
           <Row className={styles.test}>
-            <Col className="form-div" xs={12} md={6}>
+            <Col className='form-div' xs={12} md={6}>
               <h2>{lang === "eng" ? "Registration" : "Registrieren"}</h2>
               <Formik
                 initialValues={{
@@ -190,8 +189,7 @@ function signUp() {
                       setSubmitting(false);
                       console.log(err.message);
                     });
-                }}
-              >
+                }}>
                 {/* Callback function containing Formik state and helpers that handle common form actions */}
                 {({
                   values,
@@ -202,19 +200,18 @@ function signUp() {
                   handleSubmit,
                   isSubmitting,
                 }) => (
-                  <Form onSubmit={handleSubmit} className="mx-auto">
+                  <Form onSubmit={handleSubmit} className='mx-auto'>
                     <Form.Group
-                      className="form-group"
-                      controlId="formFirstName"
-                    >
+                      className='form-group'
+                      controlId='formFirstName'>
                       <Form.Label>
                         {lang === "eng" ? "First Name :" : "Vorname :"}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        type='text'
                         /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name="first_name"
-                        placeholder=""
+                        name='first_name'
+                        placeholder=''
                         /* Set onChange to handleChange */
                         onChange={handleChange}
                         /* Set onBlur to handleBlur */
@@ -229,20 +226,20 @@ function signUp() {
                         }
                       />
                       {touched.first_name && errors.first_name ? (
-                        <div className="errorForm-message">
+                        <div className='errorForm-message'>
                           {errors.first_name}
                         </div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group className="form-group" controlId="formSurname">
+                    <Form.Group className='form-group' controlId='formSurname'>
                       <Form.Label>
                         {lang === "eng" ? "Last Name :" : "Nachname :"}
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        type='text'
                         /* This name property is used to access the value of the form element via values.nameOfElement */
-                        name="last_name"
-                        placeholder=""
+                        name='last_name'
+                        placeholder=''
                         /* Set onChange to handleChange */
                         onChange={handleChange}
                         /* Set onBlur to handleBlur */
@@ -257,21 +254,20 @@ function signUp() {
                         }
                       />
                       {touched.last_name && errors.last_name ? (
-                        <div className="errorForm-message">
+                        <div className='errorForm-message'>
                           {errors.last_name}
                         </div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className="form-group"
-                      controlId="formEmail"
-                      className="form-group"
-                    >
+                      className='form-group'
+                      controlId='formEmail'
+                      className='form-group'>
                       <Form.Label>Email :</Form.Label>
                       <Form.Control
-                        type="text"
-                        name="email"
-                        placeholder=""
+                        type='text'
+                        name='email'
+                        placeholder=''
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.email}
@@ -280,17 +276,17 @@ function signUp() {
                         }
                       />
                       {touched.email && errors.email ? (
-                        <div className="errorForm-message">{errors.email}</div>
+                        <div className='errorForm-message'>{errors.email}</div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group controlId="formBasicPassword">
+                    <Form.Group controlId='formBasicPassword'>
                       <Form.Label>
                         {lang === "eng" ? "Password :" : "Passwort :"}
                       </Form.Label>
                       <Form.Control
-                        type="password"
-                        placeholder=""
-                        name="password"
+                        type='password'
+                        placeholder=''
+                        name='password'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.password}
@@ -301,24 +297,23 @@ function signUp() {
                         }
                       />
                       {touched.password && errors.password ? (
-                        <div className="errorForm-message">
+                        <div className='errorForm-message'>
                           {errors.password}
                         </div>
                       ) : null}
                     </Form.Group>
                     <Form.Group
-                      className="form-group"
-                      controlId="formRepeatPassword"
-                    >
+                      className='form-group'
+                      controlId='formRepeatPassword'>
                       <Form.Label>
                         {lang === "eng"
                           ? "confirm Password :"
                           : "Passwort wiederholen :"}
                       </Form.Label>
                       <Form.Control
-                        type="password"
-                        placeholder=""
-                        name="repeatPassword"
+                        type='password'
+                        placeholder=''
+                        name='repeatPassword'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.repeatPassword}
@@ -329,15 +324,15 @@ function signUp() {
                         }
                       />
                       {touched.repeatPassword && errors.repeatPassword ? (
-                        <div className="errorForm-message">
+                        <div className='errorForm-message'>
                           {errors.repeatPassword}
                         </div>
                       ) : null}
                     </Form.Group>
-                    <Form.Group className="form-group" controlId="formTerms">
+                    <Form.Group className='form-group' controlId='formTerms'>
                       <Field
-                        type="checkbox"
-                        name="acceptTerms"
+                        type='checkbox'
+                        name='acceptTerms'
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={
@@ -350,24 +345,25 @@ function signUp() {
                         <Form.Label>
                           Yes, I have read the{" "}
                           <a onClick={() => setTermsShown(true)}>
-                            terms and conditions
+                            terms of use
                           </a>
                           .
                         </Form.Label>
                       ) : (
                         <Form.Label>
                           Ja, ich habe die{" "}
-                          <a onClick={() => setTermsShown(true)}>AGB</a> gelesen
-                          und verstanden.
+                          <a onClick={() => setTermsShown(true)}>
+                            Nutzungsbedingungen
+                          </a>{" "}
+                          gelesen und verstanden.
                         </Form.Label>
                       )}
                     </Form.Group>
                     <Button
-                      className="form-group"
-                      variant="primary"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
+                      className='form-group'
+                      variant='primary'
+                      type='submit'
+                      disabled={isSubmitting}>
                       {lang === "eng"
                         ? "Register your account"
                         : "Registrieren"}
@@ -378,7 +374,7 @@ function signUp() {
             </Col>
             <Col className={styles.imageDiv} xs={12} md={6}>
               <Image
-                src="/imgs/jed-owen-1JgUGDdcWnM-unsplash.jpg"
+                src='/imgs/jed-owen-1JgUGDdcWnM-unsplash.jpg'
                 className={styles.img}
               />
             </Col>
@@ -386,14 +382,72 @@ function signUp() {
         </Container>
       )}
       {termsShown ? (
-        <div className="popup">
-          <div className="popup_inner">
-            <p>TEst</p>
+        <div className='popup'>
+          <div className='popup_inner' style={{ padding: "10%" }}>
+            {lang === "eng" ? (
+              <>
+                {" "}
+                <h1>Terms of Use</h1>
+                <p>
+                  By agreeing to the user agreement you confirm that your data
+                  will be stored on the server and used for your personal use of
+                  the web application. Your password will not be stored in plain
+                  text and your personal data will be accessible only accessible
+                  by the administration or by entering your password.
+                </p>
+                <p>
+                  In the app it is possible to create gardens, whose data is
+                  also stored on the server. This data is publicly available to
+                  optimize the use of the app.
+                </p>
+                <p>
+                  For more information see our{" "}
+                  <a target='_blank' href='/about'>
+                    about-page
+                  </a>{" "}
+                  or the{" "}
+                  <a
+                    target='_blank'
+                    href='https://www.uni-muenster.de/de/en/datenschutzerklaerung.html'>
+                    Data protection policy
+                  </a>
+                </p>
+              </>
+            ) : (
+              <>
+                <h1>Nutzungsbedingungen</h1>
+                <p>
+                  Mit Einwilligung der Nutzungsvereinbarung bestätigen Sie, dass
+                  Ihre Daten auf dem Server gespeichert und für ihre persönliche
+                  Nutzung der Webapplikation genutzt werden. Ihr Passwort wird
+                  nicht in Klartext gespeichert und ihre persönlichen Daten sind
+                  nur durch die Administration oder durch Angabe ihres
+                  Passwortes zugänglich.
+                </p>
+                <p>
+                  In der App ist es möglich Gärten anzulegen, dessen Daten
+                  ebenso auf dem Server gespeichert werden. Diese Daten sind
+                  öffentlich zugänglich, um so die Nutzung der App zu
+                  optimieren.
+                </p>
+                <p>
+                  Für weitere Informationen nutzen Sie die{" "}
+                  <a target='_blank' href='/about'>
+                    about-Seite
+                  </a>{" "}
+                  oder unsere{" "}
+                  <a
+                    target='_blank'
+                    href='https://www.uni-muenster.de/de/datenschutzerklaerung.html'>
+                    Datenschutzerklärung
+                  </a>
+                </p>
+              </>
+            )}
             <button
-              className="popupCloseButton"
-              onClick={() => setTermsShown(false)}
-            >
-              <FontAwesomeIcon className="closeIcon" icon={faTimes} />
+              className='popupCloseButton'
+              onClick={() => setTermsShown(false)}>
+              <FontAwesomeIcon className='closeIcon' icon={faTimes} />
             </button>
           </div>
         </div>
