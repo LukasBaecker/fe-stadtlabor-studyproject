@@ -89,9 +89,9 @@ export default function Home() {
                 : `${styles.quote} ${styles.desktop}`
             }>
             {lang === "eng" ? (
-              <p>"GardenUp the world!"</p>
+              <p>"GardenUp the City!"</p>
             ) : (
-              <p>"GardenUp the world!"</p>
+              <p>"GardenUp the City!"</p>
             )}
           </div>
           <Image
@@ -141,7 +141,7 @@ export default function Home() {
                 <p>
                   {lang === "eng"
                     ? "Scrolling through the most common crops might be inspiring. It also might simplify the choice of your favourite Urban Gardening project here at GardenUp. Get information about the crops and which garden is planting them"
-                    : "Sich einen Überblick über häufige Pflanzen zu machen mag nicht nur inspirierend sein sondern auch die Wahl deines liebsten Urban Gardening Projects vereinfacht. Verschaffe dir einen Überblick und finde heraus in welchen Urban Gardens die jeweilige Pflanze angebaut wird."}
+                    : "Wissen über die häufigsten Pflanzen zu besitzen mag nicht nur inspirierend sein sondern auch die Wahl deines liebsten Urban Gardening Projects vereinfacht. Verschaffe dir einen Überblick und finde heraus in welchen urbanen Gärten die jeweilige Pflanze angebaut wird."}
                 </p>
               </div>
             </Col>
@@ -498,7 +498,7 @@ function Advantages() {
     {
       id: 3,
       url: "/imgs/icons8-plant.svg",
-      text: "Lasst uns gemeinsam die Welt grüner machen!",
+      text: "Lasst uns gemeinsam die Stadt grüne machen!",
     },
   ];
   return (

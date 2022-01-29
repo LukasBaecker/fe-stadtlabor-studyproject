@@ -202,13 +202,13 @@ const AddGardenButton = () => {
             ? styles.menuAddGarden
             : `${styles.menuAddGarden} ${styles.clicked}`
         }>
-        <Button variat='primary' onClick={() => router.push("/creategarden")}>
+        <Button variant='primary' onClick={() => router.push("/creategarden")}>
           {lang === "eng" ? "create new Garden" : "Garten erstellen"}
         </Button>
         <br />
         <Button
           className={styles.lowerButtonAddGarden}
-          variat='primary'
+          variant='primary'
           onClick={() =>
             router.push({ pathname: "/map", query: { action: "join" } })
           }>
@@ -239,8 +239,8 @@ const Jumbotron = (props) => {
         </h1>{" "}
         <p className={props.offsetY < 1 ? "visible" : "hidden"}>
           {lang === "eng"
-            ? "On this page you can find all the garderns you are a part of. You can also jump into the map of all gardens registered at GardenUp or see our crop variaty"
-            : "Auf dieser Seite findest du alle Gärten denen du dich bereits angeschlossen hast. Außerdem kannst zu direkt zur Karte springen, auf der alle Gärten zu finden sind, die bereits bei GardenUp registriert wurden oder schau dir unsere Pflanzenvielfalt an."}
+            ? "On this page you can find all the gardens you are a part of. You can also jump into the map of all gardens registered at GardenUp or see our crop variety"
+            : "Auf dieser Seite findest du alle Gärten denen du dich bereits angeschlossen hast. Außerdem kannst du direkt zur Karte springen, auf der alle Gärten zu finden sind, die bereits bei GardenUp registriert wurden oder schau dir unsere Pflanzenvielfalt an."}
         </p>
       </div>
     </div>
