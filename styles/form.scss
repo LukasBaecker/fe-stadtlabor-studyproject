@@ -63,3 +63,9 @@
   text-align: center;
   padding-top: 50vh;
 }
+.termsPopup {
+  .popup_inner {
+    max-height: 90%;
+    overflow-y: scroll;
+  }
+}
