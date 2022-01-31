@@ -382,7 +382,7 @@ function signUp() {
         </Container>
       )}
       {termsShown ? (
-        <div className='popup'>
+        <div className='popup termsPopup'>
           <div className='popup_inner' style={{ padding: "10%" }}>
             {lang === "eng" ? (
               <>

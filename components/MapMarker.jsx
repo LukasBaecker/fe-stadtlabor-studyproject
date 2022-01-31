@@ -201,7 +201,7 @@ const JoinButton = (props) => {
   const handleTheClick = async (userDetails, gardenId) => {
     const success = await joinGarden(userDetails, gardenId);
     if (success) {
-      router.reload();
+      router.push("/map");
     } else {
       console.log("not successful");
     }

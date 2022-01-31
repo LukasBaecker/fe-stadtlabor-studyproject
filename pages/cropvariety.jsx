@@ -97,7 +97,7 @@ const SingleCrop = (props) => {
             <img
               className='post-in-list-img'
               src={backendBaseUrl + props.crop.image}
-              alt={"picture of the crop you are currently at."}
+              alt={"Picture of " + props.crop.name}
             />
           }
         </div>

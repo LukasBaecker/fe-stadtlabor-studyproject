@@ -128,7 +128,7 @@ const MapNav = (props) => {
               ? "by resource-categories: First choose the categories you want to enable/disable and then click on the button bellow to confirm."
               : "nach Ressourcen-Kategorien: Wähle die gewünschten Kategorien und wende den Filter mit Klick auf den Button an."}
           </p>
-          <FiltercategorieList />
+          <FiltercategorieList setShowFilters={setShowFilters} />
         </div>
         <div
           className={
@@ -235,6 +235,7 @@ const FiltercategorieList = (props) => {
     var filteredGardens = [];
     if (filterlist.all) {
       dispatch(setFilteredLocations(locations));
+      props.setShowFilters(false);
     } else {
       Object.keys(filterlist).forEach((e) => {
         var thisResource = [];
@@ -268,6 +269,7 @@ const FiltercategorieList = (props) => {
       var newCollection = { ...locations, features: filteredGardens };
 
       dispatch(setFilteredLocations(newCollection));
+      props.setShowFilters(false);
     }
   };
   //add all categories to the menu by mapping a div for each
@@ -455,7 +457,7 @@ const JoinButton = (props) => {
   const handleTheClick = async (userDetails, gardenId) => {
     const success = await joinGarden(userDetails, gardenId);
     if (success) {
-      router.reload();
+      router.push("/map");
     } else {
       console.log("not successful");
     }
