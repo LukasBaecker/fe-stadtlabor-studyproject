@@ -1,11 +1,13 @@
+![](readme-files/logo.jpg)
+
 # GardenUp Frontend Repository
 
 This repository contains all frontend for the GardenUp application.
 It was created within the scope of the Stadtlabor Urban Gardening Study Project at WWU Muenster
 in the Geoinformatics masters program.
 
-It is deployed at [](http://giv-project15.uni-muenster.de:3000).
-Currently, it is accessible from within the university network only.
+It is deployed [here](http://giv-project15.uni-muenster.de:3000).
+Unfortunately, it is currently only accessible from within WWU university network only.
 
 ## About GardenUp
 
@@ -41,8 +43,8 @@ The backend code is stored in a seperate repository located [here](https://githu
 All REST-API URLs are stored centrally in `/helpers/urls.jsx`. This allows for switching
 to a different backend instance easily by modifying the variable `backendBaseURL`.
 
-One instance of the backend is currently deployed at [](http://giv-project15.uni-muenster.de:8000).
-It is however only accessible from within the university network.
+One instance of the backend is currently deployed [here](http://giv-project15.uni-muenster.de:8000).
+It is however only accessible from within WWU university network.
 
 ## Basic folder structure
 
